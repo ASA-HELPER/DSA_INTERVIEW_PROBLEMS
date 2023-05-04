@@ -25,3 +25,20 @@ void binSort(int A[], int N)
         }
     }
 }
+
+// Problem : Greater on right side GFG
+class Solution
+{
+public:
+    void nextGreatest(int arr[], int n)
+    {
+        int nextGreater = arr[n - 1];
+        arr[n - 1] = -1;
+        for (int i = n - 2; i >= 0; i--)
+        {
+            int temp = arr[i];
+            arr[i] = nextGreater;
+            nextGreater = max(temp, nextGreater);
+        }
+    }
+};
