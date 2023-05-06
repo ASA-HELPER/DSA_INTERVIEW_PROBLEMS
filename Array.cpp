@@ -43,7 +43,7 @@ public:
     }
 };
 
-// Problem : Remove duplicate elements from sorted Array in O(1) space
+// Problem : Remove duplicate elements from sorted Array in O(1) space GFG
 class Solution
 {
 public:
@@ -59,5 +59,63 @@ public:
             }
         }
         return i + 1;
+    }
+};
+
+// Problem : Union of two sorted arrays GFG
+class Solution
+{
+    // Brute Force : map ya set ka use karke kar sakte hai but unordered_map ya unordered_set ka use nahi kar sakte because usme array
+    // sorted nahi rahega. TC => O((n+m)log(n+m)) , SC => O(n+m)
+    // Timc Complexity : O(n+m)
+    // Space Complexity : O(1) agar resultant array ke size ko consider naa karen toh
+public:
+    vector<int> findUnion(int arr1[], int arr2[], int n, int m)
+    {
+        vector<int> res;
+        int i = 0;
+        int j = 0;
+        // two pointers ka istemal karke dono arrays mein forward move karenge
+        while (i < n && j < m)
+        {
+            // agar first array ka element smaller hai toh usse push karenge resultant array mein tab jab woh resultant array ke last
+            // element ke equal na ho and same yehi condition tab bhi dekhenge jab first array ka element second array ke element se
+            // greater hoga toh
+            if (arr1[i] <= arr2[j])
+            {
+                if (res.size() == 0 or res.back() != arr1[i])
+                {
+                    res.push_back(arr1[i]);
+                }
+                i++;
+            }
+            else
+            {
+                if (res.size() == 0 or res.back() != arr2[j])
+                {
+                    res.push_back(arr2[j]);
+                }
+                j++;
+            }
+        }
+        // agar first array mein koyi element reh gaya ho toh usse condition check karke add karlenge
+        while (i < n)
+        {
+            if (res.back() != arr1[i])
+            {
+                res.push_back(arr1[i]);
+            }
+            i++;
+        }
+        // agar first array mein koyi element reh gaya ho toh usse condition check karke add karlenge
+        while (j < m)
+        {
+            if (res.back() != arr2[j])
+            {
+                res.push_back(arr2[j]);
+            }
+            j++;
+        }
+        return res;
     }
 };
