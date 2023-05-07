@@ -119,3 +119,24 @@ public:
         return res;
     }
 };
+
+// Problem : Check if array is sorted without sorting in O(N) time and O(1) space GFG
+class Solution
+{
+public:
+    bool arraySortedOrNot(int arr[], int n)
+    {
+        if (n == 2 && (arr[0] > arr[1]))
+        {
+            return false;
+        }
+        for (int i = 1; i < n - 1; i++)
+        {
+            if ((arr[i - 1] > arr[i]) or (arr[i] > arr[i + 1]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+};
