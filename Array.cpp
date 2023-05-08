@@ -140,3 +140,32 @@ public:
         return true;
     }
 };
+
+// Problem : Quick Left Rotation GFG
+class Solution
+{
+    // Time Complexity : O(N)
+    // Space Complexity : O(1)
+public:
+    void rotate(int arr[], int i, int j)
+    {
+        while (i < j)
+        {
+            swap(arr[i], arr[j]);
+            i++;
+            j--;
+        }
+    }
+    void leftRotate(int arr[], int k, int n)
+    {
+        // k ko n se mod isliye kiya taaki agar k ki value n se greater hai toh usse within n kar sake
+        k = k % n;
+        // observation ka khel hai saara
+        // case-1 : 0 se (k-1)th tak elements ko reverse kardo
+        rotate(arr, 0, k - 1);
+        // case-2 : kth se (k-1)th tak elements ko reverse kardo
+        rotate(arr, k, n - 1);
+        // case-3 : 0 se (n-1)th tak ke elements ko reverse kardo
+        rotate(arr, 0, n - 1);
+    }
+};
