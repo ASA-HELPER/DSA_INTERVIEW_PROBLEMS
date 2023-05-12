@@ -45,3 +45,28 @@ public:
         return mis;
     }
 };
+
+// Problem : Find the element that appears once GFG
+class Solution
+{
+public:
+    // Approach-1 : Simple brute force chala kar dikha do using 2 for loops jisme ye check karlo ki kab ek element kisi bhi next
+    // element ke equal nahi hai toh wahi hamara answer hoga. TC => O(N^2) and SC => O(1)
+
+    // Approach-2 : Use unordered_map jiski help se jis bhi element ki frequency 1 hogi wahi hamara answer hoga.
+    // TC => O(N) and SC => O(N)
+
+    int search(int A[], int N)
+    {
+        // Approach-3 : Saare numbers ka XOR kardenge because jab bhi 2 numbers ka XOR karte hai toh value 0 hojati hai and last mein
+        // ek hi element bachega jo ki single element hoga. TC => O(N) and SC => O(1)
+        int ans = 0;
+        for (int i = 0; i < N; i++)
+        {
+            ans ^= A[i];
+        }
+        return ans;
+
+        // Approach-4 : using binary search : Iske liye mein code jaldi hi yahan update karunga. TC =. O(logN) and SC => O(1)
+    }
+};
