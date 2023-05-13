@@ -37,3 +37,46 @@ public:
         return helper(nums1, nums2, 0, 0, n, m, mp);
     }
 };
+
+// Problem : Count ways to build good strings Leetcode
+class Solution
+{
+public:
+    vector<int> dp;
+    int mod = 1e9 + 7;
+    long ans = 0;
+    int helper(vector<int> &dp, int target, int zero, int one)
+    {
+        // agar length less hogayi zero se toh hum hume ek bhi way nahi mila hai
+        if (target < 0)
+        {
+            return 0;
+        }
+        // agar length 0 hogi toh matlab hume ek way milgaya hai targeted length banane ke liye
+        if (target == 0)
+        {
+            return 1;
+        }
+        // agar given length ke liye already check kar chuke hai toh return kardo jitne ways bane the
+        if (dp[target] != -1)
+        {
+            return dp[target];
+        }
+        // two choices hai ya toh zeroes ko append kar sakte hai ya phir ones ko append kar sakte hai
+        int takingones = helper(dp, target - one, zero, one);
+        int takingzeroes = helper(dp, target - zero, zero, one);
+        // dono choices ko consider karke jitne bhi strings banenge unka sum lenge total number of ways ke liye and usse store kar lenge ki given targeted length ke liye itne total strings ban sakte hai
+        return dp[target] = (takingones + takingzeroes) % mod;
+    }
+    int countGoodStrings(int low, int high, int zero, int one)
+    {
+        // dp ka size high length ke barabar lenna hoga toh 1 extra le lenge size ko as per coin change problem
+        dp.resize(high + 1, -1);
+        // yahan har length ke liye dhundenge ki kitne good strings ban sakte hai
+        for (int target = low; target <= high; target++)
+        {
+            ans = ((ans % mod) + helper(dp, target, zero, one)) % mod;
+        }
+        return ans;
+    }
+};
