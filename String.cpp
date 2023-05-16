@@ -20,3 +20,25 @@ public:
         return false;
     }
 };
+
+// Problem : Binary String GFG
+class Solution
+{
+public:
+    // Time Complexity : O(N)
+    // Ṣpace Complexity : O(1)
+    long binarySubstring(int n, string a)
+    {
+        // simple observation
+        // count karlo number of ones ko and then usse multiply kardo (ones-1) se and divide by 2 kardo
+        long long int ones = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (a[i] == '1')
+            {
+                ones++;
+            }
+        }
+        return (ones * (ones - 1)) / 2;
+    }
+};
