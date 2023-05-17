@@ -42,3 +42,46 @@ public:
         return (ones * (ones - 1)) / 2;
     }
 };
+
+// Problem : Min Number of Flips GFG
+int minFlips(string S)
+{
+    int n = S.size();
+    int count = 0;
+    for (int i = 0; i < S.size(); i++)
+    {
+        // even positions par consider kar rahe hai ki zero hoga
+        if (i % 2 == 0)
+        {
+            // agar zero nahi hai toh flip karna padega
+            if (S[i] == '1')
+                count++;
+        }
+        else
+        {
+            // agar odd position par zero hoga toh bhi flip karna hoga because humne consider kiya hai zero even positions par hoga
+            if (S[i] == '0')
+                count++;
+        }
+    }
+
+    int counter = 0;
+
+    for (int i = 0; i < S.size(); i++)
+    {
+        // even positions par consider kar rahe hai ki one hoga
+        if (i % 2 == 0)
+        {
+            if (S[i] == '0')
+                counter++;
+        }
+        else
+        {
+            // agar odd position par one hoga toh bhi flip karna hoga because humne consider kiya hai ones even positions par honge
+            if (S[i] == '1')
+                counter++;
+        }
+    }
+
+    return min(counter, count);
+}
