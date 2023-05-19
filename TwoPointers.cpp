@@ -34,3 +34,42 @@ public:
         }
     }
 };
+
+// Problem : Maximum number of 1's GFG
+class Solution
+{
+public:
+    int findZeroes(int arr[], int n, int m)
+    {
+        // Two pointers ka problem hai ye
+        int i = 0;
+        int j = 0;
+        int count = 0;
+        int ans = -1;
+        while (j < n)
+        {
+            // agar zero aaya toh count bada denge
+            if (arr[j] == 0)
+            {
+                count++;
+            }
+            // jab bhi zeroes increase ho jayenge toh maximum leke zeroes ko m se less karne ki try karenge
+            if (count > m)
+            {
+                ans = max(ans, j - i);
+                while (i < j && count > m)
+                {
+                    if (arr[i] == 0)
+                    {
+                        count--;
+                    }
+                    i++;
+                }
+            }
+            j++;
+        }
+        // edge case : ho sakta hai ek baar zeroes ko replace karne par saare ones aa rahe ho last index tak
+        ans = max(ans, j - i);
+        return ans;
+    }
+};
