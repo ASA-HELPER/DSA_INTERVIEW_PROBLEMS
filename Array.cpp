@@ -211,3 +211,62 @@ public:
         return maxLen;
     }
 };
+
+// Problem : Find all pairs with a given sum GFG
+class Solution
+{
+public:
+    vector<pair<int, int>> allPairs(int A[], int B[], int N, int M, int X)
+    {
+        // Approach-2 : Using hashmap : Isme simply ek array ke saare numbers ko map mein rakh denge and phir dusre array ke saare elements
+        // ko given sum se subtract karke dekhenge one by one ki kya difference jo mil raha hai woh map mein exist karta hai ya nahi.
+        // TC => O(N+M)  SC => O(N) because we are unordered_map
+        vector<pair<int, int>> res;
+        unordered_map<int, int> mp;
+        for (int i = 0; i < N; i++)
+        {
+            mp[A[i]]++;
+        }
+        for (int i = 0; i < M; i++)
+        {
+            if (mp[X - B[i]])
+            {
+                res.push_back({X - B[i], B[i]});
+            }
+        }
+        sort(res.begin(), res.end());
+        return res;
+
+        // Approach-3 : Using two pointers : Is solution ko hum tab use kar sakte hai jab hume ye check karna ho ki kinhi two elements
+        // ka sum X ke equal hai toh return true warna return false ya phir koyi single pair ko find karna ho toh
+        // TC => O(NlogN)   SC=>O(1) if we do not consider the array we are making by combining the given two arrays
+        // vector<int>arr;
+        // for(int i=0;i<max(N,M);i++)
+        // {
+        //     if(i<N)
+        //     {
+        //         arr.push_back(A[i]);
+        //     }
+        //     if(i<M)
+        //     {
+        //         arr.push_back(B[i]);
+        //     }
+        // }
+        // sort(arr.begin(), arr.end());
+        // int left = 0, right = arr.size() - 1;
+        // while (left < right)
+        // {
+        //     int sum = arr[left] + arr[right];
+        //     if (sum == X) {
+        //         return {arr[left],arr[right]};
+        //         // return true;
+        //     }
+        //     else if (sum < X)
+        //         left++;
+        //     else
+        //         right--;
+        // }
+        // agar ek bhi pair naa mile toh
+        // return false or empty pair;
+    }
+};
