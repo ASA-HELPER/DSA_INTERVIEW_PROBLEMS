@@ -297,3 +297,63 @@ public:
         return maxSum;
     }
 };
+
+// Problem : Majority element leetcode
+class Solution
+{
+public:
+    // Brute force Approach : two loops ka use karlo and outer loop mein se ek element ko lekar usse inner loop ki help se ye count karlo ki
+    // ye element kitni baar aa raha hai and uske count ko check karlo ki kya is element ka count > n/2 hai.
+    // TC => O(N^2)  SC => O(1)
+
+    // Second Approach : Hum array ko sort kardete hai and phir two pointers ki help se har element ka count karte rahenge and jis element
+    // ki frequency greater than n/2 hogi usse return kardenge.
+    // TC => O(NlogN)  SC => O(1)
+
+    // Better Approach : hashmap ka use karke store karlo sabhi elements ki frequency ko and and phir ek aur loop lagakar ye check karlo ki
+    // konse element ki frequency > n/2 hai.
+    // TC => O(N)   SC => O(N)
+
+    // Optimal Approach : Moore's Voting algorithm : Ye algorithm ye kehta hai ki jesse jese hum array mein traverse kar rahe hai toh hum ye
+    // dekhte jaayenge ki jo element current humne ek variable mein store kiya hai kya next element bhi wahi hai ya nahi. Agar next element
+    // bhi same hai toh count variable ko increase karenge warna count variable ko decrease karenge and agar count zero ho jata hai toh hum
+    // new element ko apne paas rakh lenge jiske liye count 1 hoga. And ek baar whole array ko traverse karne ke baad jo element hamare
+    // variable mein reh jaayega uski frequency ko array ke through dubara traverse karke nikal lenge and agar iske frequency greater than
+    // n/2 huyi toh yehi hamara answer hoga.
+    // TC => O(N)  SC => O(1)
+
+    int majorityElement(int a[], int n)
+    {
+        int count = 0;
+        int element = -1;
+        for (int i = 0; i < n; i++)
+        {
+            if (count == 0)
+            {
+                element = a[i];
+                count = 1;
+            }
+            else if (element == a[i])
+            {
+                count++;
+            }
+            else
+            {
+                count--;
+            }
+        }
+        count = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (element == a[i])
+            {
+                count++;
+            }
+        }
+        if (count > (n / 2))
+        {
+            return element;
+        }
+        return -1;
+    }
+};
