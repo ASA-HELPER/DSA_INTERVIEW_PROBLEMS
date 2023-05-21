@@ -270,3 +270,30 @@ public:
         // return false or empty pair;
     }
 };
+
+// Problem : kadane's Algorithm or Maximum subarray Leetcode
+class Solution
+{
+public:
+    // Brute Force Approach : Simply two loops ka use karenge and har subarray ke liye uske sum ko maximum sum se compare karte rahenge.
+    // TC => O(N^2)  SC=> O(1)
+    // Optimal Approach : Using kadane's algorithm : Isme hum sum mein elements ki value ko add karte rahenge and saath hi saath apne maxSum
+    // ko update karte rahenge and agar kabhi sum less than 0 hojata hai toh sum ko 0 kardenge taaki hum hamesha maximum sum ko consider kare.
+    // TC => O(N)  SC => O(1)
+    // Note : if all numbers are negative then it does not mean that maximum sum is 0 but its the smallest element in the array.
+    long long maxSubarraySum(int arr[], int n)
+    {
+        long long sum = 0;
+        long long maxSum = INT_MIN;
+        for (int i = 0; i < n; i++)
+        {
+            sum += arr[i];
+            maxSum = max(maxSum, sum);
+            if (sum < 0)
+            {
+                sum = 0;
+            }
+        }
+        return maxSum;
+    }
+};
