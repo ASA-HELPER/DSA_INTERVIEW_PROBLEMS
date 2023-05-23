@@ -357,3 +357,73 @@ public:
         return -1;
     }
 };
+
+// Problem : Sort an array 0's , 1's and 2's  GFG
+class Solution
+{
+public:
+    void sort012(int a[], int n)
+    {
+        // Dutch national flag algorithm ka use karenge
+        // Isme hum three variables lenge jinki help se hum 0's ko left side shift kardenge
+        // and 2's ko right ki side shift kardenge
+        // 1's middle mein apne aap sort hojayenge
+        // TC = > O(N)   SC => O(1)
+        int low = 0;
+        int high = n - 1;
+        int mid = 0;
+        while (mid <= high)
+        {
+            if (a[mid] == 0)
+            {
+                swap(a[low], a[mid]);
+                low++;
+                mid++;
+            }
+            else if (a[mid] == 2)
+            {
+                swap(a[mid], a[high]);
+                high--;
+            }
+            else
+            {
+                mid++;
+            }
+        }
+    }
+};
+
+// Problem : Three way partitioning GFG
+class Solution
+{
+public:
+    void threeWayPartition(vector<int> &arr, int a, int b)
+    {
+        // Dutch national flag algorithm ka use karenge
+        // Isme hum three variables lenge jinki help se hum 'a' se less waale numbers ko left side shift kardenge
+        // and 'b' se greater waale elements ko right ki side shift kardenge
+        // Middle waale elements apne aap sort hojayenge
+        // TC = > O(N)   SC => O(1)
+        int mid = 0;
+        int low = 0;
+        int high = arr.size() - 1;
+        while (mid <= high)
+        {
+            if (arr[mid] < a)
+            {
+                swap(arr[mid], arr[low]);
+                low++;
+                mid++;
+            }
+            else if (arr[mid] > b)
+            {
+                swap(arr[mid], arr[high]);
+                high--;
+            }
+            else
+            {
+                mid++;
+            }
+        }
+    }
+};
