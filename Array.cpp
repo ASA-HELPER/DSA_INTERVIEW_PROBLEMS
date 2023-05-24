@@ -427,3 +427,41 @@ public:
         }
     }
 };
+
+// Problem : Find missing and repeating numbers GFG
+class Solution
+{
+public:
+    // TC => O(N)  SC => O(1)
+    vector<int> findTwoElement(vector<int> arr, int n)
+    {
+        // Simply hum given array ka sum and sqaure sum nikalenge
+        // Phir iss sum and sqaure sum ko unke 1 to n tak ke sum and square sum se minus kardenge
+        // Phir two equations banegi inki help se missing and repeating number ko nikalenge
+        // Formula to find sum of numbers from 1 to n
+        long long int tSum = n * (n + 1) / 2;
+        // Formula to find sum of square of numbers from 1 to n
+        long long int tSqaureSum = (n * (n + 1) * (2 * n + 1)) / 6;
+        long long int sum = 0;
+        long long int sqaureSum = 0;
+        for (int i = 0; i < n; i++)
+        {
+            sum += (long long int)arr[i];
+            sqaureSum += (long long int)arr[i] * (long long int)arr[i];
+        }
+        // X-Y = val1
+        long long int equation1 = sum - tSum;
+        // X^2 - Y^2 = val2
+        // X+Y = val2/(X-Y)
+        // X+Y = val2/val1
+        long long int sqaureEquation = sqaureSum - tSqaureSum;
+        // X-Y = val1
+        long long int equation2 = sqaureEquation / equation1;
+        // repeating number (X) equations ko add karke milega
+        long long int repeatingNumber = (equation1 + equation2) / 2;
+        // missing number (Y) equations ko subtract karke milega
+        long long int missingNumber = repeatingNumber - equation1;
+        return {(int)repeatingNumber, (int)missingNumber};
+        // X+Y = val2
+    }
+};
