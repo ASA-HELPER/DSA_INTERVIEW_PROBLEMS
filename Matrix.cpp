@@ -2,9 +2,15 @@
 class Solution
 {
 public:
-    //     Approach-1 : Pehli approach toh yehi hai ki mein seedha two for loops lagakar unke andar further loops ko lagaun jinki wajah se TC => O(3*(N*M)) hojayegi  SC => O(1) hogi
-    // Approach-2 : Isme hum better kya kar sakte hai ki ek columns and ek rows ke liye ek vector le len aur jis bhi position mein 0 aa raha hoga us position par ke row and column ko un vectors mein mark karlo and phir baad second traversal mein un rows and columns ko 0 kardo. TC => O(2*(N*M))   SC => O(N+M) hojayegi
-    // Approach-3 : Hum kya karenge ki separate rows and columns ke vectors lene ki bajaye given matrix ke first column and first row ko hi consider kar lenge jisse space optimize hojayega. Hum jab bhi zero milega toh hum current row and current column ke corresponding first row and first column ke cells ko mark kardenge. Ab problem yehi hai ki hum jab mark kar rahe honge toh [0,0] par jo value hogi woh column ke liye ho rahi hai ya row ke liye ho rahi hai ye pehchane mein problem hogi toh iske liye hum ek separate variable le lenge column ko mark karne ke liye.
+    // Approach-1 : Pehli approach toh yehi hai ki mein seedha two for loops lagakar unke andar further loops ko lagaun jinki wajah se
+    // TC => O(3*(N*M)) hojayegi  SC => O(1) hogi
+    // Approach-2 : Isme hum better kya kar sakte hai ki ek columns and ek rows ke liye ek vector le len aur jis bhi position mein 0 aa raha hoga
+    // us position par ke row and column ko un vectors mein mark karlo and phir baad second traversal mein un rows and columns ko 0 kardo.
+    // TC => O(2*(N*M))   SC => O(N+M) hojayegi
+    // Approach-3 : Hum kya karenge ki separate rows and columns ke vectors lene ki bajaye given matrix ke first column and first row ko hi consider
+    // kar lenge jisse space optimize hojayega. Hum jab bhi zero milega toh hum current row and current column ke corresponding first row and first
+    //  column ke cells ko mark kardenge. Ab problem yehi hai ki hum jab mark kar rahe honge toh [0,0] par jo value hogi woh column ke liye ho rahi
+    // hai ya row ke liye ho rahi hai ye pehchane mein problem hogi toh iske liye hum ek separate variable le lenge column ko mark karne ke liye.
     void setZeroes(vector<vector<int>> &matrix)
     {
         // TC => O(2*(N*M))
@@ -12,7 +18,8 @@ public:
         int m = matrix.size();
         int n = matrix[0].size();
         int colzero = 1;
-        // sabse pehle hum jis bhi cell par zero mile us cell ke corresponding first row and first column ko mark kardenge and agar j = 0 hai toh uske liye variable ko 0 mark kardenge
+        // sabse pehle hum jis bhi cell par zero mile us cell ke corresponding first row and first column ko mark kardenge and agar j = 0 hai toh uske
+        // liye variable ko 0 mark kardenge
         for (int i = 0; i < m; i++)
         {
             for (int j = 0; j < n; j++)
