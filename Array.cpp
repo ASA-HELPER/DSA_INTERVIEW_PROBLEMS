@@ -465,3 +465,119 @@ public:
         // X+Y = val2
     }
 };
+
+// Problem : Rearrange an array with O(1) extra space GFG
+class Solution
+{
+public:
+    // Optimised code using trick : trick yehi hai ki current position par jo number hai usse x maan lenge
+    // phir array ki x position par jo element hai usse n se mod karke n se hi multiply kardenge and phir x mein add karke
+    // current position par store kardenge array ki.
+    // ab is trick se ye hoga ki hum two numbers ko ek hi position par store kar paa rahe hai jiski wajah se dusre traversal mein hume
+    // current position par konsa number hoga ye pata chal jaayega just n se divide karke dekhlo.
+    // Examples par dry run karlo samajh aajayega.
+    // TC => O(N)   SC => O(1)
+    void arrange(long long arr[], int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            int x = arr[i];
+            int y = arr[x];
+            arr[i] = x + (y % n) * n;
+        }
+        for (int i = 0; i < n; i++)
+        {
+            arr[i] /= n;
+        }
+    }
+};
+
+// Problem : Rearrange array alternatively GFG
+class Solution
+{
+public:
+    // Optimised code : Isme hum ek hi position par two numbers ko rakhne ki koshish karenge
+    // Dividened = Quotient*Divisor + Remainder
+    // Dividend/Divisor = Quotient
+    // Dividend%Divisor = Remainder
+    // Yahan remainder old value ko represent karega and Quotient new(final answer at current position) value ko represent karega
+    // ek cheez notice karo ki hume hamesha even index par maximum number ko rakhna hai and odd position par minimum value ko
+    // TC => O(N)    SC => O(1)
+    void rearrange(long long *arr, int n)
+    {
+        int MAX = arr[n - 1] + 1;
+        int min_index = 0;
+        int max_index = n - 1;
+        for (int i = 0; i < n; i++)
+        {
+            // even index hai toh current value mein maximum value ko add karna hoga but pehle mod lena hoga MAX se taaki previous value mil
+            // sake
+            if (i % 2 == 0)
+            {
+                arr[i] = (arr[max_index] % MAX) * MAX + arr[i];
+                max_index--;
+            }
+            // odd index hai toh current value mein minimum value ko add karna hoga but pehle mod lena hoga MAX se taaki previous value mil
+            // sake
+            else
+            {
+                arr[i] = (arr[min_index] % MAX) * MAX + arr[i];
+                min_index++;
+            }
+        }
+        for (int i = 0; i < n; i++)
+        {
+            arr[i] /= MAX;
+        }
+    }
+};
+
+// Problem : Next Permutation GFG
+class Solution
+{
+public:
+    // {1,2,3,6,5,4}
+    // 3>6 toh hum first_index mein 2 ko rakhlenge
+    // ab last se dubara check karenge ki konsa number greater hai 3 se
+    // 4 greater hai 3 se toh 3 and 4 ko swap kardenge
+    // {1,2,4,6,5,3} ko ab hum 6 se 3 tak reverse kardenge
+    // Final answer array hoga : {1,2,4,3,5,6}
+    // TC => O(N)   SC => O(1)
+    vector<int> nextPermutation(int n, vector<int> arr)
+    {
+        // Hum ek variable le lenge jiski help se hum last se us index ko find karne ki koshish karenge jahan par current number next
+        // number se less hoga taaki jo bhi small number wala index hai usse last mein shift kar sake
+        int first_index = INT_MAX;
+        for (int i = n - 2; i >= 0; i--)
+        {
+            if (arr[i] < arr[i + 1])
+            {
+                first_index = i;
+                break;
+            }
+        }
+        // agar koyi bhi number apne next number se chota nahi hoga toh hume pure vector ko reverse kardenge
+        if (first_index == INT_MAX)
+        {
+            reverse(arr.begin(), arr.end());
+        }
+        // warna hum last se us index ko find karne ki koshish karenge jo ki hamare first_index waale number par hai usse greater hoga
+        // jese hi high_index ka number milega toh hum first_index and last_index waale number ko swap kardenge phir
+        // first_index ke next index se last tak ke numbers ko swap kardenge
+        else
+        {
+            int high_index = INT_MAX;
+            for (int i = n - 1; i >= 0; i--)
+            {
+                if (arr[i] > arr[first_index])
+                {
+                    high_index = i;
+                    break;
+                }
+            }
+            swap(arr[first_index], arr[high_index]);
+            reverse(arr.begin() + first_index + 1, arr.end());
+        }
+        return arr;
+    }
+};
