@@ -1,3 +1,45 @@
+// Problem : Rotate Image LeetCode
+class Solution
+{
+public:
+    // Brute Force Approach : Simply ek new matrix le lenge jisme hum and uske last column se usse fil karna start karna start karenge.
+    // Original matrix ki first row ko final matrix ki last column mein put kardenge, aese hi second row ke elements ko new matrix ke second
+    // last column mein put kardenge.
+    // Simply : new_matrix[j][n - i - 1] = Org_matrix[i][j];
+    // TC => O(N*N)   SC => O(N*N)
+
+    // Space Optimised Approach :
+    // TC => O(N*N) + O(N*N).One O(N*N) is for transposing the matrix and the other is for reversing the matrix.
+    // SC => O(1)
+    void rotate(vector<vector<int>> &matrix)
+    {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        // Sabse pehle hum transpose karenge matrix ka
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i; j < n; j++)
+            {
+                swap(matrix[i][j], matrix[j][i]);
+            }
+        }
+        // ab hum har row ko reverse karenge taaki hume final matrix mil sake
+        for (int i = 0; i < n; i++)
+        {
+            // Har row reverse karne ke liye manually kar rahe hai reverse using swap function other simply in-built reverse function ko bhi laga
+            // sakte hai har row par
+            int left = 0;
+            int right = n - 1;
+            while (left < right)
+            {
+                swap(matrix[i][left], matrix[i][right]);
+                left++;
+                right--;
+            }
+        }
+    }
+};
+
 // Problem : Set Matrix Zeroes Leetcode
 class Solution
 {
