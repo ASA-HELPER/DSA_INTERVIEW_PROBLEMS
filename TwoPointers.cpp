@@ -110,3 +110,63 @@ public:
         return sum;
     }
 };
+
+// Problem : 3Sum LeetCode
+
+// Problem : 4Sum Leetcode
+class Solution
+{
+public:
+    // TC => O(N^3)   SC => O(1)
+    vector<vector<int>> fourSum(vector<int> &nums, int target)
+    {
+        int n = nums.size();
+        vector<vector<int>> ans;
+        sort(nums.begin(), nums.end());
+        // Two pointers ki approach hi use karenge
+        // Two for loops chalayenge and unke andar two pointers ka concept use karenge
+        // Outer less than n-3 times isliye chalega because hume 4 elements chahiye hai har baar and is loop ki help se first number ko fix karenge
+        for (int i = 0; i < n - 3; i++)
+        {
+            // Simply duplicates ko avoid karne ke liye
+            if (i > 0 and nums[i] == nums[i - 1])
+                continue;
+            // inner loop mein hum second number ko fixed karke two pointer approach ko lagane ki try karenge
+            for (int j = i + 1; j < n - 2; j++)
+            {
+                // duplicates ko avoid karne ke liye
+                if (j > i + 1 and nums[j] == nums[j - 1])
+                    continue;
+                // two pointers ka use karenge
+                int left = j + 1, right = n - 1;
+                while (left < right)
+                {
+                    // all 4 pointers ki value ko add karke current sum ko nikal lenge
+                    long long cursum = (long long)nums[i] + nums[j] + nums[left] + nums[right];
+                    // agar current sum target ke equal hai toh usse apne final answer mein addd karlo
+                    if (cursum == target)
+                        ans.push_back({nums[i], nums[j], nums[left], nums[right]});
+                    // agar current sum hamare target se less hai toh left pointer ko aage move karo
+                    if (cursum < target)
+                    {
+                        left++;
+                        // duplicates ko avoid karne ke liye hum left pointer tab tak increase karenge jab tak uski value and uske previous element
+                        // ki value same hogi
+                        while (left < right and nums[left] == nums[left - 1])
+                            left++;
+                    }
+                    // agar current sum hamare target se greater hai toh right pointer ko piche move karo
+                    else
+                    {
+                        right--;
+                        // duplicates ko avoid karne ke liye hum right pointer tab tak decrease karenge jab uski value and uske next element ki
+                        //  value same hogi
+                        while (left < right and nums[right] == nums[right + 1])
+                            right--;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
