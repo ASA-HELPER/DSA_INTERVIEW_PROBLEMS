@@ -112,6 +112,67 @@ public:
 };
 
 // Problem : 3Sum LeetCode
+class Solution
+{
+public:
+    vector<vector<int>> threeSum(vector<int> &nums)
+    {
+        // TC => O(N^2)  SC => O(1)
+        vector<vector<int>> ans;
+        // hum sabse pehle sort kardenge taaki duplicates ko avoid kar saken
+        sort(nums.begin(), nums.end());
+        int N = nums.size();
+        for (int i = 0; i < N; i++)
+        {
+            // agar first element nahi hai and previous element current element ke equal hai toh continue taaki duplicates ko avoid kar sake
+            if (i > 0 && nums[i] == nums[i - 1])
+            {
+                continue;
+            }
+            // two pointers lenge taaki baaki two numbers ko select kar saken
+            int j = i + 1;
+            int k = N - 1;
+            // jab tak j less than k rahega tabhi tak loop chalega because hum chahte hai ki triplets increasing order mein ho and duplicate na ho
+            while (j < k)
+            {
+                int sum = nums[i] + nums[j] + nums[k];
+                // agar sum less than 0 hai toh hume sum ko increase karna hoga toh iske liye hum kya karenge ki j pointer ko increase karenge
+                // because k pointer par jo value hai woh toh already greater hogi us value se jo j pointer par hai
+                if (sum < 0)
+                {
+                    j++;
+                }
+                // agar sum greater than 0 hai toh hume sum ko decrease karna hoga toh iske liye hum kya karenge ki k pointer ko decrease karenge
+                // because j pointer par jo value hai woh toh already less hogi us value se jo k pointer par hai
+                else if (sum > 0)
+                {
+                    k--;
+                }
+                // agar sum equal to 0 hogaya toh
+                else
+                {
+                    vector<int> temp = {nums[i], nums[j], nums[k]};
+                    ans.push_back(temp);
+                    j++;
+                    k--;
+                    // ab jab tak current j position par jo value hai woh previous value ke same hai tab tak aage bandhenge array mein taaki
+                    // duplicates ko avoid kar saken
+                    while (j < k && nums[j] == nums[j - 1])
+                    {
+                        j++;
+                    }
+                    // ab jab tak current k position par jo value hai woh next value ke same hai tab tak piche jaayenge array mein taaki duplicates
+                    // ko avoid kar saken
+                    while (j < k && nums[k] == nums[k + 1])
+                    {
+                        k--;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
 
 // Problem : 4Sum Leetcode
 class Solution
