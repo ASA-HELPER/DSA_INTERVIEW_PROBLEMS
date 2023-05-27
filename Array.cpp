@@ -358,6 +358,89 @@ public:
     }
 };
 
+// Problem : Majority Element II LeetCode
+class Solution
+{
+public:
+    vector<int> majorityElement(vector<int> &nums)
+    {
+        // TC => O(N)   SC => O(1)
+        // Optimised Approach : Extended Moore's Voting algorithm ka use karenge. Sabse pehle iss question mein ye baat clear honi chahiye ki array
+        // mein sirf 2 hi element honge jo ki greater than n/3 times aayenge and isi cheez ka fayda utha kar hum Moore's algorithm ko extend karenge
+        int n = nums.size();
+        // Hum 4 variables le lenge jinki help se counter and element ko track karenge. 4 variables isiliye taaki dono numbers and unke count ko
+        // track kar sake
+        int cnt1 = 0, cnt2 = 0;
+        int ele1 = 0, ele2 = 0;
+        // Simply Moore's voting algorithm ka cancellation logic use karenge ki agar count 0 hai toh naya element aajayega and uska count 1 hojayega
+        // warna hum ye check karlenge ki current number equal toh nahi hai kahin jin numbers ko hum track kar rahe hai. Agar haan toh us particular
+        // tracked number ke counter ko increase kardenge warna agar dono tracked numbers ke equal nahi hai toh simply decrement kardenge counters ko
+        for (int i = 0; i < n; i++)
+        {
+            // Ek slight modification jo ki karni padegi woh ye hai ki agar mera koyi bhi counter 0 hota hai and dusre element ka counter 0 nahi hai
+            // lekin woh element jab aa raha hai traverse karte waqt toh first if condition check hogi toh hume yehi check lagana hai ki current
+            // element dusre tracked element ke equal naa ho. Is check ko understand karne ke liye is test case par dry run karlo : [1,2,2,3,2,1]
+            if (cnt1 == 0 && ele2 != nums[i])
+            {
+                cnt1 = 1;
+                ele1 = nums[i];
+            }
+            else if (cnt2 == 0 && ele1 != nums[i])
+            {
+                cnt2 = 1;
+                ele2 = nums[i];
+            }
+            else if (ele1 == nums[i])
+            {
+                cnt1++;
+            }
+            else if (ele2 == nums[i])
+            {
+                cnt2++;
+            }
+            else
+            {
+                cnt1--;
+                cnt2--;
+            }
+        }
+        vector<int> res;
+        // ab hum dubara array ko traverse karenge taaki ye confirm kar paayen ki algorithm ki help se jo element's mile hai woh n/3 times se greater
+        // hai ya nahi array mein
+        cnt1 = 0, cnt2 = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (nums[i] == ele1)
+            {
+                cnt1++;
+            }
+            if (nums[i] == ele2)
+            {
+                cnt2++;
+            }
+        }
+        // edge case : agar saare elements equal honge toh toh dono elements equal hi honge toh us case mein hume return karna hoga single element ko
+        if (ele1 == ele2)
+        {
+            return {ele1};
+        }
+        int checker = (int)(n / 3) + 1;
+        // agar element greater than n/3 times hai toh usse apne array mein rakh lo
+        if (cnt1 >= checker)
+        {
+            res.push_back(ele1);
+        }
+        if (cnt2 >= checker)
+        {
+            res.push_back(ele2);
+        }
+        // sorting karne mein yahan constant time hi lagega because sirf 2 hi elements hai toh N = 2 hoga.
+        // TC => O(NlogN) => O(2log2)  => O(2)
+        sort(res.begin(), res.end());
+        return res;
+    }
+};
+
 // Problem : Sort an array 0's , 1's and 2's  GFG
 class Solution
 {
