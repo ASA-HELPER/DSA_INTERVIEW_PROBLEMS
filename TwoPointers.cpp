@@ -73,3 +73,40 @@ public:
         return ans;
     }
 };
+
+// Problem : 3Sum Closest LeetCode
+class Solution
+{
+public:
+    // TC => O(N^2)+O(NlogN)  SC => O(1)
+    // Approach ye hai ki agar mein sort kardeta hun aur phir two pointers leta hun current index ke liye jo ki mujhe help karenge ki un 2 pointers
+    // par jo value hai aur jo value current index par hai unka sum agar less hai target se toh left pointer ko aage badhao taaki sum target ke paas
+    // paunche and agar sum zyada hai target se toho right pointer ko kum kardo taaki sum target ke pass paunch jaye and agar target aur sum equal
+    // hai toh target ko hi return kardo.
+    int threeSumClosest(vector<int> &nums, int target)
+    {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        int sum = nums[0] + nums[1] + nums[2];
+        for (int i = 0; i < n - 2; i++)
+        {
+            int left = i + 1;
+            int right = n - 1;
+            while (left < right)
+            {
+                int temp = nums[i] + nums[left] + nums[right];
+                // Hum ye dekhenge ki kya temporary sum aur target ka difference less hai current sum and target ke difference se agar haan toh hum
+                // current sum ko temporary sum assign kardenge taaki hume woh triplet mile jiske sum ki value target ke closest hai
+                if (abs(temp - target) < abs(sum - target))
+                    sum = temp;
+                if (temp < target)
+                    left++;
+                else if (temp > target)
+                    right--;
+                else
+                    return target;
+            }
+        }
+        return sum;
+    }
+};
