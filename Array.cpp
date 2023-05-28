@@ -664,3 +664,30 @@ public:
         return arr;
     }
 };
+
+// Problem : Merge Without Extra Space
+class Solution
+{
+public:
+    // Optimised Approach : Two pointers ki help lenge.
+    // Agar array1 mein current position par element already less hai than element at current position of array2 then simply array1 mein aage
+    // badhenge warna array2 ki current position waale element ko swap kardenge last element se array1 ke.
+    // Last mein simply sort kardenge arrays ko.
+    // TC => O(2*(NlogN)) hogi
+    // SC => O(1) hogi
+    void merge(long long arr1[], long long arr2[], int n, int m)
+    {
+        int i = 0, j = 0, k = n - 1;
+        while (i <= k && j < m)
+        {
+            if (arr1[i] < arr2[j])
+                i++;
+            else
+            {
+                swap(arr2[j++], arr1[k--]);
+            }
+        }
+        sort(arr1, arr1 + n);
+        sort(arr2, arr2 + m);
+    }
+};
