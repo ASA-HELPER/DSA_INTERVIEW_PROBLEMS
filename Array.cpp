@@ -691,3 +691,67 @@ public:
         sort(arr2, arr2 + m);
     }
 };
+
+// Problem : Count Inversions GFG
+class Solution
+{
+    // Brute Force : simply 2 for loops lagao and phir check karte jao condition ki a[i]>a[j] hai toh count++
+    // TC => O(N^2)   SC => O(1)
+public:
+    //   Optimal Approach : Using merge sort and concept of using sorted arrays
+    // TC => O(NlogN)     SC =>O(N) because ek temporary array bhi le rahe hai
+    long long merge(long long arr[], long long temp[], long long left, long long mid, long long right)
+    {
+        long long inv_count = 0;
+        long long i = left;
+        long long j = mid;
+        long long k = left;
+        while ((i <= mid - 1) && (j <= right))
+        {
+            if (arr[i] <= arr[j])
+            {
+                temp[k++] = arr[i++];
+            }
+            else
+            {
+                temp[k++] = arr[j++];
+                // inversion ka count lenge jo ki hoga inversion count so far + mid-i because agar ith wala element less hai j se toh
+                // i se mid tak ke saare element smaller honge mid se iske liye example se dry run karke dekhna padega
+                inv_count = inv_count + (mid - i);
+            }
+        }
+
+        while (i <= mid - 1)
+            temp[k++] = arr[i++];
+
+        while (j <= right)
+            temp[k++] = arr[j++];
+
+        for (i = left; i <= right; i++)
+            arr[i] = temp[i];
+        // Simply current array portion se jo bhi count mila hoga inversion ka usse return kardenge
+        return inv_count;
+    }
+
+    long long merge_Sort(long long arr[], long long temp[], long long left, long long right)
+    {
+        long long mid;
+        long long inv_count = 0;
+        if (right > left)
+        {
+            mid = (left + right) / 2;
+            // current portion se array ke jo inversion count milega usse add karo
+            inv_count += merge_Sort(arr, temp, left, mid);
+            // current portion se array ke jo inversion count milega usse add karo
+            inv_count += merge_Sort(arr, temp, mid + 1, right);
+            // jab merge hoga toh current portion se array ke jo inversion count milega usse add karo
+            inv_count += merge(arr, temp, left, mid + 1, right);
+        }
+        return inv_count;
+    }
+    long long int inversionCount(long long arr[], long long N)
+    {
+        long long temp[N];
+        return merge_Sort(arr, temp, 0, N - 1);
+    }
+};
