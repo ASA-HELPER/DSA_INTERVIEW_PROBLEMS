@@ -755,3 +755,35 @@ public:
         return merge_Sort(arr, temp, 0, N - 1);
     }
 };
+
+// Problem : Maximum Product Subarray Leetcode
+class Solution
+{
+public:
+    int maxProduct(vector<int> &nums)
+    {
+        // TC => O(N)
+        // SC => O(1)
+        int n = nums.size();
+        if (n == 1)
+        {
+            return nums[0];
+        }
+        // Simply prefix and suffix products ka use karenge and agar kahin par bhi 0 aata hai toh iska matlab hai ki wahan se new subarray start ho raha hai
+        int prefixProduct = 1, suffixProduct = 1;
+        int product = INT_MIN;
+        for (int i = 0; i < n; i++)
+        {
+            prefixProduct *= nums[i];
+            suffixProduct *= nums[n - i - 1];
+            product = max(product, max(prefixProduct, suffixProduct));
+            // agar prefix product 0 hojata hai toh usse 1 kardenge taaki ye show kar saken ki yahan se new subarray start ho raha hai
+            if (prefixProduct == 0)
+                prefixProduct = 1;
+            // agar suffix product 0 hojata hai toh usse 1 kardenge taaki ye show kar saken ki yahan se new subarray start ho raha hai
+            if (suffixProduct == 0)
+                suffixProduct = 1;
+        }
+        return product;
+    }
+};
