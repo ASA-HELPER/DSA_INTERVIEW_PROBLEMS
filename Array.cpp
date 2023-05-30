@@ -698,7 +698,9 @@ class Solution
     // Brute Force : simply 2 for loops lagao and phir check karte jao condition ki a[i]>a[j] hai toh count++
     // TC => O(N^2)   SC => O(1)
 public:
-    //   Optimal Approach : Using merge sort and concept of using sorted arrays
+    // Optimal Approach : Using merge sort and concept of using sorted arrays. Merge sort mein hi 2-3 lines ka change karna hai. Hum bas ye try
+    // kar rahe hai ki har branch mein sort karne ke baad hume two sorted arrays milte hai toh unke beech mein two pointers ka concept laga rahe.
+    // Dry run dekho iska youtube par ya kisi website par zyada clear hoga.
     // TC => O(NlogN)     SC =>O(N) because ek temporary array bhi le rahe hai
     long long merge(long long arr[], long long temp[], long long left, long long mid, long long right)
     {
@@ -785,5 +787,89 @@ public:
                 suffixProduct = 1;
         }
         return product;
+    }
+};
+
+// Problem : Reverse Pairs LeetCode
+class Solution
+{
+    // Interviewer se hamesha puchna ki kya aap given array ko alter kar sakte hai warna ek temporary vector le lena.
+    // O( N log N ) + O (N) + O (N) becausecO(N) Merge operation karne mein lagega, O(N) counting operation mein lagega ( at each iteration of i,
+    // j doesn’t start from 0 . Both of them move linearly )
+public:
+    // Simply merge sort ka hi concept laga hai bas 2-3 lines extra hogayi hai
+    // Almost same logic as count inversions question but yahan ye dhyaan rakhna hai ki merge karne se pehle dono sorted array mein agar ek particular
+    // left array ka element greater hai kisi particular index se toh uske aage ke index se hi left array ke further elements ko compare karna start
+    // karenge. For example :
+    // left array = [7,8,9]   right array = [3,4,5]
+    // Yahan par 7 jo hai woh 2*3 se bada hai toh count = 1 hoga and right array mein index 1 par hi ruk jaayega for 7.
+    // Ab 8 ke liye index 1 se hi start karenge compare karna 2*4 less hai toh count = 1 hi rahega and index bhi 1 hi rahega
+    // Ab 9 ke liye dekhenge toh 2*4 se greater hai toh count = 1+2 hojayega. 2 isliye add hoga because 4 tak ke saaare elements ke twice se greater
+    // hoga 9.
+    int Merge(vector<int> &nums, int low, int mid, int high)
+    {
+        // Ye ek particular logic hai jo ki hume help karega index ko track karne mein ki kahan tak index pauncha hai and kahan see comparing start
+        // karni hai right array mein
+        int total = 0;
+        int j = mid + 1;
+        // outer loop left array ke elements ke liye hai
+        for (int i = low; i <= mid; i++)
+        {
+            // inner loop right array ke elements ke liye hai
+            while (j <= high && nums[i] > 2 * (long long)nums[j])
+            {
+                j++;
+            }
+            // left array ka ek element mid+1 se jth tak ke saare elements ke twice se greater hai
+            total += (j - (mid + 1));
+        }
+
+        vector<int> t;
+        int left = low, right = mid + 1;
+
+        while (left <= mid && right <= high)
+        {
+
+            if (nums[left] <= nums[right])
+            {
+                t.push_back(nums[left++]);
+            }
+            else
+            {
+                t.push_back(nums[right++]);
+            }
+        }
+
+        while (left <= mid)
+        {
+            t.push_back(nums[left++]);
+        }
+        while (right <= high)
+        {
+            t.push_back(nums[right++]);
+        }
+
+        for (int i = low; i <= high; i++)
+        {
+            nums[i] = t[i - low];
+        }
+        return total;
+    }
+
+    int MergeSort(vector<int> &nums, int low, int high)
+    {
+        if (low >= high)
+            return 0;
+        int mid = (low + high) / 2;
+        // array ko break karte waqt jo count milega
+        int countPairs = MergeSort(nums, low, mid);
+        countPairs += MergeSort(nums, mid + 1, high);
+        // wapis merge karte waqt jo count milega
+        countPairs += Merge(nums, low, mid, high);
+        return countPairs;
+    }
+    int reversePairs(vector<int> &nums)
+    {
+        return MergeSort(nums, 0, nums.size() - 1);
     }
 };
