@@ -74,6 +74,38 @@ public:
     }
 };
 
+// Problem : Rows with max 1s GFG
+class Solution
+{
+public:
+    // TC => O(N+M) hogi because hum bas two pointers ko hi use karke matrix ko ek baar traverse kar rahe hai
+    // SC => O(1) because hum koyi extra space use nahi kar rahe hai
+    int rowWithMax1s(vector<vector<int>> Arr, int n, int m)
+    {
+        // simply hum yahan row number and column number ko as two pointers treat kar rahe hai
+        // Hum first row and last column se traverse karna start karenge because har row sorted hai toh 1s rightmost hi honge hamesha
+        int row = 0;
+        int col = m - 1;
+        int maxRowIndex = -1;
+        // approach yehi hai ki hum bas ye check karenge ki agar current cell par 1 hai toh previous column par shift karenge
+        // warna hum next row mein shift karenge jab tak row < n hai and columns >=0 hai
+        while (row < n && col >= 0)
+        {
+            if (Arr[row][col] == 1)
+            {
+                maxRowIndex = row;
+                col--;
+            }
+            else
+            {
+                row++;
+            }
+        }
+
+        return maxRowIndex;
+    }
+};
+
 // Problem : 3Sum Closest LeetCode
 class Solution
 {
