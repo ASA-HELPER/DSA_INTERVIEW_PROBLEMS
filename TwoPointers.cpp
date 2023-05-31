@@ -231,3 +231,52 @@ public:
         return ans;
     }
 };
+
+// Problem : Conntainer with most water LeetCode
+class Solution
+{
+public:
+    // TC => O(N) because two pointers ki help se heights waale vector ko ek hi baar traverse kar rahe hai
+    // SC => O(1) because variables ke alawa hum koyi aur extra space use nahi kar rahe hai
+    int maxArea(vector<int> &height)
+    {
+        // Simply hum bas itna sochenge ki mujhe har baar two heights chahiye jinke beech mein water hoga toh koshish yehi rahegi ki
+        // two maximum heights miljaayen jin mein se kisi ek ki height tak hi water bharega dono heights ke beech mein
+        int n = height.size();
+        // initially hum maan rahe hai ki leftHeight and rightHeight -1 hai
+        int leftHeight = -1;
+        int rightHeight = -1;
+        int i = 0;
+        int j = n - 1;
+        int mostWater = 0;
+        // Two pointers ki help lekar mein left and right side se array ke maximum heights ko find karne ki try karunga
+        while (i < j)
+        {
+            // dono taraf se heights ko rakhlo apne paas
+            leftHeight = height[i];
+            rightHeight = height[j];
+            // ab container mein utna hi water hoga jitna container ka area hoga dono ends ki minimum height tak. Toh hum kya karenge ki dono
+            // heights mein se minimum ko multiply kardenge un dono heights ke beech ke distance se. Clarity ke liye ye keh sakte hai ki hum
+            // rectangle ka area nikal rahe hai jahan par difference between indexes of heights jo hai woh breadth of rectangle ko represent
+            // kar raha hai.
+            int currentWater = min(leftHeight, rightHeight) * (j - i);
+            // ab current container mein jo bhi water hai usse hum most water ke variable ke saath compare karenge taaki jis container mein
+            // maximum water hoga uska area apne paas rakh sake har baar compare karne ke liye
+            mostWater = max(mostWater, currentWater);
+            // ab humne jin 2 heights ko consider kiya tha unme se jo minimum hogi usko find karenge because hum har baar maximum heights chahiye
+            // hai toh hum us pointer ko hi shift karenge jo ki 2 heights mein se minimum height ko point kar raha hoga
+            int minHeight = min(leftHeight, rightHeight);
+            // agar minimum height left waale pointer ki hai toh hum left pointer ko increment karenge
+            if (minHeight == leftHeight)
+            {
+                i++;
+            }
+            // agar minimum height right waale pointer ki hai toh hum right pointer ko decrement karenge
+            else
+            {
+                j--;
+            }
+        }
+        return mostWater;
+    }
+};
