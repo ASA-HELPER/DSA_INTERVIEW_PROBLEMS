@@ -298,6 +298,50 @@ public:
     }
 };
 
+// Problem : Stock Buy and sell GFG
+void stockBuySell(int price[], int n)
+{
+    // TC => O(N)    SC => O(1)
+    // Simply hum increasing subarrays ke starting and ending points ko find kar rahe hai
+    int profit = 0;
+    int buy = 0;
+    for (int i = 0; i < n - 1; i++)
+    {
+        // agar current position par value less hai next value se and abhi tak buy nahi kiya hai toh buy karlo and profit ko 1 kardo
+        if (price[i] < price[i + 1] && buy == 0)
+        {
+            cout << "(" << i << " ";
+            buy = 1;
+            profit = 1;
+        }
+        // agar current position ki value greater hogayi hai next vaale se toh iska matlab increasing subarray khatam hogaya hai toh hum
+        // sell price ko print karke buy ko 0 kardenge taaki dubara se buy kar paayen stock ko
+        else if (price[i] > price[i + 1] && buy == 1)
+        {
+            cout << i << ")"
+                 << " ";
+            buy = 0;
+        }
+    }
+    // agar koyi bhi stock khareed hi nahi paaye toh profit hoga nahi
+    if (profit == 0)
+    {
+        cout << "No Profit"
+             << "\n";
+    }
+    // agar stock khareeda hai and last index par sell kiya hai toh last cell ki value ko print karna padega
+    else if (buy == 1)
+    {
+        cout << n - 1 << ")"
+             << "\n";
+    }
+    // har test case ke baad next line mein jaane ke liye
+    else
+    {
+        cout << "\n";
+    }
+}
+
 // Problem : Majority element leetcode
 class Solution
 {
