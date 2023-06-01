@@ -41,3 +41,39 @@ public:
         return minWin;
     }
 };
+
+// Problem : Count the subarrays having product less than k GFG
+class Solution
+{
+public:
+    // TC => O(N)  SC => O(1) hogi
+    int countSubArrayProductLessThanK(const vector<int> &a, int n, long long k)
+    {
+        // Agar k hi 1 hai toh koyi product isse less hoga hi nahi toh subarrays zero honge
+        if (k == 1)
+        {
+            return 0;
+        }
+        // simply sliding window approach lagakar dekhenge
+        int i = 0;
+        int j = 0;
+        long long int product = 1;
+        int count = 0;
+        while (j < n)
+        {
+            product *= a[j];
+            if (product >= k)
+            {
+                while (product >= k)
+                {
+                    product /= a[i];
+                    i++;
+                }
+            }
+            // har length ke subarrays ko count karte rahenge
+            count += (j - i + 1);
+            j++;
+        }
+        return count;
+    }
+};
