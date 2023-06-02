@@ -917,3 +917,47 @@ public:
         return MergeSort(nums, 0, nums.size() - 1);
     }
 };
+
+// Problem : Maximum Circular subarray sum
+class Solution
+{
+public:
+    // TC => O(N)   SC => O(1)
+    // simply kadane's algorithm ka use kar rahe hai
+    int kadane(vector<int> &arr)
+    {
+        int ans = arr[0], sum = 0;
+        for (int i : arr)
+        {
+            sum += i;
+            ans = max(ans, sum);
+            if (sum < 0)
+            {
+                sum = 0;
+            }
+        }
+        return ans;
+    }
+    int maxSubarraySumCircular(vector<int> &nums)
+    {
+        // Sabse pehle hum normal kadane's algorithm ki help se sum le aayenge
+        int x = kadane(nums);
+        int sum = 0;
+        // ab hum har element ko array mein -1 se multiply kardenge and total sum ko bhi saath mein hi calculate karte rahenge
+        for (int &i : nums)
+        {
+            sum += i;
+            i = -i;
+        }
+        // ab hum modified vector par dubara kadane's algorithm lagayenge
+        int y = kadane(nums);
+        // agar total sum + modified vector se jo kadane's algorithm ne sum diya hai inka sum 0 hoga toh return kadane's algorithm se
+        // bina modify kare jo sum mila tha usse hi send kardo
+        if (sum + y == 0)
+        {
+            return x;
+        }
+        // warna maximum bhejdo normal kadane's algorithm se jo sum mila tha usme and sum of modified vector kadane's algorithm + total sum ka
+        return max(x, y + sum);
+    }
+};
