@@ -175,3 +175,66 @@ public:
         return spiral;
     }
 };
+
+// Problem : Largest rectangle of 1s with swapping of columns allowed GFG
+class Solution
+{
+public:
+    // TC => O(R*(R+C))     SC => O(R*C)
+    // Original   prefix matrix  sorted rows   Area
+    // 0 1 0 1 0    0 1 0 1 0     0 0 0 1 1     2
+    // 0 1 0 1 1    0 2 0 2 0     0 0 0 2 2     4
+    // 1 1 0 1 0    1 3 0 3 1     0 1 1 3 3     6
+    int maxArea(vector<bool> mat[], int r, int c)
+    {
+        // Sabse pehle hum simply prefix sum le lenge pure matrix ka top to bottom
+        vector<vector<int>> cnt(r, vector<int>(c, 0));
+        for (int i = 0; i < r; i++)
+        {
+            for (int j = 0; j < c; j++)
+            {
+                // agar first row hai toh usme toh usme hamesha matrix ki current value hi aayegi
+                if (i == 0)
+                {
+                    cnt[i][j] = mat[i][j];
+                }
+                else
+                {
+                    if (mat[i][j] == 0)
+                    {
+                        cnt[i][j] = 0;
+                    }
+                    // count matrix ke previous row ke current index ki value ko add karna hoga har baar
+                    else
+                    {
+                        cnt[i][j] = mat[i][j] + cnt[i - 1][j];
+                    }
+                }
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < r; i++)
+        {
+            // har baar ek row ko lekar usse sort karenge and uski minimum height nikal te rahenge jo ki matrix ki values hi honge
+            // and is minimum height ko width se multiply karke area nikalte rahenge and width ko bhi 1 se increase karte rahenge jesse
+            // jesse columns mein aage traverse karte rahenge
+            sort(cnt[i].begin(), cnt[i].end());
+            int minHeight = INT_MAX;
+            for (int j = c - 1, width = 1; j >= 0; j--, width++)
+            {
+                minHeight = min(minHeight, cnt[i][j]);
+                //   kyunki row sorted hai toh ek baar agar 0 miljaaye toh break kardo pura row check karne ki zaroorat nahi hai because zeroes hi milenge
+                if (minHeight == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    int area = width * minHeight;
+                    ans = max(ans, area);
+                }
+            }
+        }
+        return ans;
+    }
+};
