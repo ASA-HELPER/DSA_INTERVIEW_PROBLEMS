@@ -139,3 +139,24 @@ public:
         return title;
     }
 };
+
+// Problem : Excel Sheet Column Number LeetCode
+class Solution
+{
+public:
+    int titleToNumber(string columnTitle)
+    {
+        int result = 0;
+        for (char ch : columnTitle)
+        {
+            // Simply har baar ek character ko nikalo and uske correspoding number ko nikalo. 1 ko plus is liye kar rahe hai becuase coding
+            // scenario mein 'A' to 'Z' ko 0 to 25 se represent kar rahe hai
+            int d = ch - 'A' + 1;
+            // character ke corresponding jo bhi nuber aayega usse pehle result ko 26 se multiply karna padega phir usme number ko add karenge.
+            //  26 se multiply isliye because jesse decimal mein number form karne ke liye 10 se multiply karke phir number ko add karte hai
+            // wese hi string of characters to number ke conversion mein 26 se multiply karke add karte hai number ko
+            result = result * 26 + d;
+        }
+        return result;
+    }
+};
