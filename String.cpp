@@ -160,3 +160,49 @@ public:
         return result;
     }
 };
+
+// Problem : Bulls and Cows LeetCode
+class Solution
+{
+public:
+    // TC => O(2N)    SC => O(1)
+    // Question mein bulls ka matlab hai woh digits jo ki apni correct position par guess mein according to secret and cows ka matlab woh digits
+    // jo ki secret mein hai lekin correct position par nahi hai guess mein
+    // Is case par dry run karna : Secret = "1122"  Guess = "1222" iska answer hai : "3A0B"
+    string getHint(string secret, string guess)
+    {
+        int n = secret.size();
+        // Hum simply ek vector le lenge 10 size ka because digits 0 to 9 hoti hai
+        vector<int> digits(10, 0);
+        int bulls = 0;
+        int cows = 0;
+        // First traversal mein hum number of bulls ko count karlenge agar current position par digit secret mein and guess mein same hai warna
+        // digits waale vector mein digit ke count ko increase kardenge because ye woh digit hai jo ki secret mein hai but guess mein correct
+        // position par nahi hai
+        for (int i = 0; i < n; i++)
+        {
+            int num = int(secret[i] - 48);
+            if (secret[i] == guess[i])
+            {
+                bulls++;
+            }
+            else
+            {
+                digits[num]++;
+            }
+        }
+        // Second traversal mein hum number of cows ko count karlenge agar current position par digit secret mein and guess mein same nahi hai and
+        // digits waale vector mein current digit ka count greater hai zero se and saath hi saath hum current digit ke count ko digits waale vector
+        // se decrease karte jaayenge
+        for (int i = 0; i < n; i++)
+        {
+            int num = int(guess[i] - 48);
+            if (secret[i] != guess[i] && digits[num] > 0)
+            {
+                cows++;
+                digits[num]--;
+            }
+        }
+        return to_string(bulls) + 'A' + to_string(cows) + 'B';
+    }
+};
