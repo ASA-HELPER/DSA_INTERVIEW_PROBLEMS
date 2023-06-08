@@ -206,3 +206,60 @@ public:
         return to_string(bulls) + 'A' + to_string(cows) + 'B';
     }
 };
+
+// Problem : Minimum characters to be added at front to make string palindrome in O(N) GFG
+class Solution
+{
+    // Brute Force Approach :
+    // Start checking the string each time if it is a palindrome and if not, then delete the last character and check again. When the string gets
+    // reduced to either a palindrome or an empty string then the number of characters deleted from the end till now will be the answer as those
+    // characters could have been inserted at the beginning of the original string in the order which will make the string a palindrome.
+    // TC => O(N*N)     SC => O(1)
+public:
+    // Test case for dry run : tcitkg       Answer : 5
+    // LPS ka concept use karna padega jiski help se hum longest prefix nikalenge reversed string ka jo ki longest suffix hoga given string ka jo ki ye
+    // show karega ki itne characters jo hai woh apni correct position par hai. And inhe remove kardenge original string se toh bach jaayenge characters
+    // string mein utne hi characters chahiye honge string ko palindrome banane mein
+    // Same code hai LPS ka
+    // TC => O(N)    SC => O(N)
+    // For string = AACECAAAA
+    // Concatenated String = AACECAAAA$AAAACECAA
+    // LPS array will be {0, 1, 0, 0, 0, 1, 2, 2, 2, 0, 1, 2, 2, 2, 3, 4, 5, 6, 7}
+    vector<int> lps(int n, string s)
+    {
+        int i = 1, j = 0;
+        vector<int> ans(n, 0);
+        while (i < n)
+        {
+            if (s[i] == s[j])
+            {
+                ans[i] = j + 1;
+                i++;
+                j++;
+            }
+            else
+            {
+                if (j != 0)
+                {
+                    j = ans[j - 1];
+                }
+                else
+                {
+                    i++;
+                }
+            }
+        }
+        return ans;
+    }
+    int minChar(string str)
+    {
+        // Hum given string ko reverse karke usme '$' ko append karke usme original string ko append kardenge
+        // And phir newly created string ke liye Longest prefix suffix nikalenge
+        int n = str.length();
+        string s = str;
+        reverse(str.begin(), str.end());
+        string new_s = s + '$' + str;
+        vector<int> lps_ans = lps((2 * n + 1), new_s);
+        return n - lps_ans[2 * n];
+    }
+};
