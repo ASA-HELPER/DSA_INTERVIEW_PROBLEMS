@@ -161,6 +161,53 @@ public:
     }
 };
 
+// Problem : Remove consecutive characters Interviewbit
+class Solution
+{
+    // TC => O(N)     SC => O(N)
+    string removechars(string A, int B)
+    {
+        int n = A.size();
+        int count = 1;
+        // Hum ek vector le lenge taaki ye store kar saken ki ek particular character kitni baar consecutively aa raha hai
+        vector<pair<char, int>> v;
+        for (int i = 1; i < n; i++)
+        {
+            // agar character consecutively repeat ho raha hai toh count ko increase karte rahenge
+            if (A[i] == A[i - 1])
+            {
+                count++;
+            }
+            // warna ye check karenge ki kya ye character B times aaya hai consecutively in string agar haan toh iska length 0 kardenge because hume
+            // isse apne final answer mein nahi dena hai warna iski length ko apne paas rakhlenge and isse {character,length} ki form mein vector of
+            // pair mein daaldenge and count ko phir se 1 kardenge
+            else
+            {
+                int len;
+                if (count == B)
+                    len = 0;
+                else
+                    len = count;
+                v.push_back({A[i - 1], len});
+                count = 1;
+            }
+        }
+        // Ye last character ke liye hai  ki agar last character ki agar last character taak conseceutively chalta raha loop toh usse out of loop
+        // add karna padega vector mein us character ki length ke saath
+        v.push_back({A[n - 1], count % B});
+        string ans = "";
+        // ab vector mein se character ko aur uske length ko lekar har character ko uski length times string mein append karte jaayenge
+        for (auto x : v)
+        {
+            for (int i = 0; i < x.second; i++)
+            {
+                ans.push_back(x.first);
+            }
+        }
+        return ans;
+    }
+};
+
 // Problem : Bulls and Cows LeetCode
 class Solution
 {
