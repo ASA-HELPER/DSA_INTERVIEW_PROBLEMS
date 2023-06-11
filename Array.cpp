@@ -170,6 +170,36 @@ public:
     }
 };
 
+// Problem : Smallest positive missing number
+class Solution
+{
+    // TC => O(N)       SC => O(1)
+public:
+    int missingNumber(int arr[], int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            // Simply hum kya kar rahe hai ki jo bhi positive number greater than 0 hai
+            // usse swapping karke uski correct index par rakh rahe hai and jese hi woh
+            // correct position par paunch jaaye toh while loop se bahar aajayenge
+            // while loop isliye taaki jis number ko current number se swap kara hai woh
+            // bhi apni correct position par paunch jaaye
+            while (arr[i] > 0 && arr[i] <= n && arr[i] != arr[arr[i] - 1])
+                swap(arr[i], arr[arr[i] - 1]);
+        }
+        // second traversal mein bas itna dekh lenge ki konsa number aesa hai jo ki apni correct position par nahi hai
+        for (int i = 0; i < n; i++)
+        {
+            if (arr[i] != (i + 1))
+            {
+                return i + 1;
+            }
+        }
+        // agar sabhi numbers apni correct position par hai toh iska matlab n+1th number hi missing hai vector mein
+        return n + 1;
+    }
+};
+
 // Problem : Longest Sub-Array with sum K
 class Solution
 {
