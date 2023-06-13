@@ -70,3 +70,43 @@ public:
         // Approach-4 : using binary search : Iske liye mein code jaldi hi yahan update karunga. TC =. O(logN) and SC => O(1)
     }
 };
+
+// Problem : Maximum Sum of rectangle No longer than K
+class Solution
+{
+public:
+    // TC => O(cols*cols*rows*log(rows))
+    // SC => O(rows)
+    int maxSumSubmatrix(vector<vector<int>> &matrix, int k)
+    {
+        int res = INT_MIN, rows = matrix.size(), cols = matrix[0].size();
+        // Columns mein traverse karte huye column sum nikalenge
+        for (int left = 0; left < cols; left++)
+        {
+            vector<int> sums(rows, 0);
+            for (int right = left; right < cols; right++)
+            {
+                // Ye basically ek row ka prefix sum nikal rahe hai
+                for (int i = 0; i < rows; i++)
+                {
+                    sums[i] += matrix[i][right];
+                }
+                set<int> s = {0};
+                int run_sum = 0;
+                // ab row ke prefix sum waale array mein se sum ko nikal kar add karte jaayenge and usme se k ko minus karke uska lower bound
+                // find karenge set mein and agar woh set mein mil jaata hai toh check karlenge ki kya woh maximum hai warna usse set mein daaldenge
+                for (int sum : sums)
+                {
+                    run_sum += sum;
+                    auto it = s.lower_bound(run_sum - k);
+                    if (it != s.end())
+                    {
+                        res = max(res, run_sum - (*it));
+                    }
+                    s.insert(run_sum);
+                }
+            }
+        }
+        return res;
+    }
+};
