@@ -301,6 +301,47 @@ public:
     }
 };
 
+// Problem : Count triplets with sum smaller than X GFG
+class Solution
+{
+public:
+    // Approach-1 : 3 for loops ka use karke check karlenge sum ko ki less than
+    // given sum hai toh count increment kardenge by 1
+    // TC => O(N^3)  SC => O(1)
+    long long countTriplets(long long arr[], int n, long long sum)
+    {
+        // Approach-2 : Simply array ko sort kardenge and phir two pointers ka use karenge
+        // TC => O(N^2)  SC => O(1)
+        sort(arr, arr + n);
+        long long count = 0;
+        // 0 to n-2 tak jaayenge because hume last mein 2 numbers toh chahiye hi isliye
+        // third last element tak hi jaa sakte hai
+        for (int k = 0; k < n - 2; k++)
+        {
+            int i = k + 1;
+            int j = n - 1;
+            // two pointer approach lagayenge
+            while (i < j)
+            {
+                long long s = (long long)(arr[i] + arr[j] + arr[k]);
+                // agar current sum less than hoga given sum se toh hum count karlenge ki
+                // kitne numbers aese hai between i and j jo ki triplet bana rahe hai
+                if (s < sum)
+                {
+                    count += (j - i);
+                    i++;
+                }
+                // agar sum greater hoga toh jth pointer ko decrement karenge
+                else
+                {
+                    j--;
+                }
+            }
+        }
+        return count;
+    }
+};
+
 // Problem : kadane's Algorithm or Maximum subarray Leetcode
 class Solution
 {
