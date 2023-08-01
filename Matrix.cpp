@@ -216,14 +216,14 @@ public:
         for (int i = 0; i < r; i++)
         {
             // har baar ek row ko lekar usse sort karenge and uski minimum height nikal te rahenge jo ki matrix ki values hi honge
-            // and is minimum height ko width se multiply karke area nikalte rahenge and width ko bhi 1 se increase karte rahenge jesse
-            // jesse columns mein aage traverse karte rahenge
+            // and is minimum height ko width se multiply karke area nikalte rahenge and width ko bhi 1 se increase karte rahenge
+            // jesse jesse columns mein aage traverse karte rahenge
             sort(cnt[i].begin(), cnt[i].end());
             int minHeight = INT_MAX;
             for (int j = c - 1, width = 1; j >= 0; j--, width++)
             {
                 minHeight = min(minHeight, cnt[i][j]);
-                //   kyunki row sorted hai toh ek baar agar 0 miljaaye toh break kardo pura row check karne ki zaroorat nahi hai because zeroes hi milenge
+                // kyunki row sorted hai toh ek baar agar 0 miljaaye toh break kardo pura row check karne ki zaroorat nahi hai because zeroes hi milenge
                 if (minHeight == 0)
                 {
                     break;
@@ -236,5 +236,37 @@ public:
             }
         }
         return ans;
+    }
+};
+
+// Problem : Row with max 1s
+class Solution
+{
+public:
+    int rowWithMax1s(vector<vector<int>> Arr, int n, int m)
+    {
+        // TC => O(N+M)
+        // SC => O(1)
+        // Simply yahan two pointers ka concept use kiya hai
+        int row = 0;
+        // first row ke last column se traverse karna start kaernge
+        int col = m - 1;
+        int maxRowIndex = -1;
+        // agar current cell ki value 1 hai toh previous column par aayenge warna next row
+        // par jaayenge.
+        while (row < n && col >= 0)
+        {
+            if (Arr[row][col] == 1)
+            {
+                maxRowIndex = row;
+                col--;
+            }
+            else
+            {
+                row++;
+            }
+        }
+
+        return maxRowIndex;
     }
 };
