@@ -1,3 +1,50 @@
+// Problem : Sorting Elements of an Array by Frequency GFG
+class Solution
+{
+    // TC => O(NlogN)      SC => O(N)
+public:
+    // ek comparator banayenge jo ki sort karega elements ko unke frequency ke according
+    static bool cmp(pair<int, int> &a, pair<int, int> &b)
+    {
+        if (a.first == b.first)
+        {
+            return a.second < b.second;
+        }
+        return a.first > b.first;
+    }
+    vector<int> sortByFreq(int arr[], int n)
+    {
+        // sabhi elements ki frequency ko count karenge using map
+        unordered_map<int, int> mp;
+        for (int i = 0; i < n; i++)
+        {
+            mp[arr[i]]++;
+        }
+        vector<pair<int, int>> vec;
+        // map se elements aur unki frequency ko as a pair insert karenge vector mein taaki
+        // sorting kar sake using comparator
+        for (auto it : mp)
+        {
+            vec.push_back({it.second, it.first});
+        }
+
+        sort(vec.begin(), vec.end(), cmp);
+        vector<int> ans;
+        // sorted vector mein se ek ek karke elements and unki frequency ko nikal kar final answer
+        // vector mein push kardenge
+        for (auto it : vec)
+        {
+            int count = it.first;
+            int num = it.second;
+            while (count--)
+            {
+                ans.push_back(num);
+            }
+        }
+        return ans;
+    }
+};
+
 // Problem : Arithmetic Subarrays LeetCode
 class Solution
 {
