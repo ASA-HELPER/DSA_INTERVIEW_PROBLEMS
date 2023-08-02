@@ -71,6 +71,7 @@ public:
     }
 };
 
+// Binary search on matrices
 // Problem : Maximum Sum of rectangle No longer than K
 class Solution
 {
@@ -108,6 +109,68 @@ public:
             }
         }
         return res;
+    }
+};
+
+// Problem : Median in a row-wise sorted Matrix
+class Solution
+{
+public:
+    // Approach-1 : Ek 'ans' vector le lo and usme saare elements ko push kardo and uss vector ko
+    // sort karlo and return kardo ans[(R*C)/2] par jo bhi element hai.
+    // TC => O(R*C*log(R*C))     SC => O(R*C)
+
+    // Approach-2 : using binary search
+    // First column ko traverse karke minimum find karlo and last column ko traverse maximum
+    // find karlo, phir mid element ko find karo and coun tkaro kitne elements less than equal
+    // to mid hai
+    // TC => O(R*logC)     SC => O(1)
+    int countSmallerThanMid(vector<int> &row, int mid)
+    {
+        int low = 0;
+        int high = row.size() - 1;
+        // current median ke liye find karenge ki kitne number of elements less hai current
+        // median se
+        while (low <= high)
+        {
+            int md = low + (high - low) / 2;
+            if (row[md] <= mid)
+            {
+                low = md + 1;
+            }
+            else
+            {
+                high = md - 1;
+            }
+        }
+        return low;
+    }
+    int median(vector<vector<int>> &matrix, int R, int C)
+    {
+        int low = 1;
+        int high = 1e9;
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            int count = 0;
+            // har row ko pick karenge and find karenge ki current se median se kitne elements
+            // less hai
+            for (int i = 0; i < R; i++)
+            {
+                count += countSmallerThanMid(matrix[i], mid);
+            }
+            // agar number of elements less than equal to current median jo hai woh half elements
+            // se less hai toh right mein move karenge
+            if (count <= (R * C) / 2)
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+        return low;
     }
 };
 
