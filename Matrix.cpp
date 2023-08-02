@@ -1,3 +1,36 @@
+// Problem : Search in a matrix GFG
+class Solution
+{
+public:
+    // TC => O(N+M)    SC => O(1)
+    int matSearch(vector<vector<int>> &mat, int N, int M, int X)
+    {
+        // simply first row ke last column se start karenge traverse
+        int i = 0;
+        int j = M - 1;
+        while (i >= 0 && i < N && j >= 0 && j < M)
+        {
+            // agar number mil jaata hai matrix mein toh return 1
+            if (mat[i][j] == X)
+            {
+                return 1;
+            }
+            // agar number greater than X hai toh previous column mein jaana padega
+            else if (mat[i][j] > X)
+            {
+                j--;
+            }
+            // agar number less than X hai toh next row mein jaana padega
+            else if (mat[i][j] < X)
+            {
+                i++;
+            }
+        }
+        // agar number nahi milta hai matrix mein toh return 0
+        return 0;
+    }
+};
+
 // Problem : Rotate Image LeetCode
 class Solution
 {
