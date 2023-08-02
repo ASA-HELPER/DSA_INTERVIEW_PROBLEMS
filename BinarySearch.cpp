@@ -115,7 +115,7 @@ public:
 // Problem : Allocate minimum number of pages GFG
 class Solution
 {
-    // TC => O(NlogN)     SC =. O(1)
+    // TC => O(Nlog(sum(A[])-max(A[])))     SC = O(1)
 public:
     bool helper(int A[], int N, int M, int mid)
     {
@@ -127,7 +127,7 @@ public:
             // number of pages ko count karte rahenge jo ki ek student ko allocate kar sakte hai
             count += A[i];
             // agar number of pages maximum number of pages jo ki ek student allocate kar sakte
-            // hai use zyada hojata hai toh nex student ko allocate karna start karenge
+            // hai use zyada hojata hai toh next student ko allocate karna start karenge
             if (count > mid)
             {
                 count = A[i];
@@ -159,6 +159,59 @@ public:
             int mid = low + (high - low) / 2;
             // agar mid number of pages allocate kar paa rahe hai toh left ki taraf move karenge
             if (helper(A, N, M, mid))
+            {
+                ans = mid;
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+        return ans;
+    }
+};
+
+// Problem : The Painter's Partition Problem-II GFG
+class Solution
+{
+    // TC => O(Nlog(sum(A[])-max(A[])))     SC = O(1)
+public:
+    bool helper(int A[], int N, int k, long long mid)
+    {
+        long long count = 0;
+        // initially 1 painter toh hoga hi
+        int painters = 1;
+        for (int i = 0; i < N; i++)
+        {
+            // time ko count karte rahenge jo ki ek painter ko lagega board ko paint karne mein
+            count += A[i];
+            // agar calculated time maximum time jo ki ek pianter le sakta hai
+            // hai usse zyada hojata hai toh next painter paint karna start karega
+            if (count > mid)
+            {
+                count = A[i];
+                painters++;
+            }
+        }
+        // agar number of painters less than equal to honge total number of painters se
+        // toh return true warna false
+        return painters <= k;
+    }
+    long long minTime(int A[], int N, int k)
+    {
+        long long low = 0;
+        long long high = 0;
+        for (int i = 0; i < N; i++)
+        {
+            low = max(low, (long long)A[i]);
+            high += A[i];
+        }
+        long long ans = -1;
+        while (low <= high)
+        {
+            long long mid = low + (high - low) / 2;
+            if (helper(A, N, k, mid))
             {
                 ans = mid;
                 high = mid - 1;
