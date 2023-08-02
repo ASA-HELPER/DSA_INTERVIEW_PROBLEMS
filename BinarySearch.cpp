@@ -110,3 +110,64 @@ public:
         return res;
     }
 };
+
+// Binary Search on answers
+// Problem : Allocate minimum number of pages GFG
+class Solution
+{
+    // TC => O(NlogN)     SC =. O(1)
+public:
+    bool helper(int A[], int N, int M, int mid)
+    {
+        int count = 0;
+        // initially 1 student toh hoga hi
+        int persons = 1;
+        for (int i = 0; i < N; i++)
+        {
+            // number of pages ko count karte rahenge jo ki ek student ko allocate kar sakte hai
+            count += A[i];
+            // agar number of pages maximum number of pages jo ki ek student allocate kar sakte
+            // hai use zyada hojata hai toh nex student ko allocate karna start karenge
+            if (count > mid)
+            {
+                count = A[i];
+                persons++;
+            }
+        }
+        // agar number of students jinhe pages allocate karen hai less ya equal to hai total number
+        // of students ke toh return true warna false
+        return persons <= M;
+    }
+    int findPages(int A[], int N, int M)
+    {
+        // Agar number of books less hongi number of students se toh allocation possible nahi hoga
+        if (N < M)
+        {
+            return -1;
+        }
+        int low = 0;
+        int high = 0;
+        // range maximum number of pages se total number of pages tak jaayegi
+        for (int i = 0; i < N; i++)
+        {
+            low = max(low, A[i]);
+            high += A[i];
+        }
+        int ans = -1;
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            // agar mid number of pages allocate kar paa rahe hai toh left ki taraf move karenge
+            if (helper(A, N, M, mid))
+            {
+                ans = mid;
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+        return ans;
+    }
+};
