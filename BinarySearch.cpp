@@ -1,3 +1,49 @@
+// Problem : Number and the Digit Sum GFG
+class Solution
+{
+public:
+    // TC => O(logN)    SC => O(1)
+    long long int numberCount(long long int N, long long int K)
+    {
+        // Hum ek range bana lenge 1 to N tak ki
+        int low = 1;
+        int high = N;
+        int ans = 0;
+        while (low <= high)
+        {
+            // ek number ko as mid find karenge
+            int mid = low + (high - low) / 2;
+            int num = mid;
+            int sum = 0;
+            // number ke digits ka sum nikal lenge
+            while (num > 0)
+            {
+                sum += num % 10;
+                num = num / 10;
+            }
+            // agar sum-number >=k hai toh iska matlab is number se aage ke jitne bhi
+            // numbers hai sabke liye ye condition true hogi because har baar 1 se hi
+            // number increase hoga and sum bhi 1 se hi increase hoga toh difference
+            // constant hojaayega toh hum range mein left ki taraf move karne ki try
+            // karenge
+            if (abs(sum - mid) >= K)
+            {
+                // current number se given number tak ke saare numbers hamaare answers
+                // honge toh count N-number+1 hojaayega
+                ans = N - mid + 1;
+                high = mid - 1;
+            }
+            else
+            {
+                // agar current number condition ko follow nahi kar raha hai toh range
+                // mein right ki taraf move karenge
+                low = mid + 1;
+            }
+        }
+        return ans;
+    }
+};
+
 // Problem : Missing element of AP (GFG)
 class Solution
 {
