@@ -62,6 +62,39 @@ public:
     }
 };
 
+// Problem : Two Repeated Elements GFG
+class Solution
+{
+public:
+    // TC => O(N)    SC => O(1)
+    // Dry run : arr = [1,2,2,1]
+    // arr[abs(arr[0])] = arr[1] = 2 already positive toh negative kardenge => arr[1] = -2
+    // arr[abs(arr[1])] = arr[2] = 2 already positive toh negative kardenge => arr[1] = -2
+    // arr[abs(arr[2])] = arr[2] = -2 already negative hai toh iska matlab ye duplicate hai
+    // arr[abs(arr[3])] = arr[1] = -2 already negative hai toh iska matlab ye duplicate hai
+    // ans => {2,1}
+    vector<int> twoRepeated(int arr[], int N)
+    {
+        vector<int> ans;
+        for (int i = 0; i < N + 2; i++)
+        {
+            // Hum yahan kya kar rahe hai ki har number ko negative bana rahe hai and agar
+            // same number dubara aayega toh woh already hi negative hoga and isse hume
+            // pata chal jaayega ki number repeat hogaya hai
+            if (arr[abs(arr[i])] < 0)
+            {
+                ans.push_back(abs(arr[i]));
+            }
+            else
+            {
+                // first time number aaya hai toh usse negative karke array mein rakh denge
+                arr[abs(arr[i])] = -arr[abs(arr[i])];
+            }
+        }
+        return ans;
+    }
+};
+
 // Problem : Union of two sorted arrays GFG
 class Solution
 {
