@@ -131,3 +131,123 @@ public:
         return count;
     }
 };
+
+// Problem : Number of pairs GFG
+class Solution
+{
+    // TC => O(N*logN+M*logM)    SC => O(1)
+public:
+    // Question mein bohot saare cases ko handle karna padega
+    // Ye getIndex waala function basically binary search ki help se current element se just
+    // greater waale element ka index return karega
+    int getIndex(int y[], int n, int key)
+    {
+        int low = 0;
+        int high = n - 1;
+        int ans = -1;
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            if (key < y[mid])
+            {
+                ans = mid;
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+        return ans;
+    }
+    long long countPairs(int x[], int y[], int m, int n)
+    {
+        // Dono arrays ko sort karna padega
+        sort(x, x + m);
+        sort(y, y + n);
+        // Hume second waale array mein zeroes, ones, two,three and four ko count karna padega
+        int zeroes = 0, ones = 0, two = 0, three = 0, four = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (y[i] == 0)
+            {
+                zeroes++;
+            }
+            else if (y[i] == 1)
+            {
+                ones++;
+            }
+            else if (y[i] == 2)
+            {
+                two++;
+            }
+            else if (y[i] == 3)
+            {
+                three++;
+            }
+            else if (y[i] == 4)
+            {
+                four++;
+            }
+        }
+        long long ans = 0;
+        for (int i = 0; i < m; i++)
+        {
+            // Case-1 : Agar current element 0 hai toh kuch nahi hoga because 0 ki power
+            // kuch bhi ho woh hamesha zero hi rahega toh pow(x,y)>pow(y,x) hone ka koyi
+            // chance hi nahi hai
+            if (x[i] == 0)
+            {
+                continue;
+            }
+            // Case-2 : Agar current element 1 hai toh hamare second array mein jitne bhi
+            // zeroes honge un sabke saath 1 pair bana paayega
+            else if (x[i] == 1)
+            {
+                ans += zeroes;
+            }
+            // Case-3 : Agar current element 2 hoga toh hume ye pata karna hoga ki 2 se greater
+            // kitne element hai Binary search ki help se just greater waale element ka index
+            // find karke number of elements greater than 2 find karlenge
+            else if (x[i] == 2)
+            {
+                int index = getIndex(y, n, x[i]);
+                if (index != -1)
+                {
+                    ans += n - index;
+                }
+                // 2 ke liye 3 and 4 aese numbers hai jinme ye condition pow(x,y) > pow(y,x)
+                // true nahi hogi toh 3 and 4 ke count ko decrease karna hoga and yahan par
+                // hume zeroes and ones ke count ko bhi add karna padega because 2 ki power
+                // zero hamesha zyada hota hai zero ki power 2 se and same for 1 also.
+                ans -= three;
+                ans -= four;
+                ans += zeroes;
+                ans += ones;
+            }
+            else
+            {
+                // Case-3 : agar 0,1,2 ke alawa koyi bhi number hai toh just greater greater
+                // element ka index find karlo and usse number of elements greater than current
+                // element find karlo
+                int index = getIndex(y, n, x[i]);
+                if (index != -1)
+                {
+                    ans += n - index;
+                }
+                // yahan par hume zeroes and ones ke count ko bhi add karna padega because kisi
+                // bhi number ki power zero hamesha zyada hota hai zero ki power of that number
+                // se and same for 1 also.
+                ans += zeroes;
+                ans += ones;
+                // exception agar current number 3 hai toh phir hume number of twos ko bhi add
+                // karna padega because pow(3,2) > pow(2,3) always
+                if (x[i] == 3)
+                {
+                    ans += two;
+                }
+            }
+        }
+        return ans;
+    }
+};
