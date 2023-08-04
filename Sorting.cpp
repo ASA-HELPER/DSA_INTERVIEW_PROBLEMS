@@ -1,3 +1,93 @@
+// Sorting Algorithms :
+// Bubble Sort :
+class Solution
+{
+public:
+    // Bubble sort algorithm mein hum swapping karte rehte hai jab tak hamara array sort
+    // nahi hoga and har baar unsorted array ka size chota hota jaayega
+    // TC => O(N^2) because two for loops use ho rahe hai
+    // SC => O(1)
+    // Bubble sort stable algorithm hota hai.
+    void bubbleSort(int arr[], int n)
+    {
+        // ye outer loop hamare unsorted array ki length bata raha hai
+        for (int i = n - 1; i >= 0; i--)
+        {
+            // Ek boolean flag rakh lenge jo ki ye batayega ki swapping huyi ya nahi
+            bool swapped = false;
+            // ye current unsorted array mein greatest element ko swap karte karte last
+            // position par leke jaayega
+            for (int j = 0; j < i; j++)
+            {
+                // agar next element small hai current element se
+                if (arr[j] > arr[j + 1])
+                {
+                    swapped = true;
+                    swap(arr[j], arr[j + 1]);
+                }
+            }
+            // agar ek baar bhi swapping nahi huyi hai toh break kardo array sort hogaya hai
+            if (!swapped)
+            {
+                break;
+            }
+        }
+    }
+};
+
+// Insertion Sort :
+class Solution
+{
+public:
+    // Insertion simply kehta hai aap ek ek karke har element ko uthao and usse uske saare
+    // previous indexes par jo element hai unse compare karo and agar current element se greater
+    // hai previous element toh elements ko shift karte raho right mein and jahan condition
+    // fail hogayi loop se break kardo
+    // TC => O(N^2)    SC => O(1)
+    void insert(int nums[], int n)
+    {
+        for (int i = 1; i < n; i++)
+        {
+            // current element ko key bana lo
+            int key = nums[i];
+            int j = i - 1;
+            while (j >= 0 && nums[j] > key)
+            {
+                nums[j + 1] = nums[j];
+                j--;
+            }
+            // current element ko uski correct position par place kardo
+            nums[j + 1] = key;
+        }
+    }
+};
+
+// Selection Sort :
+class Solution
+{
+public:
+    void selectionSort(int arr[], int n)
+    {
+        // TC => O(N^2)   SC => O(1)
+        // Simply ek ek current index ko minimum element manege and phir uske aage ke elements
+        // se usse compare karenge and agar koyi smaller element milgaya current minimum element
+        // se toh minimum index ko change kardenge and pura array traverse karne ke baad current
+        // index waale element ko swap kardo minimum index waale element se
+        for (int i = 0; i < n; i++)
+        {
+            int minidx = i;
+            for (int j = i + 1; j < n; j++)
+            {
+                if (arr[j] < arr[minidx])
+                {
+                    minidx = j;
+                }
+            }
+            swap(arr[minidx], arr[i]);
+        }
+    }
+};
+
 // Problem : Sorting Elements of an Array by Frequency GFG
 class Solution
 {
