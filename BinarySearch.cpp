@@ -333,3 +333,67 @@ public:
         return ans;
     }
 };
+
+// Problem : Heaters Leetcode
+class Solution
+{
+    // Time Complexity : O((N+M)log(M+N))
+    // Space Complexity : O(1)
+public:
+    // Simply binary search on answers ka hi concept use hua hai.
+    bool blackBox(vector<int> &houses, vector<int> &heaters, int n, int m, int radius)
+    {
+        // Yahan hum two pointer approach laga rahe hai
+        int i = 0, j = 0;
+        // hum houses waale vector ke through traverse karenge andye dekhenge ki current heater ki range jo hai usme kahin par current house aa raha hai agar haan toh next house ke liye check karenge warna next heater ko try karenge
+        while (i < n)
+        {
+            // agar hamare paas heaters hi nahi bache toh iska matlab ye radius toh work nahi karega
+            if (j == m)
+            {
+                return false;
+            }
+            // heater ki range nikal rahe hai
+            int l = heaters[j] - radius;
+            int r = heaters[j] + radius;
+            // agar house current heater ki range mein nahi hai toh next heater par jaayenge
+            if (houses[i] < l or houses[i] > r)
+            {
+                j++;
+            }
+            // agar current house current heater ki range mein hai toh next heater par jaayenge
+            else
+            {
+                i++;
+            }
+        }
+        return true;
+    }
+
+    int findRadius(vector<int> &houses, vector<int> &heaters)
+    {
+        sort(houses.begin(), houses.end());
+        sort(heaters.begin(), heaters.end());
+        int n = houses.size();
+        int m = heaters.size();
+        int low = 0;
+        // heaters and houses mein se jo bhi max index par hoga utni hi hamari range hogi
+        int high = max(*max_element(houses.begin(), houses.end()), *max_element(heaters.begin(), heaters.end()));
+        int ans = 0;
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            // agar current radius saare heaters ko warm kar paa raha hai toh isse hum apna answer maan lenge and isse chota answer find out karne ki try karenge
+            if (blackBox(houses, heaters, n, m, mid))
+            {
+                ans = mid;
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+        return ans;
+    }
+};
