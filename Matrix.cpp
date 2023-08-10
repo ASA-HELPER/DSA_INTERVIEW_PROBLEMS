@@ -209,6 +209,48 @@ public:
     }
 };
 
+// Problem : Coins of Geekland GFG
+class Solution
+{
+    // Approach-1 : 3 for loops ka use karenge jisme outer loop rows ke through traverse
+    // karne ke liye use karenge, inner loop columns ke through traverse karne ke liye
+    // use karenge and sabse inner loop ko k*k ke matrix ka sum nikalne ke liye use karenge
+    // TC => O((N^2)*(k^2))    SC => O(1)
+public:
+    // Approach-2 : using prefix sum for matrix
+    // TC => O(N^2)  SC => O(N^2)
+    int Maximum_Sum(vector<vector<int>> &mat, int N, int k)
+    {
+        // ek additional matrix lekar usse fil karenge
+        vector<vector<int>> preSum(N + 1, vector<int>(N + 1, 0));
+        int maxSum = INT_MIN;
+        for (int i = 1; i <= N; i++)
+        {
+            for (int j = 1; j <= N; j++)
+            {
+                // current cell par prefix sum matrix ke value hogi given matrix value +
+                // previous left cell ki value + previous upper cell ki value - diagonally
+                // previous cell ki value
+                preSum[i][j] = mat[i - 1][j - 1] + preSum[i - 1][j] + preSum[i][j - 1] - preSum[i - 1][j - 1];
+                if (i >= k && j >= k)
+                {
+                    // preSum[i-k][j-k] ko isliye add karna padega because preSum[i][j-k] and
+                    // preSum[i-k][j] ko subtract karte waqt hume preSum[i-k][j-k] ki value ko
+                    // 2 baar subtract kardiya tha
+                    // Aese samjho ki tum kisi (i,j) cell se (i+k,j+k) cell tak ke matrix ka
+                    // sum nikal rahe ho toh uske liye tumhe whole matrix ke sum mein se
+                    // upper horizontal rectangle submatrix ko subtract kardoge and left waale
+                    // left vertical rectangle submatrix ko subtract karna padega but subtract
+                    // karte waqt hume diagonal square matrix ko do baar subtract kardiya hai
+                    // toh usse ek baar add karna padega
+                    maxSum = max(maxSum, preSum[i][j] - preSum[i][j - k] - preSum[i - k][j] + preSum[i - k][j - k]);
+                }
+            }
+        }
+        return maxSum;
+    }
+};
+
 // Problem : Largest rectangle of 1s with swapping of columns allowed GFG
 class Solution
 {
