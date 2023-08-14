@@ -1,3 +1,59 @@
+// Count distinct elements in every window GFG
+class Solution
+{
+    // TC => O(N) because hum linearly traverse kar rahe hai
+    // SC => O(N) because humne unordered_map ka use kiya hai
+public:
+    vector<int> countDistinct(int A[], int n, int k)
+    {
+        // ek map rakhlenge jiski help se hum frequency ko track kar paayenge har element ki
+        unordered_map<int, int> mp;
+        int count = 0;
+        // k size ki intial window mein kitne unique elements hai count karlenge
+        for (int i = 0; i < k; i++)
+        {
+            mp[A[i]]++;
+            // agar element unique hai window mein toh usse count karlenge
+            if (mp[A[i]] == 1)
+            {
+                count++;
+            }
+        }
+        // ek result vector create karlenge jisme har window ke count ko store karwa lenge
+        vector<int> res;
+        // initial window ke count ko result vector mein push kardenge
+        res.push_back(count);
+        int i = 0;
+        int j = k;
+        while (j < n)
+        {
+            // Pehle mujhe ith pointer waale element ko remove karna hoga and uski frequency
+            // ko check karna hoga
+            mp[A[i]]--;
+            // agar element ki frequency zero hojaati hai toh iska matlab number of unique
+            // elements decrement hogaye by 1
+            if (mp[A[i]] == 0)
+            {
+                count--;
+            }
+            // Uske baad mujhe jth pointer waale element ko window mein include karna hoga and
+            // uski frequency ko increase karna hoga
+            mp[A[j]]++;
+            // agar new element enter hua hai toh iska matlab hai ki unique elements ki frequency
+            // increment huyi hai toh count ko 1 se increase karna padega
+            if (mp[A[j]] == 1)
+            {
+                count++;
+            }
+            res.push_back(count);
+            // window ko aage move karne ke liye dono pointers ko increment karna jaroori hai
+            i++;
+            j++;
+        }
+        return res;
+    }
+};
+
 // Problem : Smallest window containing 0, 1 and 2 GFG
 class Solution
 {
