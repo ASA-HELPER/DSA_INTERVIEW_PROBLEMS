@@ -30,6 +30,38 @@ public:
     }
 };
 
+// Problem : Count number of distinct elements in each contiguous subarray in O(N) time
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    vector<int> ar(n);
+    for (int i = 0; i < n; i++)
+        cin >> ar[i];
+    map<long long, int> m;
+    long long ans = 0;
+    for (int i = 0; i < n; i++)
+    {
+        long long right = n - i;
+        long long left = 1;
+        if (m.count(ar[i]) == 1)
+        {
+            int ind = m[ar[i]];
+            ind++;
+            left = i - ind + 1;
+        }
+        else
+            left = i + 1;
+        ans += left * right;
+        m[ar[i]] = i;
+    }
+    cout << ans << "\n";
+    return 0;
+}
+
 // Problem : Count number of Subarrays with XOR K
 int subarraysWithXorK(vector<int> a, int k)
 {
