@@ -1065,3 +1065,131 @@ public:
         return max(x, y + sum);
     }
 };
+
+// Problem : Next Smallest Palindrome GFG
+class Solution
+{
+    // Brute force approach : Given number mein hi 1 add karte jao and har baar new number ko check karo ki kya ye palindrome hai
+    // TC => O(N*N)   SC => O(1)
+public:
+    // Optimised Approach : TC => O(N)  SC => O(N) just for result vector
+    // Kuch cases ko consider karte hai aproach ko banane ke liye :
+    // Case-1 : Jab number of digits given number mein even hongi toh hum simply number ko 2 parts mein divide kardenge ek leftpart and
+    // dusra right part. Aur phir left part ko reverse karke right mein part mein daal denge and check kar lenge ki kya ye given number se
+    // bada hai palindrome agar haan toh isse hi return kardo warna left part ko 1 se increment karke phir leftpart ko reverse karke daaldo
+    // rightpart mein. For example : 123456
+    // after reversal 123321 < 123456 toh hume middle element ko increment karna hoga
+    // ab 124421 > 123456 se toh 1235321 hi hamara next smallest palindrome hoga
+    // Case-2: Jab number of digits given number mein odd hongi toh hum simply number ko 2 parts mein divide kardenge ek leftpart and
+    // dusra right part. Aur phir left part ko reverse karke right mein part mein daal denge and check kar lenge ki kya ye given number se
+    // bada hai palindrome agar haan toh isse hi return kardo warna left part ko 1 se increment karke phir leftpart ko reverse karke daaldo
+    // rightpart mein. Yahan jab hum 1 add karenge toh woh middle element mein add hokar aage left part mein as carry jaa bhi sakta hai aur
+    // nahi bhi jaa sakta hai. For example : 1234567
+    // after reversal 1234321 < 1234567 toh hume middle element ko increment karna hoga
+    // ab 1235321 > 1234567 se toh 1235321 hi hamara next smallest palindrome hoga
+    bool compare(vector<int> &a, vector<int> &b)
+    {
+        for (int i = 0; i < a.size(); i++)
+        {
+            if (a[i] > b[i])
+                return true;
+            else if (a[i] < b[i])
+                return false;
+        }
+        return false;
+    }
+    vector<int> generateNextPalindrome(int num[], int n)
+    {
+        // Ek vector le lenge jiski help se hum given number ke left and right part ko compare kar paayen
+        vector<int> a;
+        int cnt = 0;
+        // is loop ki help se hum ye check kar rahe hai ki current number ki saari digits 9 toh nahi hai
+        for (int i = 0; i < n; i++)
+        {
+            if (num[i] == 9)
+                cnt++;
+            a.push_back(num[i]);
+        }
+        // agar saari digits 9 hai toh hum ek vector n+1 size ka initialize kardenge taaki next smallest palindrome ko return kar saken
+        if (cnt == n)
+        {
+            // by default saari digits is vector mein 0 hongi
+            vector<int> temp(n + 1, 0);
+            // temp mein sabhi digits zero hongi except first and last. Isse samjhane ke liye ek example lete hai : 9999 toh N = 4
+            // next palindrome hoga 10001 toh vector ka size 5 hojayega
+            temp[0] = 1;
+            temp[n] = 1;
+            return temp;
+        }
+        // agar given number mein odd number of digits hai toh
+        if (n % 2 != 0)
+        {
+            // sabse pehle given number ki ek copy bana lenge
+            vector<int> b = a;
+            // ab hum given number ke left part ko reverse karke copy vector mein daal rahe hai taaki compare kar sake.For example : a = 12131
+            // toh b = 12121 hojayega
+            for (int i = (n / 2) + 1, k = (n / 2) - 1; i < n; i++, k--)
+            {
+                b[i] = a[k];
+            }
+            // agar 'b' greater hoga 'a' se toh return kardenge 'b' ko hi because yehi next palindrome hai
+            if (compare(b, a))
+                return b;
+            // agar 'b' greater nahi hai 'a' se toh hum kya karenge ki middle element mein 1 add karke left part ko increase karenge
+            //  upar waale example ke liye : 12221 hoajega aur yehi hamara palindrome hai
+            for (int i = n / 2; i >= 0; i--)
+            {
+                // agar 9 nahi hai toh middle element mein 1 add karke loop se break kardo because koyi carry toh generate hoga nahi
+                if (b[i] != 9)
+                {
+                    b[i]++;
+                    break;
+                }
+                // agar middle element 9 hai toh usse 0 kardo and further aese hi left part ko update kardo agar unme bhi 9 hai toh
+                else
+                    b[i] = 0;
+            }
+            // left part ko right part mein reverse karke put kardenge and 'b' ko return kardenge
+            for (int i = (n / 2) + 1, k = (n / 2) - 1; i < n; i++, k--)
+            {
+                b[i] = b[k];
+            }
+            return b;
+        }
+        // agar number mein even number of digits hai toh
+        else
+        {
+            // sabse pehle given number ki ek copy bana lenge
+            vector<int> b = a;
+            // ab hum given number ke left part ko reverse karke copy vector mein daal rahe hai taaki compare kar sake.For example : a = 1231
+            // toh b = 1221 hojayega
+            for (int i = (n / 2), k = (n / 2) - 1; i < n; i++, k--)
+            {
+                b[i] = a[k];
+            }
+            // agar 'b' greater hoga 'a' se toh return kardenge 'b' ko hi because yehi next palindrome hai
+            if (compare(b, a))
+                return b;
+            // agar 'b' greater nahi hai 'a' se toh hum kya karenge ki left part mein 1 add karke left part ko increase karenge
+            //  upar waale example ke liye : 1321 hoajega aur yehi hamara palindrome hai
+            for (int i = n / 2 - 1; i >= 0; i--)
+            {
+                // agar 9 nahi hai toh middle element mein 1 add karke loop se break kardo because koyi carry toh generate hoga nahi
+                if (b[i] != 9)
+                {
+                    b[i]++;
+                    break;
+                }
+                // agar middle element 9 hai toh usse 0 kardo and further aese hi left part ko update kardo agar unme bhi 9 hai toh
+                else
+                    b[i] = 0;
+            }
+            // // left part ko right part mein reverse karke put kardenge and b ko return kardenge
+            for (int i = (n / 2), k = (n / 2) - 1; i < n; i++, k--)
+            {
+                b[i] = b[k];
+            }
+            return b;
+        }
+    }
+};
