@@ -1,3 +1,40 @@
+// Problem : Generate Grey Code Sequences
+class Solution
+{
+    // Sabse pehle ye pata hona zaroori hai ki given N ke liye kitne grey code generate honge.
+    // Toh N ke liye 2^N grey code generate hote hai
+    // Yahan base case ka role sabse zyada hai. Hum given N se 1 ki taraf jaayenge because N hamara base case hai jiske liye grey code fix
+    // hi rahega yaani "0" "1" . Toh issi ka fayda uthayenge hum.
+    // Hum har baar previous N ke grey code sequences ko start se traverse karke unke front mein "0" append karenge phir last se traverse
+    // karke "1" ko front mein append karenge and har baar apne answer vector mein push karte rahenge
+    // For example : N = 2 toh pehle N = 1 ka nikalenge jo ki "0" and "1"
+    // Ab inme pehle "0" ko front mein add karenge "00" and "01" hojayega and phir unme reverse mein "1" ko front mein add karenge "11" and
+    // "10" hojayega. Toh N=2 ke liye grey code sequence hojayega : {"00","01","11","10"}
+    // TC => O(N*2^N) because given N ke liye 2^N grey code sequences generate honge and kyunki har N ke liye nikal rahe hai from N to 1 toh
+    // N se multiply hojayega.    SC => O(1) hoga agar recursive stack space ko consider nahi karenge toh
+public:
+    vector<string> generateCode(int N)
+    {
+        vector<string> v;
+        if (N == 1)
+        {
+            v.push_back("0");
+            v.push_back("1");
+            return v;
+        }
+        vector<string> res = generateCode(N - 1);
+        for (int i = 0; i < res.size(); i++)
+        {
+            v.push_back("0" + res[i]);
+        }
+        for (int i = res.size() - 1; i >= 0; i--)
+        {
+            v.push_back("1" + res[i]);
+        }
+        return v;
+    }
+};
+
 // Problem : Maximum Subset XOR GFG or Maximum XOR Subset GFG
 class Solution
 {
