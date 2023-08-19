@@ -310,3 +310,44 @@ public:
         return n - lps_ans[2 * n];
     }
 };
+
+// Problem : Longest Prefix Suffix GFG
+class Solution
+{
+    // KMP Algorithm use karna hai isme.
+    // TC => O(N)    SC => O(N)
+public:
+    int lps(string s)
+    {
+        int n = s.size();
+        int i = 1, j = 0;
+        // ek lps vector ko create karte hai and iski values ko update karte huye jo final answer aata hai Nth position mein wahi answer hoga
+        vector<int> lps(n, 0);
+        while (i < n)
+        {
+            // agar ith and jth position par jo character hai woh same hai toh current ith position par j+1 value put karenge and i and j dono
+            // ko increase karenge
+            if (s[i] == s[j])
+            {
+                lps[i] = j + 1;
+                i++;
+                j++;
+            }
+            // agar ith and jth position par jo character hai woh same nahi hai toh ye dekhna hoga ki kya j 0 hai agar haan toh ith position
+            // par lps ki value 0 hojayegi warna j ki value lps[j-1] hojayegi
+            else
+            {
+                if (j == 0)
+                {
+                    lps[i] = 0;
+                    i++;
+                }
+                else
+                {
+                    j = lps[j - 1];
+                }
+            }
+        }
+        return lps[n - 1];
+    }
+};
