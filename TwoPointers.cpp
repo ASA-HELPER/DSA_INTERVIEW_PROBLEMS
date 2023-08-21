@@ -264,6 +264,96 @@ public:
     }
 };
 
+// Problem : Remove and Reverse GFG
+class Solution
+{
+    // Agar aap even number of times reverse karoge toh koyi pharak nahi padega but agar aap
+    // odd number of times reverse karoge toh aapko ek hi baar last mein reverse karne par
+    // bhi answer miljaayega
+    // Baar baar reverse karne se better hai mein ek flag rakh leta hun jo ki mujhe ye batadega
+    // ki mujhe kahan se remove karna hai and jab bhi hume repeating character milega toh flag
+    // ko change kardenge and iske liye hum two pointers ka use karenge
+    // TC => O(N)   SC => O(k) where k<=26 because map mein hamesha 26 hi characters hote hai
+public:
+    string removeReverse(string S)
+    {
+        int n = S.size();
+        // map mein saar characters ki frequency nikal lenge
+        unordered_map<char, int> mp;
+        for (int k = 0; k < n; k++)
+        {
+            mp[S[k]]++;
+        }
+        // two pointers ka use karlenge ek start par and ek end par
+        int start = 0;
+        int end = n - 1;
+        // initially start se shuru karenge toh direction ko 0 rakhenge
+        int dir = 0;
+        while (start < end)
+        {
+            // agar direction 0 hai toh
+            if (dir == 0)
+            {
+                // agar start par jo character hai uski frequency 1 se zyada nahi hai toh
+                // simply start ko aage badha do
+                if (mp[S[start]] == 1)
+                {
+                    start++;
+                }
+                // Warna simply start par jo character hai uski frequency ko decrease karo
+                // and us character ko # se replace kardo taaki last mein hum jab final string
+                // create karenge jo isse ignore kar saken and start pointer ko aage badha kar
+                // direction ko reverse kardo
+                else
+                {
+                    mp[S[start]]--;
+                    S[start] = '#';
+                    start++;
+                    dir = 1;
+                }
+            }
+            else
+            {
+                // agar end par jo character hai uski frequency 1 se zyada nahi hai toh
+                // simply end ko 1 peeche le jaao
+                if (mp[S[end]] == 1)
+                {
+                    end--;
+                }
+                // Warna simply end par jo character hai uski frequency ko decrease karo
+                // and us character ko # se replace kardo taaki last mein hum jab final string
+                // create karenge jo isse ignore kar saken and end pointer ko 1 peeche le jao
+                // and direction ko reverse kardo
+                else
+                {
+                    mp[S[end]]--;
+                    S[end] = '#';
+                    end--;
+                    dir = 0;
+                }
+            }
+        }
+        string ans = "";
+        // final string ko create karenge jahan # show kar raha hai ki current character ko
+        // remove kardiya gaya hai
+        for (int i = 0; i < n; i++)
+        {
+            if (S[i] != '#')
+            {
+                ans += S[i];
+            }
+        }
+        // agar dir=1 hai toh iska matlab hai ki aap last se traverse kar rahe the matlab
+        // odd number of times reverse kiya string ko toh hume final answer ko bhi reverse
+        // karna padega
+        if (dir == 1)
+        {
+            reverse(ans.begin(), ans.end());
+        }
+        return ans;
+    }
+};
+
 // Problem : Conntainer with most water LeetCode
 class Solution
 {
