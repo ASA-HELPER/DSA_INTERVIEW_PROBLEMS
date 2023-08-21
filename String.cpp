@@ -86,6 +86,57 @@ int minFlips(string S)
     return min(counter, count);
 }
 
+// Problem : Transform String GFG
+class Solution
+{
+    // TC => O(max(A.size,B.size))    SC => O(1)
+public:
+    // Hume ye bol rakha hai ki transformation ke liye A se character ko uske index se remove
+    // karke statring mein rakhdo. Toh hum isme kya karenge ki pehle toh dono strings ke characters
+    // ki frequency same hai ya nahi. Agar frequency same nahi hai toh transform nahi kar
+    // sakte toh answer straight forward -1 hojaayega
+    int transform(string A, string B)
+    {
+        if (A.size() != B.size())
+        {
+            return -1;
+        }
+        int n = A.size();
+        int ans = 0;
+        unordered_map<char, int> mp;
+        for (int i0; i < n; i++)
+        {
+            mp[A[i]]++;
+            mp[B[i]]--;
+        }
+        // agar frequency different hogi toh return -1
+        for (auto it : mp)
+        {
+            if (it.second)
+            {
+                return -1;
+            }
+        }
+        // Last se traverse karenge and ye dekhenge ki jahan bhi A and B ke characters different
+        // huye wahan par ans ko increase karenge jo ki hamare number of transformations ko track
+        // kar raha hoga and sirf string A ke hi pointer ko decrease karenge and agar dono
+        // strings ke characters same hai toh dono ke pointers ko decrease karenge
+        int i = n - 1;
+        int j = n - 1;
+        while (i >= 0 && j >= 0)
+        {
+            while (i >= 0 && A[i] != B[j])
+            {
+                ans++;
+                i--;
+            }
+            i--;
+            j--;
+        }
+        return ans;
+    }
+};
+
 // Problem : Excel Sheet Column Title LeetCode
 class Solution
 {
