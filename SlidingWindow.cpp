@@ -98,6 +98,60 @@ public:
     }
 };
 
+// Problem : Smallest distinct window
+class Solution
+{
+    // TC => O(256*N)   SC => O(256)
+public:
+    // Approach : Sliding window use karke window mein distinct number of characters ka track
+    // rakhenge maltab jese hi saare distinct characters mile toh minimum window ko update karenge
+    int findSubString(string str)
+    {
+        int charcount[256] = {0};
+        int distinct = 0;
+        int minlen = str.length();
+        int left = 0, right = 0;
+        // Sabse pehle hum ye count karlenge ki hamare given string mein kitne unique characters hai
+        for (int i = 0; i < str.length(); i++)
+        {
+            if (charcount[str[i]] == 0)
+            {
+                distinct++;
+            }
+            charcount[str[i]]++;
+        }
+        // ab hum charcount waale character array ko dubara zero par reset kardenge
+        memset(charcount, 0, sizeof(charcount));
+        while (right < str.length())
+        {
+            // current character ki frequency ko increase karke ye check karenge ki kya ye new
+            // character hai. agar haan toh distinct number of characters ko decrease kardenge
+            charcount[str[right]]++;
+            if (charcount[str[right]] == 1)
+            {
+                distinct--;
+            }
+            // agar saare distinct characters milgaaye hai toh hum window ka size decrease karne
+            // ki try karenge agar left pointer par jo character hai uski frequency greater than
+            // 1 hai toh and saath hi saath left pointer ko aage badha kar window ka size decrease
+            // kar rahe hai
+            if (distinct == 0)
+            {
+                while (charcount[str[left]] > 1)
+                {
+                    charcount[str[left]]--;
+                    left++;
+                }
+                // minimum window ki length ko saath hi saath track karenge jab bhi saare characters
+                // window mein honge tabhi
+                minlen = min(minlen, right - left + 1);
+            }
+            right++;
+        }
+        return minlen;
+    }
+};
+
 // Problem : Count the subarrays having product less than k GFG
 class Solution
 {
