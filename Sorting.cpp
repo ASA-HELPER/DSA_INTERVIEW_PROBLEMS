@@ -88,6 +88,129 @@ public:
     }
 };
 
+// Problem : Merge Sort
+class Solution
+{
+    // TC => O(NlogN)   SC => O(N)
+    // Merge sort stable algorithm hai because ye maintain karti hai relative order ko equal
+    // elements ke array mein
+public:
+    void merge(int arr[], int l, int m, int r)
+    {
+        // ek temporary vector banayenge accroding to l and r ki kya range hai
+        vector<int> temp(r - l + 1, 0);
+        // temporary vector ke through traverse karne ke liye ek variable rakh lenge
+        int i = 0;
+        // dono arrays jinhe sort karke merge karna hai woh alag alag index se start honge
+        // ek array l se start ho raha hoga and m tak jaayega and dusra array m+1 se start
+        // ho raha hoga and r tak jaa raha hoga
+        int n1 = l;
+        int n2 = m + 1;
+        // dono arrays ke elements ko compare karke temporary array mein sorted form mein
+        // daal rahe hain
+        while (n1 <= m && n2 <= r)
+        {
+            if (arr[n1] <= arr[n2])
+            {
+                temp[i++] = arr[n1];
+                n1++;
+            }
+            else
+            {
+                temp[i++] = arr[n2];
+                n2++;
+            }
+        }
+        // agar first array mein kuch elements reh gaye hai toh unhe temp mein daalenge
+        while (n1 <= m)
+        {
+            temp[i++] = arr[n1];
+            n1++;
+        }
+        // agar second array mein kuch elements reh gaye hai toh unhe temp mein daalenge
+        while (n2 <= r)
+        {
+            temp[i++] = arr[n2];
+            n2++;
+        }
+        // ab original array ki l to r ki range mein jo elements hai unhe sorted temporary
+        // array se original array mein daalenge
+        for (int j = l; j <= r; j++)
+        {
+            arr[j] = temp[j - l];
+        }
+    }
+
+public:
+    void mergeSort(int arr[], int l, int r)
+    {
+        // Simply hum given array ko divide karte rahenge jab tak l and r equal nahi ho jaate hai
+        if (l == r)
+        {
+            return;
+        }
+        // har baar array ka mid find karo and array ko 2 parts mein divide kardo
+        int m = (l + r) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        // jab array totally single elements mein divide hogaya hai toh ab unhe merge function
+        // ki help se sort karke one by one merge karo
+        merge(arr, l, m, r);
+    }
+};
+
+// Problem : Quick Sort
+class Solution
+{
+public:
+    // TC => O(NlogN)    SC => O(logN)
+    // QuickSort is an unstable algorithm because we do swapping of elements according to
+    // pivot’s position (without considering their original positions).
+    void quickSort(int arr[], int low, int high)
+    {
+        // jab tak low less hai high se tab tak har baar partition function ko call karke
+        // pivot element ko find karke usse less elements ko left side and greater element
+        // ko right side shift kardo and phir uske left and right side ke sub-arrays par bhi
+        // same approach ko lagao
+        if (low < high)
+        {
+            int p = partition(arr, low, high);
+            quickSort(arr, low, p - 1);
+            quickSort(arr, p + 1, high);
+        }
+    }
+
+public:
+    int partition(int arr[], int low, int high)
+    {
+        int pivot = low;
+        int i = low;
+        int j = high;
+
+        while (i < j)
+        {
+            // jab tak starting elements array ke pivot element se less hai tab tak aage badhte raho
+            while (arr[i] <= arr[pivot])
+            {
+                i++;
+            }
+            // jab tak endinng elements array ke pivot element se greater hai tab tak peeche jaate raho
+            while (arr[j] > arr[pivot])
+            {
+                j--;
+            }
+            // ab agar i<j hai toh swap kardo ith and jth element ko
+            if (i < j)
+            {
+                swap(arr[j], arr[i]);
+            }
+        }
+        // last mein swap kardo jth element ko pivot se
+        swap(arr[j], arr[pivot]);
+        return j;
+    }
+};
+
 // Problem : Sorting Elements of an Array by Frequency GFG
 class Solution
 {
