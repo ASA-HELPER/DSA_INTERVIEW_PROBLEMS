@@ -258,6 +258,53 @@ public:
     }
 };
 
+// Problem : Sort an array according to the other GFG
+class Solution
+{
+    // TC => O(NlogN)   SC => O(N)
+public:
+    vector<int> sortA1ByA2(vector<int> A1, int N, vector<int> A2, int M)
+    {
+        // Sabse pehle hum array1 ke saare elements ki frequency ko count karlenge taaki
+        // hume ye pata chalta rahe ki konsa element reh gaya hai array1 mein array2 ke
+        // elements ke according sort karne ke baad
+        unordered_map<int, int> mp;
+        for (auto it : A1)
+            mp[it]++;
+
+        // Ab hum array2 ke through traverse karenge and ye dekhenge ki uski kitni frequency
+        // array1 mein hai map ki help se and utni frequency ko array1 ke starting se assign
+        // karna shuru kardenge and us element ko phir map se erase kardenge
+        int i = 0;
+        for (auto it : A2)
+        {
+            while (mp[it])
+            {
+                A1[i] = it;
+                mp[it]--;
+                i++;
+            }
+            mp.erase(it);
+        }
+        // Jitne bhi elements the array2 ke unhe jahan tak assign kardiya hai us index ko apne
+        // paas rakhlenge taaki baad mein sorting ke kaam aaye and ab jo bhi elements ki
+        // frequency map mein reh gayi hai unhe array1 mein daal denge
+        int ind = i;
+        for (auto it : mp)
+        {
+            while (mp[it.first])
+            {
+                A1[i] = it.first;
+                mp[it.first]--;
+                i++;
+            }
+        }
+        // ab us index se sort kardenge array1 ko jahan se sirf array 1 ke elements start ho rahe hai
+        sort(A1.begin() + ind, A1.end());
+        return A1;
+    }
+};
+
 // Problem : Arithmetic Subarrays LeetCode
 class Solution
 {
