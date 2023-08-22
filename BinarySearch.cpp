@@ -101,6 +101,54 @@ public:
     }
 };
 
+// Problem : Smallest Factorial Number GFG
+class Solution
+{
+public:
+    // TC => (log(base2)N * log(base5)N)     SC => O(1)
+    int findNum(int n)
+    {
+        // range ko sochne ke liye observation zaroori hai agar dhyaan de toh 5 ke har multiple
+        // par jaane par ek zero increase ho jaata hai toh aapko jitne trailing zeroes chahiye
+        // utna hi multiple hona chahiye 5 ka. For example :
+        // 9! tak mein 5 ka sirf ek mutiple hai jo ki 5 khud hi hai
+        // 10! par 5 ke 2 multiples (5,10) aagaye toh 2 trailing zeroes hojaayenge
+        // 15! par 5 ke 3 multiples (5,10,15) aagaye toh 3 trailing zeroes hojaayenge
+        // and issi tarah jese jese 5 ke multiples increase honge wese wese trailing zeroes
+        // increase hojaayenge. Toh isliye n ki koyi bhi value di ho uske range hamesha
+        // 1 to 5*n tak hi jaayegi
+        int low = 1;
+        int high = 5 * n;
+        int ans = 0;
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            int count = 0;
+            int power = 5;
+            // simply trailing zeros ko nikalne ki try kar rahe hai by dividing number by 5
+            // because isse hume ye pata chal jaayega ki 5 ke kitne multiples present hai
+            // number mein
+            while ((mid / power) != 0)
+            {
+                count += mid / power;
+                power *= 5;
+            }
+            // agar number of trailing zeroes zyada hai toh hum apni range ko kum karne ki
+            // koshish karenge warna range ko low se increase karenge
+            if (count >= n)
+            {
+                ans = mid;
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+        return ans;
+    }
+};
+
 // Problem : Missing element of AP (GFG)
 class Solution
 {
