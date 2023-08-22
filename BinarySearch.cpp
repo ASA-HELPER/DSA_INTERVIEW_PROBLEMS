@@ -1,3 +1,60 @@
+// Problem : Square root of a number GFG
+class Solution
+{
+public:
+    // TC => O(logN)    SC => O(1)
+    long long int Sqrt(long long int x)
+    {
+        // agar x=1 hai toh uska sqrt bhi 1 hi hoga
+        if (x == 1)
+        {
+            return 1;
+        }
+        // kisi bhi number x ka sqrt 0 to x ki range mein hi aayega
+        long long low = 0;
+        long long high = x;
+        // answer ko double lene ka reason yehi hai ki ho agar kahin par ceil value kahi ho
+        // toh answer ko ceil mein convert karsake according to first decimal value after point
+        double ans = 0;
+        while (low <= high)
+        {
+            long long mid = low + (high - low) / 2;
+            if ((mid * mid) == x)
+            {
+                return mid;
+            }
+            else if ((mid * mid) < x)
+            {
+                ans = mid;
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+        // factor ko 1 isliye liye taaki decimal points ko increase kar sake like 0.1,0.01,...
+        double factor = 1;
+        // precision ka matlab yehi hai ki kitne decimal points tak aap answer chahte hai
+        // hum yahan 2 decimal places tak hi consider kar rahe hai
+        int precision = 2;
+        for (int i = 0; i < precision; i++)
+        {
+            // har baar next decimal place ki value nikalne ke liye hume factor ko 10 se divide
+            // karna padega
+            factor = factor / 10;
+            // simply ye sqrt check karne ke liye call kar rahe hai ki j ki kya value hogi
+            // jiske liye j ka square less hoga x se
+            for (double j = ans; j * j < x; j += factor)
+            {
+                ans = j;
+            }
+        }
+        // answer ko long long mein typecast kar rahe hai as per the question
+        return (long long)ans;
+    }
+};
+
 // Problem : Number and the Digit Sum GFG
 class Solution
 {
