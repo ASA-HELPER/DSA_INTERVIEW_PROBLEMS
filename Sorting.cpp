@@ -392,6 +392,47 @@ public:
     }
 };
 
+// Problem : Maximum Intersecting Lines GFG
+class Solution
+{
+public:
+    // TC => O(NlogN)   SC => O(2N)
+    int maxIntersections(vector<vector<int>> lines, int N)
+    {
+        vector<int> slines(N), elines(N);
+        for (int i = 0; i < N; i++)
+        {
+            slines[i] = lines[i][0];
+            elines[i] = lines[i][1];
+        }
+        sort(slines.begin(), slines.end());
+        sort(elines.begin(), elines.end());
+
+        int i = 0;
+        int j = 0;
+        int intersections = 0;
+        int finalAns = INT_MIN;
+        // simply agar current start line less hai current end time se toh intersections increase
+        // hote rahenge and hum start waale vector mein aage badte rahenge and jesse hi start
+        // line zyada hojaaye end line se toh intersections ko decrease karte rahenge
+        while (i < N && j < N)
+        {
+            if (slines[i] <= elines[j])
+            {
+                intersections++;
+                finalAns = max(finalAns, intersections);
+                i++;
+            }
+            else
+            {
+                intersections--;
+                j++;
+            }
+        }
+        return finalAns;
+    }
+};
+
 // Problem : Number of pairs GFG
 class Solution
 {
