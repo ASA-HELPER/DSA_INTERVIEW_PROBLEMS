@@ -32,6 +32,34 @@ public:
     }
 };
 
+// Problem : Reverse a Doubly Linked List GFG
+Node *reverseDLL(Node *head)
+{
+    // TC => O(N)       SC => O(1)
+    // Simply three pointers ka use karenge
+    // previous pointer jiski help se hum current ka previous handle karenge taaki puri list ko
+    // traverse karne ke baad hume new head mil sake
+    Node *prev = NULL;
+    // current pointer ko use karke hum given linked list ke through traverse karenge
+    Node *curr = head;
+    // temp pointer ko use karke hum current pointer ke next ko hold karenge
+    Node *temp;
+    while (curr != NULL)
+    {
+        // sabse pehle current ke next ko temp mein store kar lenge
+        // phir current ke next mein prev ko daal denge
+        // phir current ke previous mein temp ko daaldenge
+        // phir current ko previous bana do and temp ko current bana do
+        temp = curr->next;
+        curr->next = prev;
+        curr->prev = temp;
+        prev = curr;
+        curr = temp;
+    }
+    head = prev;
+    return head;
+}
+
 // Problem : Check If Circular Linked List GFG
 bool isCircular(Node *head)
 {
