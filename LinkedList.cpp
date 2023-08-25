@@ -99,3 +99,37 @@ Node *removeDuplicates(Node *head)
     }
     return head;
 }
+
+// Problem : Remove duplicates from unsorted linked list GFG
+class Solution
+{
+    // TC => O(N)  SC => O(N)
+public:
+    Node *removeDuplicates(Node *head)
+    {
+        // Jab tak temp NULL nahi ho jaata hai tab tak hum linked list ke through traverse karenge
+        Node *temp = head;
+        // previous pointer ki help se hum next to next waala logic implement kar paayenge
+        Node *prev = head;
+        unordered_map<int, int> mp;
+        while (temp != NULL)
+        {
+            // agar node already present hai list mein toh hume prev ke next mein temp ka next dena hai
+            // and temp ko prev ka next bana dena hai
+            if (mp[temp->data])
+            {
+                prev->next = temp->next;
+                temp = prev->next;
+            }
+            // agar present nahi hai toh node ko map mein mark karenge and temp ko previous banakar
+            // temp ko aage move kardenge
+            else
+            {
+                mp[temp->data] = 1;
+                prev = temp;
+                temp = temp->next;
+            }
+        }
+        return head;
+    }
+};
