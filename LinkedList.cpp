@@ -78,3 +78,24 @@ bool isCircular(Node *head)
     }
     return false;
 }
+
+// Remove duplicates from sorted linked list GFG
+// TC => O(N)     SC => O(1)
+Node *removeDuplicates(Node *head)
+{
+    // Simply hum ek pointer le lenge jo ki linked ke through traverse karne mein help karega
+    Node *temp = head;
+    // Jab tak temp NULL nahi ho jaata hai tab tak hum linked list ke through traverse karenge
+    while (temp != NULL)
+    {
+        // ab jab tak temp ka next NULL nahi hota and current node and next node ki value same hai tab tak temp ke next mein
+        // temp ke next ka next daal te rahenge
+        while (temp->next != NULL && temp->data == temp->next->data)
+        {
+            temp->next = temp->next->next;
+        }
+        // ab kyunki temp ki value uske next ki value ke equal nahi hai toh temp ko aage move karenge
+        temp = temp->next;
+    }
+    return head;
+}
