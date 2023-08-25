@@ -133,3 +133,86 @@ public:
         return head;
     }
 };
+
+// Problem : Prime List GFG
+class Solution
+{
+    // TC => O(number of nodes * sqrt(value of node))     SC => O(1)
+public:
+    // Is function ki help se hum ye check karlenge ki current node ki value prime hai ya nahi
+    bool isPrime(int n)
+    {
+        if (n == 1)
+            return false;
+        if (n == 2 || n == 3)
+            return true;
+        if (n % 2 == 0 || n % 3 == 0)
+            return false;
+        for (int i = 5; i <= sqrt(n); i += 6)
+        {
+            if (n % i == 0 || n % (i + 2) == 0)
+                return false;
+        }
+        return true;
+    }
+
+    int nearestPrime(int n)
+    {
+        // just before and just after waala prime nikalenge
+        int prime1, prime2;
+        if (n == 1)
+            return 2;
+        // Just previous prime nikalenge
+        for (int i = n; i > 1; i--)
+        {
+            if (isPrime(i))
+            {
+                prime1 = i;
+                break;
+            }
+        }
+        // just after waala prime nikalenge
+        for (int i = n; i < n * n; i++)
+        {
+            if (isPrime(i))
+            {
+                prime2 = i;
+                break;
+            }
+        }
+        // ab dono primes ka distance current se nikal kar compare karlenge kiska distance less hai
+        if (abs(n - prime1) > abs(n - prime2))
+        {
+            return prime2;
+        }
+        else if (abs(n - prime1) < abs(n - prime2))
+        {
+            return prime1;
+        }
+        // agar distance same hai toh return karo smaller prime ko
+        else
+        {
+            if (prime1 > prime2)
+                return prime2;
+            else
+                return prime1;
+        }
+    }
+
+    Node *primeList(Node *head)
+    {
+        Node *curr = head;
+        while (curr)
+        {
+            // agar prime nahi hai current node ki value tabhi nearest prime nikalenge warna nahi nikalenge
+            if (!isPrime(curr->val))
+            {
+                int new_val = nearestPrime(curr->val);
+                // ab current node ko uske nearest pointer ki value assign kardo
+                curr->val = new_val;
+            }
+            curr = curr->next;
+        }
+        return head;
+    }
+};
