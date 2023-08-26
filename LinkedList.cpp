@@ -216,3 +216,52 @@ public:
         return head;
     }
 };
+
+// Problem : Length of longest palindrome linked list GFG
+// TC => O(N*N) SC => O(1)
+// Ye function help karega check karne mein ki kitne characters dono side se help kar rahe
+// palindrome banane mein
+int countCommon(Node *prev, Node *temp)
+{
+    int count = 0;
+    while (prev != NULL && temp != NULL)
+    {
+        if (temp->data == prev->data)
+        {
+            count++;
+        }
+        else
+        {
+            break;
+        }
+        prev = prev->next;
+        temp = temp->next;
+    }
+    return count;
+}
+
+int maxPalindrome(Node *head)
+{
+    // Simply reverse linked list ka hi logic hai ye bas har node ko as a center node maan
+    // kar uske left and right part ko compare karke dekhenge ki kitni length ka palindrome
+    // ban sakta hai. Current node ke piche ki linked ko reverse karte jaaeyenge taaki
+    // palindorme ko check kar sake by using previous nodes which are reverse and next nodes
+    // of current node
+    Node *prev = NULL;
+    Node *curr = head;
+    Node *temp;
+    int len = 0;
+    while (curr != NULL)
+    {
+        temp = curr->next;
+        curr->next = prev;
+        // agar odd center hai toh uske dono side mein equal same characters honge
+        len = max(len, 2 * countCommon(prev, temp) + 1);
+        // agar even center hai toh current node ko hum previous ke saath hi jod denge
+        // and phir dono side mein kitne equal characters hai nikal lenge
+        len = max(len, 2 * countCommon(curr, temp));
+        prev = curr;
+        curr = temp;
+    }
+    return len;
+}
