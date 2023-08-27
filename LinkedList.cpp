@@ -320,3 +320,50 @@ int maxPalindrome(Node *head)
     }
     return len;
 }
+
+// Problem : Linked List Matrix GFG
+Node *constructLinkedMatrix(int mat[MAX][MAX], int n)
+{
+    // TC => O(N*N) because hum pure matrix ko hi traverse kar rahe hai
+    // SC => O(N*N) because linked list mein N*N elements honge
+    // Hum matrix ke starting node ko head bana denge
+    Node *head = new Node(mat[0][0]);
+    // ab ek temp pointer rakhlenge jo ki har baar hume help karega har row ke columns ke through traverse karne mein
+    Node *temp = head;
+    for (int i = 0; i < n; i++)
+    {
+        // Ab hum temp2 pointer ko temp ko point kar wa denge taaki down jaa paayen
+        Node *temp2 = temp;
+        for (int j = 0; j < n; j++)
+        {
+            // agar last column hai toh temp ka right NULL hojaayega
+            if ((j + 1) == n)
+            {
+                temp->right = NULL;
+            }
+            // warna temp ke right mein next column ki value de denge
+            else
+            {
+                temp->right = new Node(mat[i][j + 1]);
+            }
+            // agar last row hai toh temp ke down ko NULL kardenge
+            if ((i + 1) == n)
+            {
+                temp->down = NULL;
+            }
+            // warna temp ke down mein current column ke next row ka element de do
+            else
+            {
+                temp->down = new Node(mat[i + 1][j]);
+            }
+            // temp ke right mein jaate jaao
+            temp = temp->right;
+        }
+        // ab humne temp ki starting ko rakha tha temp2 pointer par toh ab dubara temp ko
+        // wahin lekar aayenge and temp ke down mein chale jaayenge jo ki next row paunch
+        // jaayega
+        temp = temp2;
+        temp = temp->down;
+    }
+    return head;
+}
