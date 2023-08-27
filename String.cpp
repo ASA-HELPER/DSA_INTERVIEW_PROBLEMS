@@ -43,6 +43,42 @@ public:
     }
 };
 
+// Problem : Minimum days GFG
+class Solution
+{
+public:
+    int getMinimumDays(int N, string S, vector<int> &P)
+    {
+        int count = 0;
+        // Simply hum ye check karenge ki jab tak current character and next character equal
+        // hai tab tak and agar current character par ? nahi hai toh permutation se index leke
+        // us index par S ke ? laga denge.
+        // TC => O(N)    SC => O(1)
+        for (int i = 0; i < N - 1; i++)
+        {
+            while (S[i + 1] == S[i] && S[i] != '?')
+            {
+                S[P[count++]] = '?';
+            }
+        }
+        return count;
+    }
+    // Another Approach
+    int getMinimumDays(int N, string S, vector<int> &P)
+    {
+        int count = 0;
+        for (int i = 0; i < N - 1; i++)
+        {
+            if (S[P[i]] == S[P[i] + 1] || S[P[i]] == S[P[i] - 1])
+            {
+                count = i + 1;
+            }
+            S[P[i]] = '?';
+        }
+        return count;
+    }
+};
+
 // Problem : Min Number of Flips GFG
 int minFlips(string S)
 {
@@ -92,7 +128,7 @@ class Solution
     // TC => O(max(A.size,B.size))    SC => O(1)
 public:
     // Hume ye bol rakha hai ki transformation ke liye A se character ko uske index se remove
-    // karke statring mein rakhdo. Toh hum isme kya karenge ki pehle toh dono strings ke characters
+    // karke starting mein rakhdo. Toh hum isme kya karenge ki pehle toh dono strings ke characters
     // ki frequency same hai ya nahi. Agar frequency same nahi hai toh transform nahi kar
     // sakte toh answer straight forward -1 hojaayega
     int transform(string A, string B)
@@ -104,7 +140,7 @@ public:
         int n = A.size();
         int ans = 0;
         unordered_map<char, int> mp;
-        for (int i0; i < n; i++)
+        for (int i = 0; i < n; i++)
         {
             mp[A[i]]++;
             mp[B[i]]--;
@@ -400,5 +436,52 @@ public:
             }
         }
         return lps[n - 1];
+    }
+};
+
+// Case Specific Sorting of strings GFG
+class Solution
+{
+    // Question simply yeh keh raha hai ki jahan par bhi lowercase letters hai unhe sort kardo and jahan par bhi upper case characters hai
+    // unhe sort kardo but given string mein jo ordeering ko change kiye bina.
+    // Hum simply saare lowercase characters ko ek string mein store kar lenge and saare uppercase characters ko ek string mein store karlenge
+    // Phir dono strings ko sort kardenge and simply second traversal mein given string ke lowercase letters ki jagah lowercase letters ko
+    // sorted form mein put karenge and uppercase letter ki jagah uppercase letters ko put karenge
+    // TC => O(2NlogN)   SC => O(N)
+public:
+    string caseSort(string str, int n)
+    {
+        string lower = "";
+        string upper = "";
+        for (int i = 0; i < n; i++)
+        {
+            if (islower(str[i]))
+            {
+                lower += str[i];
+            }
+            else
+            {
+                upper += str[i];
+            }
+        }
+        // lowercase characters ke string ko sort karlenge
+        sort(lower.begin(), lower.end());
+        // uppercase characters ke string ko sort karlenge
+        sort(upper.begin(), upper.end());
+        int l = 0;
+        int u = 0;
+        // simply given string ko traverse karenge and lowercase character and uppercase character waale string se given string ko update karenge
+        for (int i = 0; i < n; i++)
+        {
+            if (islower(str[i]))
+            {
+                str[i] = lower[l++];
+            }
+            else
+            {
+                str[i] = upper[u++];
+            }
+        }
+        return str;
     }
 };
