@@ -79,7 +79,62 @@ bool isCircular(Node *head)
     return false;
 }
 
-// Remove duplicates from sorted linked list GFG
+// Problem : Sorted insert for circular linked list GFG
+class Solution
+{
+public:
+    // TC => O(N)    SC => O(1)
+    Node *sortedInsert(Node *head, int data)
+    {
+        // Sabse pehle hume tail node nikalna hi padega is question mein jisse thoda asaan hoga sochna
+        Node *tail = head;
+        while (tail->next != head)
+        {
+            tail = tail->next;
+        }
+        // Agar head hi greater hai hamare new node se toh iska matlab hamara newnode head banega
+        // Toh hume tail ke next mein newnode and newnode ke next mein head dekar newnode ko head
+        // bana dena hai
+        if (data < head->data)
+        {
+            Node *temp = new Node(data);
+            tail->next = temp;
+            temp->next = head;
+            head = temp;
+        }
+        // Agar tail se greater hai hamara node toh hume newnode ke next mein head and tail ke next
+        // mein newnode ko daalna hai and newnode ke next mein head ko daal dena hai bas
+        else if (data > tail->data)
+        {
+            Node *temp = new Node(data);
+            tail->next = temp;
+            temp->next = head;
+        }
+        // warna in between daalna hoga node ko kahin toh hum previous node ka track rakhenge apne
+        // paas taaki previous ke next mein given node ko daal saken and given node ke next mein
+        // current node ko daal denge
+        else
+        {
+            Node *prev = head;
+            Node *curr = head->next;
+            while (prev != tail)
+            {
+
+                if (data > prev->data && data <= curr->data)
+                {
+                    Node *temp = new Node(data);
+                    prev->next = temp;
+                    temp->next = curr;
+                }
+                prev = curr;
+                curr = curr->next;
+            }
+        }
+        return head;
+    }
+};
+
+// Problem : Remove duplicates from sorted linked list GFG
 // TC => O(N)     SC => O(1)
 Node *removeDuplicates(Node *head)
 {
@@ -217,7 +272,7 @@ public:
     }
 };
 
-// Problem : Length of longest palindrome linked list GFG
+// Problem : Length of longest palindrome in linked list GFG
 // TC => O(N*N) SC => O(1)
 // Ye function help karega check karne mein ki kitne characters dono side se help kar rahe
 // palindrome banane mein
