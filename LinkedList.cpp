@@ -367,3 +367,72 @@ Node *constructLinkedMatrix(int mat[MAX][MAX], int n)
     }
     return head;
 }
+
+// Problem : Intersection of Two Linked Lists GFG
+class Solution
+{
+public:
+    // Brute Force Approach : Sabse basic approach yehi hai ki aap 2 while loops ka use karke linked list 1
+    // ke har node ki value ko linked list 2 ke har node ki value ke saath compare karke dekho and jahan bhi
+    // match ho wahan par new node banakar new linked list mein append kardo
+    // TC => O(N*M)   SC => O(1)
+    Node *findIntersection(Node *head1, Node *head2)
+    {
+        // dummy node new linked list ko banane ke liye
+        Node *dummy = new Node(-1);
+        // dummy linked list ke through traverse karne ke liye ptr pointer ko use karenge
+        Node *ptr = dummy;
+        while (head1 != NULL)
+        {
+            // temp ko point karwa denge linked list 2 ke head par taaki traverse kar saken
+            Node *temp = head2;
+            while (temp != NULL)
+            {
+                // agar nodes ki values match huyi toh new node ko new linked list mein appen kardenge
+                if (temp->data == head1->data)
+                {
+                    ptr->next = new Node(head1->data);
+                    ptr = ptr->next;
+                }
+                temp = temp->next;
+            }
+            head1 = head1->next;
+        }
+        // new linked list last node ko NULL ko point karwa denge
+        ptr->next = NULL;
+        // ab kyunki linked list dummy ke next se start ho rahi hai toh dummy ke next ko return karenge
+        return dummy->next;
+    }
+
+    // Better Approach : Better approach ye hai ki aap linked list 2 ki values ko map mein store karwa lo
+    // taaki ye pata kar saken ki konsi nodes common hai dono linked list mein
+    // TC => O(N+M)   SC => O(N+M)
+    Node *findIntersection(Node *head1, Node *head2)
+    {
+        // dummy node new linked list ko banane ke liye
+        Node *dummy = new Node(-1);
+        // dummy linked list ke through traverse karne ke liye ptr pointer ko use karenge
+        Node *ptr = dummy;
+        unordered_map<int, int> mp;
+        // linked list 2 ki saari nodes ki values ko map mein mark kar rahe hai
+        while (head2 != NULL)
+        {
+            mp[head2->data] = 1;
+            head2 = head2->next;
+        }
+        while (head1 != NULL)
+        {
+            // agar current node ki value map mein hai toh new node ko new linked list mein appen kardenge
+            if (mp[head1->data])
+            {
+                ptr->next = new Node(head1->data);
+                ptr = ptr->next;
+            }
+            head1 = head1->next;
+        }
+        // new linked list last node ko NULL ko point karwa denge
+        ptr->next = NULL;
+        // ab kyunki linked list dummy ke next se start ho rahi hai toh dummy ke next ko return karenge
+        return dummy->next;
+    }
+};
