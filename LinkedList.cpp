@@ -436,3 +436,41 @@ public:
         return dummy->next;
     }
 };
+
+// Problem : Union of two linked list GFG
+class Solution
+{
+public:
+    // Brute Force Approach : Simply haan merge sort ki help se dono linked list ko sort karlo
+    // And phir two pointers ki help se dono linked list mein traverse karte huye new linked list
+    // banao jisme saare unique elements ho.
+    // TC => O((N+M)log(N+M))   SC => O(N+M)
+
+    // Better Approach : Hum set ka use karlen jo ki hamare linked list ke nodes ko unique bhi rakhega
+    // and sorted bhi rakhega and phir set se one by one values ko nikal kar new linked list mein
+    // append karte raho.
+    // TC => O(N+M)    SC => O(N+M)
+    struct Node *makeUnion(struct Node *head1, struct Node *head2)
+    {
+        set<int> st;
+        while (head1 != NULL)
+        {
+            st.insert(head1->data);
+            head1 = head1->next;
+        }
+        while (head2 != NULL)
+        {
+            st.insert(head2->data);
+            head2 = head2->next;
+        }
+        Node *dummy = new Node(-1);
+        Node *ptr = dummy;
+        for (auto it : st)
+        {
+            ptr->next = new Node(it);
+            ptr = ptr->next;
+        }
+        ptr->next = NULL;
+        return dummy->next;
+    }
+};
