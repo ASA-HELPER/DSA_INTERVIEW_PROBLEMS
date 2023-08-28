@@ -474,3 +474,45 @@ public:
         return dummy->next;
     }
 };
+
+// Problem : Reverse alternate nodes in Link List GFG
+class Solution
+{
+    // TC => O(N)     SC => O(1)
+public:
+    // Reverse function ki help se reverse kardenge
+    Node *reversed(Node *node)
+    {
+        Node *prev = NULL;
+        Node *temp;
+        Node *curr = node;
+        while (curr != NULL)
+        {
+            temp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        return prev;
+    }
+    void rearrange(struct Node *odd)
+    {
+        if (odd == NULL || odd->next == NULL)
+            return;
+
+        Node *oddHead = odd;
+        Node *oddCurr = oddHead;
+        Node *evenHead = odd->next;
+        Node *evenCurr = evenHead;
+        while (oddCurr && evenCurr && evenCurr->next)
+        {
+            // odd ke next mein even ka next daaldo and odd ko aage badha do pehle
+            oddCurr->next = evenCurr->next;
+            oddCurr = oddCurr->next;
+            // phir even ke next mein odd ka next daal do and phir even ko aage badha do
+            evenCurr->next = oddCurr->next;
+            evenCurr = evenCurr->next;
+        }
+        oddCurr->next = reversed(evenHead);
+    }
+};
