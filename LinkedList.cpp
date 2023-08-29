@@ -134,6 +134,35 @@ public:
     }
 };
 
+// Split a Circular Linked List into two halves GFG
+// TC => O(N)   SC => O(1)
+void splitList(Node *head, Node **head1_ref, Node **head2_ref)
+{
+    // Simply fast and next pointers ki help se mid ko find karenge
+    Node *slow = head;
+    Node *fast = head->next;
+    while (fast != head && fast->next != head)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    // mid find karne ke baad first linked list ko original linked list ka head assign
+    // kardenge and second linked list ko mid ka next assign kardenge
+    *head1_ref = head;
+    *head2_ref = slow->next;
+    // mid ke next mein phir first linked list ka head dekar usse circular linked list
+    // bana denge and second linked list mein traverse karenge jab tak original linked
+    // list ka head hamara next naa ho taaki original linked list ke last node ka link
+    // uske head se break karke second linked list ke head par laga saken
+    slow->next = *head1_ref;
+    Node *curr = *head2_ref;
+    while (curr->next != head)
+    {
+        curr = curr->next;
+    }
+    curr->next = *head2_ref;
+}
+
 // Problem : Remove duplicates from sorted linked list GFG
 // TC => O(N)     SC => O(1)
 Node *removeDuplicates(Node *head)
@@ -516,3 +545,38 @@ public:
         oddCurr->next = reversed(evenHead);
     }
 };
+
+// Problem : Reverse alternate K nodes GFG : Question mein yehi kaha tha ki pehle k nodes ko reverse karo , phir next k nodes ko reverse nahi karna
+// and aese hi linked list ke last tak karo
+Node *kAltReverse(Node *head, int k, int flag)
+{
+    Node *current = head;
+    Node *temp;
+    Node *prev = NULL;
+    int count = 0;
+    // ye while loop reverse linked list ka hi kaam kar raha hai
+    while (current != NULL && count++ < k)
+    {
+        temp = current->next;
+        if (flag)
+        {
+            // reverse link if flag is true
+            current->next = prev;
+        }
+        prev = current;
+        current = temp;
+    }
+    // recursively work kar rahe hai hum yahan par
+    if (temp != NULL)
+    {
+        if (flag)
+            head->next = kAltReverse(temp, k, !flag);
+        else
+            prev->next = kAltReverse(temp, k, !flag);
+    }
+    // agar flag hoga toh prev return karenge iska matlab hi humne last k nodes ko reverse kiya hai warna head ko return karenge
+    if (flag)
+        return prev;
+    else
+        return head;
+}
