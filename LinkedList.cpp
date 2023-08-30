@@ -79,6 +79,60 @@ struct Node *findMiddleNode(struct Node *head)
     return slow;
 }
 
+// Problem : Quick Sort on linked list GFG
+// Sorting Linked List using quicksort takes O(n^2) time in worst case and O(nLogn) in average and best cases, otherwise you may get TLE.
+// Hum yahan first ke around partition kar rahe hai
+node *partition(node *head, node *tail)
+{
+    node *curr = head;
+    node *prev = head;
+    node *pivot = head;
+    while (curr != tail->next)
+    {
+        // agar current node ki value pivot se kum hai toh prev ke next se iski value ko swap kardo
+        // and prev ko aage badhao
+        if (curr->data < pivot->data)
+        {
+            swap(curr->data, prev->next->data);
+            prev = prev->next;
+        }
+        curr = curr->next;
+    }
+    // last mein pivot ki value ko prev ki value se swap kardo
+    swap(pivot->data, prev->data);
+    return prev;
+}
+
+void quicksort(node *head, node *tail)
+{
+    if (head == NULL or head->next == NULL or (head == tail))
+    {
+        return;
+    }
+    // Sabse pehle hum linked list ka pivot point nikalenge jesse array mein karte hai
+    node *pivot = partition(head, tail);
+    // ab head se pivot node tak quicksort lagayenge
+    quicksort(head, pivot);
+    // ab pivot node ke next se tail tak quicksort lagayenge
+    quicksort(pivot->next, tail);
+    return;
+}
+
+void quickSort(struct node **headRef)
+{
+    node *head = *headRef, *tail = head;
+    if (head == NULL or head->next == NULL)
+    {
+        return;
+    }
+    // Hum sabse pehle doubly linked list ka tail nikal lenge
+    while (tail->next != NULL)
+    {
+        tail = tail->next;
+    }
+    quicksort(head, tail);
+}
+
 // Ye function lists ko sort karke merge karega
 struct Node *mergeSortedLists(struct Node *l1, Node *l2)
 {
