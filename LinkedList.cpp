@@ -60,6 +60,88 @@ Node *reverseDLL(Node *head)
     return head;
 }
 
+// Problem : Merge Sort on doubly linked list GFG
+// TC => O(NlogN)  SC => O(1)
+// Ye function har baar mujhe lists ke middle node ko find karke dega
+struct Node *findMiddleNode(struct Node *head)
+{
+    if (head == NULL or head->next == NULL)
+    {
+        return head;
+    }
+    Node *slow = head;
+    Node *fast = head;
+    while (fast->next != NULL && fast->next->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
+// Ye function lists ko sort karke merge karega
+struct Node *mergeSortedLists(struct Node *l1, Node *l2)
+{
+    if (l1 == NULL)
+    {
+        return l2;
+    }
+    if (l2 == NULL)
+    {
+        return l1;
+    }
+    Node *dummy = new Node(0);
+    Node *ptr = dummy;
+    while (l1 != NULL && l2 != NULL)
+    {
+        if (l1->data <= l2->data)
+        {
+            ptr->next = l1;
+            l1->prev = ptr;
+            l1 = l1->next;
+        }
+        else
+        {
+            ptr->next = l2;
+            l2->prev = ptr;
+            l2 = l2->next;
+        }
+        ptr = ptr->next;
+    }
+    if (l1 != NULL)
+    {
+        ptr->next = l1;
+        l1->prev = ptr;
+    }
+    if (l2 != NULL)
+    {
+        ptr->next = l2;
+        l2->prev = ptr;
+    }
+    // Doubly linked list hai toh dummy ke next ke previous ko NULL karna hoga
+    dummy->next->prev = NULL;
+    return dummy->next;
+}
+
+struct Node *sortDoubly(struct Node *head)
+{
+    // Base condition
+    if (head == NULL or head->next == NULL)
+    {
+        return head;
+    }
+    // Har baar linked list ka middle find karlenge and phir middle ke next ko new head banakar
+    // uske us new Head ke previous ko NULL and middle node ke next ko NULL kardenge
+    Node *midNode = findMiddleNode(head);
+    Node *newHead = midNode->next;
+    newHead->prev = NULL;
+    midNode->next = NULL;
+
+    Node *list1 = sortDoubly(head);
+    Node *list2 = sortDoubly(newHead);
+    return mergeSortedLists(list1, list2);
+}
+
 // Problem : Check If Circular Linked List GFG
 bool isCircular(Node *head)
 {
