@@ -486,30 +486,48 @@ public:
     }
 };
 
-// Problem : Make array elements unique
+// Problem : Repeated Substring Pattern LeetCode
 class Solution
 {
+    // Brute Force yehi hai ki aap har baar prefix and suffix nikal len and check karle ki kya dono equal hai and saath hi mein ye
+    // bhi check karna ho ki current substring ki length se divisible hai string ki length ya nahi.
+    // TC => O(N*N)	because substring nikalne mein O(N) time lagta hai and string ko traverse karne mein O(N) time lagega
+    // SC => O(N) hoga
 public:
-    //   TC => O(NlogN)     SC => O(1)
-    long long int minIncrements(vector<int> arr, int n)
+    // Simply KMP algorithm lagaya hai
+    // TC => O(N)   SC => O(N)
+    bool repeatedSubstringPattern(string s)
     {
-        // Simply sort kardenge taaki saare elements ko increasing order mein unique kar paayen
-        sort(arr.begin(), arr.end());
-        long long int count = 0;
-        for (int i = 1; i < n; i++)
+        int n = s.size();
+        int i = 0;
+        int j = 1;
+        vector<int> lps(n, 0);
+        while (j < n)
         {
-            // agar previous element greater ho jaata hai current se toh hum
-            // number of operations ko count karlenge ki previous se greater banane mein
-            // current number ko kitne operation lagenge. For example [4,5,3] hai toh 3 ko
-            // 5 se greater banane ke liye (5-3)+1 = 3 operations lagenge tabhi 3 ko 6 banayenge
-            if (arr[i - 1] >= arr[i])
+            if (s[i] == s[j])
             {
-                // Number of operations ko count kar rahe hai
-                count += arr[i - 1] - arr[i] + 1;
-                // bas current number ko previous ka greater bana do
-                arr[i] = arr[i - 1] + 1;
+                lps[j] = i + 1;
+                i++;
+                j++;
+            }
+            else
+            {
+                if (i == 0)
+                {
+                    lps[j] = 0;
+                    j++;
+                }
+                else
+                {
+                    i = lps[i - 1];
+                }
             }
         }
-        return count;
+        // agar longest prefix suffix ki length 0 hai toh return false
+        if (lps[n - 1] == 0)
+            return false;
+        // Warna hume ye check karna hoga ki string ki length kya woh divisible hai (string length - length of longest prefix suffix )
+        // like : str = ababab , n = 6 , lps[5] = 4, 6%(6-4) = 6%2 = 0
+        return n % (n - lps[n - 1]) == 0;
     }
 };
