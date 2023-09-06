@@ -1,3 +1,37 @@
+// Problem : Implement Stack using Array
+// TC => O(1) for push and pop functions
+class MyStack
+{
+private:
+    int arr[1000];
+    int top;
+
+public:
+    MyStack() { top = -1; }
+    int pop();
+    void push(int);
+};
+
+void MyStack ::push(int x)
+{
+    // Simply top ko as an index samjho jisse increment karke us index par hum element ko store kar rahe hai
+    top++;
+    arr[top] = x;
+}
+
+int MyStack ::pop()
+{
+    if (top != -1)
+    {
+        // pehle element ko apne pass variable mein store karna hai phir uske baad top ko decrement karna hai
+        int ele = arr[top];
+        top--;
+        return ele;
+    }
+    // agar array hi empty hoga toh return kardo -1
+    return -1;
+}
+
 // Problem: The celebrity problem GFG
 class Solution
 {

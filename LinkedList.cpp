@@ -354,6 +354,47 @@ public:
     }
 };
 
+// Problem : Delete nodes having greater value on right
+// TC => O(N)   SC =>O(N)
+class Solution
+{
+public:
+    // Approach : Simply reverse karo phir leaders in a array ki approach lagao and phir reverse karo
+    Node *reverse(Node *head)
+    {
+        Node *temp;
+        Node *prev = NULL;
+        Node *curr = head;
+        while (curr != NULL)
+        {
+            temp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        return prev;
+    }
+    Node *compute(Node *head)
+    {
+        head = reverse(head);
+        Node *ans = new Node(0);
+        Node *temp = ans;
+
+        int maxi = INT_MIN;
+        while (head != NULL)
+        {
+            if (head->data >= mx)
+            {
+                temp->next = new Node(head->data);
+                temp = temp->next;
+                maxi = head->data;
+            }
+            head = head->next;
+        }
+        return reverse(ans->next);
+    }
+};
+
 // Problem : Prime List GFG
 class Solution
 {
