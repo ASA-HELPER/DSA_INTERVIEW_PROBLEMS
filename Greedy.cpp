@@ -18,3 +18,47 @@ public:
         return count;
     }
 };
+
+// Problem : Swap and Maximize GFG
+// TC => O(NlogN)
+long long int maxSum(int arr[], int n)
+{
+    // jab array ka size 2 hoga toh first and second element ka difference do baar nikalna
+    // hoga because circular array hai ye
+    if (n == 2)
+    {
+        return 2 * abs(arr[0] - arr[1]);
+    }
+    // simply sort kardenge
+    sort(arr, arr + n);
+    int i = 0;
+    int j = n - 1;
+    long long int sum = 0;
+    // two pointers ki help lenge
+    while (i < j)
+    {
+        // sabse pehle mein ith and jth pointer ke beech ka difference add karlunga
+        sum += abs(arr[i] - arr[j]);
+        // ab mein ye dekhunga ki kya i+1<j hai because agar hum first example ko dekhen toh
+        // hum observe karenge ki arrangement kuch aesa hai smaller element then greater element
+        // then smaller element then greater element. Toh hum yahan visualize kar rahe hai
+        // ki greater element 2 smaller elements ke beech mein hi hai toh hum uska difference
+        // dono chote elements ke saath ek hi baar mein nikal rahe hai. Matlab ith and (i+1)th
+        // element ke beech mein jth element ke baare mein visualize kar rahe hai ki woh wahin
+        // par hai.
+        // For example : Sort karne ke baad array aesa hoga : [1,2,4,8]
+        // toh hum 8 ka difference 1 and 2 dono ke saath nikal rahe hai usse un dono ke beech
+        // mein rakha hua soch kar
+        if (i + 1 < j)
+        {
+            sum += abs(arr[i + 1] - arr[j]);
+        }
+        i++;
+        j--;
+    }
+    // circular array hai toh hamara ith pointer jahan jaake rukega wahi hamara rearrangement
+    // ka last element hoga toh uska array ke first element ke saath difference nikal kar
+    // add karna jaroori hai because array circular hai as per the question.
+    sum += abs(arr[0] - arr[i]);
+    return sum;
+}
