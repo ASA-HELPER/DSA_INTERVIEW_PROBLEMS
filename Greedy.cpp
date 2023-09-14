@@ -62,3 +62,37 @@ long long int maxSum(int arr[], int n)
     sum += abs(arr[0] - arr[i]);
     return sum;
 }
+
+// Problem : N meetings in a room GFG
+class Solution
+{
+public:
+    // TC => O(NlogN)     SC => O(N)
+    int maxMeetings(int start[], int end[], int n)
+    {
+        // hum ek pair bana lenge taaki har meeting ke start and end time ko ek dusre se bind kar saken
+        vector<pair<int, int>> meetings;
+        for (int i = 0; i < n; i++)
+        {
+            meetings.push_back({end[i], start[i]});
+        }
+        // end time ke according acsending order mein sort kardenge
+        sort(meetings.begin(), meetings.end());
+        // first meeting ko le rahe hai toh uska end time apne paas rakh lenge
+        int End = meetings[0].first;
+        // ek meeting le li hai toh max meetings abhi tak 1 hojaayengi
+        int maxMeet = 1;
+        for (int i = 1; i < n; i++)
+        {
+            // agar previous meeting ka end time current meeting ke start time se less hai toh
+            // ek aur meeting ko hum room mein karwa sakte hai toh hume simply meetings ke count
+            // ko increase karenge and end time ko update kardenge
+            if (End < meetings[i].second)
+            {
+                maxMeet++;
+                End = meetings[i].first;
+            }
+        }
+        return maxMeet;
+    }
+};
