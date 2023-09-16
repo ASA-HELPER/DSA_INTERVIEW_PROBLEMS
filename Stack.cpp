@@ -1,4 +1,4 @@
-// Problem : Implement Stack using Array
+// Problem : Implement Stack using Array GFG
 // TC => O(1) for push and pop functions
 class MyStack
 {
@@ -31,6 +31,141 @@ int MyStack ::pop()
     // agar array hi empty hoga toh return kardo -1
     return -1;
 }
+
+// Problem : Implement Stack using Linked List GFG
+struct StackNode
+{
+    int data;
+    StackNode *next;
+    StackNode *next;
+    StackNode(int a)
+    {
+        data = a;
+        next = NULL;
+    }
+}
+
+class MyStack
+{
+private:
+    StackNode *top;
+
+public:
+    MyStack()
+    {
+        top = NULL;
+    }
+    // TC => O(1) for push and pop
+    // SC => O(1) fro push and pop
+    void push(int x)
+    {
+        // ulti linked list bana rahe hai matlab new node ka next hoga previous node
+        // simply hum new Node banakar uske next mein top ko daal denge lekin tab jab top NULL naa
+        // ho warna top ko ki hi newNode assign kardenge and return kardenge
+        StackNode *newNode = new StackNode(x);
+        if (top == NULL)
+        {
+            top = newNode;
+            return;
+        }
+        // newNode ke next mein top ko de do and top ko newNode banado
+        newNode->next = top;
+        top = newNode;
+    }
+
+    // Function to remove an item from top of the stack.
+    int pop()
+    {
+        // agar top NULL hai toh -1 return kardo
+        if (top == NULL)
+        {
+            return -1;
+        }
+        // topmost node ko apne paas rakhlo ek pointer mein
+        StackNode *temp = top;
+        // top ko uske next par le jaao visualization ke according previous node par
+        top = top->next;
+        // topmost node ki value nikal lo and temp pointer ko delete kardo
+        int topValue = temp->data;
+        delete temp;
+        return topValue;
+    }
+}
+
+// Problem : Maximum Absolute Difference GFG
+class Solution
+{
+public:
+    // TC => O(N)     SC => O(2N)
+    vector<int> leftsmaller(int a[], int n)
+    {
+        stack<int> st;
+        vector<int> v;
+        for (int i = 0; i < n; i++)
+        {
+            // jab tak stack ke top ki value greater than equal to hogi current element ke
+            // tab tak stack se pop karte rahenge
+            while (!st.empty() && st.top() >= a[i])
+            {
+                st.pop();
+            }
+            // agar stack empty hai toh 0 push kardenge
+            if (st.empty())
+            {
+                v.push_back(0);
+            }
+            // warna vector mein stack ke top ki value ko append kardenge
+            else
+            {
+                v.push_back(st.top());
+            }
+            st.push(a[i]);
+        }
+        return v;
+    }
+    vector<int> rightsmaller(int a[], int n)
+    {
+        stack<int> st;
+        vector<int> v;
+        // jab tak stack ke top ki value greater than equal to hogi current element ke
+        // tab tak stack se pop karte rahenge
+        for (int i = n - 1; i >= 0; i--)
+        {
+            while (!st.empty() && st.top() >= a[i])
+            {
+                st.pop();
+            }
+            // agar stack empty hai toh 0 push kardenge
+            if (st.empty())
+            {
+                v.push_back(0);
+            }
+            // warna vector mein stack ke top ki value ko append kardenge
+            else
+            {
+                v.push_back(st.top());
+            }
+            st.push(a[i]);
+        }
+        // kyunki hum last se element se chal kar vector ko prepare kar rahe hai toh
+        // reverse karna padega
+        reverse(v.begin(), v.end());
+        return v;
+    }
+    int findMaxDiff(int a[], int n)
+    {
+        // har element ke liye left smaller and right smaller elements ko vectors mein store karwa lenge
+        vector<int> ls = leftsmaller(a, n);
+        vector<int> rs = rightsmaller(a, n);
+        // stored vectors ki values ka difference nikal kar dekh lenge ki konsa maximum hai
+        int maxi = INT_MIN;
+        for (int i = 0; i < n; i++)
+        {
+            maxi = max(maxi, abs(ls[i] - rs[i]));
+        }
+        return maxi;
+    }
+};
 
 // Problem: The celebrity problem GFG
 class Solution
