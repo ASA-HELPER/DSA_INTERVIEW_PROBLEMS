@@ -96,3 +96,57 @@ public:
         return maxMeet;
     }
 };
+
+// Problem : Find Maximum Equal sum of Three Stacks GFG
+class Solution
+{
+public:
+    // TC => O(N1+N2+N3)     SC => O(1)
+    int maxEqualSum(int N1, int N2, int N3, vector<int> &S1, vector<int> &S2, vector<int> &S3)
+    {
+        int sum1 = 0;
+        int sum2 = 0;
+        int sum3 = 0;
+        // Teeno given arrays ka sum nikal lenge and phir un sums ka minimum apne paas rakhlenge
+        for (int i = 0; i < N1; i++)
+        {
+            sum1 += S1[i];
+        }
+        for (int i = 0; i < N2; i++)
+        {
+            sum2 += S2[i];
+        }
+        for (int i = 0; i < N3; i++)
+        {
+            sum3 += S3[i];
+        }
+        int minSum = min({sum1, sum2, sum3});
+        int i = 0, j = 0, k = 0;
+        // teeno arrays mein traverse karte huye ye dekhenge ki kiska sum greater hai minimum sum se
+        // jiska sum greater uske current element ko uske sum se subtract karke aage badhte rahenge
+        // aur har baar check karlenge ki kya teeno ka sum equal hogaya hai
+        while (i <= N1 && j <= N2 && k <= N3)
+        {
+            if (sum1 > minSum)
+            {
+                sum1 -= S1[i++];
+            }
+            if (sum2 > minSum)
+            {
+                sum2 -= S2[j++];
+            }
+            if (sum3 > minSum)
+            {
+                sum3 -= S3[k++];
+            }
+            if (sum1 == sum2 && sum2 == sum3)
+            {
+                return sum1;
+            }
+            // kyunki sums ki value change huyi hai toh minimum sum ko bhi update karna padega
+            minSum = min({minSum, sum1, sum2, sum3});
+        }
+        // Agar teeno ke sums ki value equal nahi huyi hai toh return 0
+        return 0;
+    }
+};
