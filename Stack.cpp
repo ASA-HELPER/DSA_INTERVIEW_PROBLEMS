@@ -391,3 +391,92 @@ public:
         return 0;
     }
 };
+
+// Problem : Maximum of minimum for every window size GFG
+class Solution
+{
+    // minimums nikalen hai unka maximum konsa hai.
+    // har size ka window lena hai and ye pata karna hai ki us window size mein jitne bhi
+public:
+    // Approach-1 : Brute force toh yehi hai ki har size ke windows ko lo aur iterate karke
+    // nikal lo ki har window ka minimum kya hai aur unka maximum nikal lo phir. Iske liye
+    // 2 loops lagenge outside loop window ka size batayega and isliye while loop two pointers
+    // ki help se window ko forward move karta rahega and hum elements ko deque mein daalte
+    // rahenge and jab daal rahenge honge deque mein toh ye check karlenge ki previous element
+    // agar greater hai toh usse remove kardenge and phir isse daalenge and jo bhi hamara
+    // minimum hai ek current winndow ka woh next window mein bhi hai ya nahi toh uske liye
+    // deque mein element ke saath uska index bhi daal denge and jese hi minimum element
+    // window se nikal jaayega toh uska next element minimum ban jaayega deque se and agar deque
+    // empty hojaayega toh iska matlab hai ki current element hi is window ka minimum hai. Agar
+    // current element deque ke last element se greater hai toh usse deque mein push karenge.
+    // TC => O(N*N)    SC => O(N)
+    // Approach-2 : Hum ye nikalne ki koshish karenge ki current element kitne size tak ki window
+    // mein minimum ho sakta hai and iske liye hum ye dekh lenge ki usse smallest number kis index
+    // par exist karta hai uske left and right mein. And un indexes ka difference hume window ka
+    // size bata dega jisme current element minimum hoga.
+    // TC => O(N)   SC => O(N)
+    vector<int> maxOfMin(int arr[], int n)
+    {
+        vector<int> rightNS(n, 0);
+        vector<int> leftNS(n, 0);
+        stack<int> st;
+        // Har element ke liye uske left mein jo smaller element hai udka index nikal rahe hai
+        for (int i = 0; i < n; i++)
+        {
+            // jab tak current element smaller hai stack ke top waale element se tab tak stack se
+            // element nikalte jaao and agar stack empty ho jaaye toh iska matlab current element
+            // ke left mein usse smaller koyi element nahi hai toh current element ke liye left
+            // smaller element ho jaayega -1 warna and agar stack empty nahi hua toh stack ka top
+            // waala element hi current element ke liye left smaller element hoga
+            while (!st.empty() and arr[st.top()] >= arr[i])
+                st.pop();
+
+            if (st.empty())
+                leftNS[i] = -1;
+            else
+                leftNS[i] = st.top();
+            // current element ke index ko stack mein push kardo
+            st.push(i);
+        }
+        // same stack ko hi right smaller nikalne ke liye use kar saken isliye hum stack ko empty kar rahe hai
+        while (!st.empty())
+            st.pop();
+        // Har element ke liye uske right mein jo smaller element hai udka index nikal rahe hai
+        for (int i = n - 1; i >= 0; i--)
+        {
+            // jab tak current element smaller hai stack ke top waale element se tab tak stack se
+            // element nikalte jaao and agar stack empty ho jaaye toh iska matlab current element
+            // ke right mein usse smaller koyi element nahi hai toh current element ke liye right
+            // smaller element ho jaayega n warna and agar stack empty nahi hua toh stack ka top
+            // waala element hi current element ke liye right smaller element hoga
+            while (!st.empty() and arr[st.top()] >= arr[i])
+                st.pop();
+
+            if (st.empty())
+                rightNS[i] = n;
+            else
+                rightNS[i] = st.top();
+            // current element ke index ko stack mein push kardo
+            st.push(i);
+        }
+        vector<int> ans(n);
+        for (int i = 0; i < n; i++)
+        {
+            // 0 based indexing ki wajah se -2 karna padh raha hai dono ke liye
+            int winSize = rightNS[i] - leftNS[i] - 2;
+            ans[winSize] = max(ans[winSize], arr[i]);
+        }
+
+        // this for loop is for the elements whose winSize were not formed and
+        // can be given by the further greater element as the window size n as
+        // n-1 winSize window elements will also be in the range of n.
+        // matlab last se chalkar ye dekhlenge ki current index se last index tak mein
+        // jo maximum hai wahi current window size ka answer hoga.
+        for (int i = n - 2; i >= 0; i--)
+        {
+            ans[i] = max(ans[i], ans[i + 1]);
+        }
+
+        return ans;
+    }
+};
