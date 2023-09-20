@@ -156,6 +156,35 @@ public:
 };
 
 // Problem : Reverse a stack GFG
+class Solution
+{
+    // Is link par jaao dry run dikha rakha hai : https://www.techiedelight.com/reverse-stack-using-recursion/
+public:
+    // TC => O(N*N)    SC => O(N)
+    // For each top element, we will pop it and call recursion to insert a given element at the bottom of the remaining stack. After recursive
+    // function does its work and adds the given element to the bottom of stack, then we can simply push the popped element to the top of the stack.
+    void insertAtBottom(stack<int> &st, int element)
+    {
+        if (st.empty())
+        {
+            st.push(element);
+            return;
+        }
+        int num = st.top();
+        st.pop();
+        insertAtBottom(st, element);
+        st.push(num);
+    }
+    void Reverse(stack<int> &St)
+    {
+        if (St.empty())
+            return;
+        int num = St.top();
+        St.pop();
+        Reverse(St);
+        insertAtBottom(St, num);
+    }
+};
 
 // Problem : Maximum Absolute Difference GFG
 class Solution
