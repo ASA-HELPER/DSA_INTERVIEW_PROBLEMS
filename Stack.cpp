@@ -92,6 +92,71 @@ public:
     }
 }
 
+// Problem : Sort a Stack GFG
+// TC => O(N*N) because worst case mein ye ho sakta hai ki array decreasing ho toh insert and sort dono N times chalenge
+// SC => O(N)
+// insert ka kaam hai sabhi numbers ko unki correct position par rakhna sorted order mein.
+void
+insert(stack<int> &s, int x)
+{
+    // agar stack empty hai toh seedha insert kardenge uske top par jis bhi element ko insert karna hai
+    if (s.empty())
+    {
+        s.push(x);
+        return;
+    }
+    else
+    {
+        // agar stack ke top par jo element hai woh current element se bada hai toh recursively hum stack
+        // se pop karte jaayenge elements ko and ek variable mein store kar lenge jab tak ek aisa element
+        // nahi miljaata jo current element se chota hai and jese hi chota element mil jaaye toh current
+        // element ko stack mein daal ke un elements ko phir recursively waapis jaate waqt push kardenge
+        if (s.top() > x)
+        {
+            int top = s.top();
+            s.pop();
+            insert(s, x);
+            s.push(top);
+        }
+        // agar stack ke top par jo element hai woh current element jisse insert karna hai usse chota hai
+        // toh directly current element ko daaldo stack mein and return kardo
+        else
+        {
+            s.push(x);
+            return;
+        }
+    }
+}
+
+// Ye basically sabhi numbers ko recurively ek variable mein store karlega and phir insert ko call karega
+void SortedStack ::sort()
+{
+    // Your code here
+    if (s.empty())
+    {
+        return;
+    }
+    else
+    {
+        int top = s.top();
+        s.pop();
+        sort();
+        // isse pehle tak hum bas ek simple sa kaam kar rahe hai ki stack se pop karte jaa rahe hai
+        // and ek variable mein store kar rahe hai and jab stack empty hojaayega toh last stored value
+        // ko lekar jaayenge aur usse stack mein correct position par rakh denge sorted order mein
+        insert(s, top);
+    }
+}
+
+class SortedStack
+{
+public:
+    stack<int> s;
+    void sort();
+};
+
+// Problem : Reverse a stack GFG
+
 // Problem : Maximum Absolute Difference GFG
 class Solution
 {
@@ -250,5 +315,50 @@ public:
             return -1;
         }
         return ans;
+    }
+};
+
+// Problem : Expression contains redundant bracket or not GFG
+class Solution
+{
+public:
+    int checkRedundancy(string s)
+    {
+        // TC => O(N)    SC => O(N)
+        int n = s.size();
+        stack<char> st;
+        // Simply ek stack le lenge character type ka
+        for (int i = 0; i < n; i++)
+        {
+            char ch = s[i];
+            // agar current character opening bracket hai ya phir operator hai toh usse seedha stack mein push kardo
+            if (ch == '(' || ch == '+' || ch == '-' || ch == '*' || ch == '/')
+            {
+                st.push(ch);
+            }
+            // agar closing bracket hai toh stack se pop karte jao elements jab tak tumhe opening bracket nahi milta
+            // agar opening bracket se pehle ek bhi operator miljaata hai stack mein toh redudant bracket nahi hai
+            // warna redundant brackets present hai
+            else if (ch == ')')
+            {
+                bool operatorFound = false;
+                while (!st.empty() && st.top() != '(')
+                {
+                    if (st.top() == '+' || st.top() == '-' || st.top() == '*' || st.top() == '/')
+                    {
+                        operatorFound = true;
+                    }
+                    st.pop();
+                }
+                // stack ke top par opening bracket present hai toh usse bhi remove karna padega
+                st.pop();
+                // agar operator nahi mila toh iska matlab redundant bracket hai
+                if (!operatorFound)
+                {
+                    return true;
+                }
+            }
+        }
+        return 0;
     }
 };
