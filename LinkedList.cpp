@@ -79,6 +79,72 @@ struct Node *findMiddleNode(struct Node *head)
     return slow;
 }
 
+// Problem : QuickSort on doubly linked list GFG
+class Solution
+{
+public:
+    void swap(int *a, int *b)
+    {
+        int t = *a;
+        *a = *b;
+        *b = t;
+    }
+    Node *partition(Node *l, Node *h)
+    {
+        // Starting element ko hi pivot maan lenge
+        Node *pivot = l;
+        // 2 pointers le lenge traverse karne ke liye
+        Node *i = l, *j = h;
+        bool flag = false;
+
+        while (!flag)
+        {
+            // jab tak pivot element se samller hai ith pointer par value nodes ka tab tak
+            // aage badte rahenge and jese hi ith pointer jth pointer ke equal hoga toh
+            // flag ko true kardenge
+            while (i != NULL && i->data <= pivot->data)
+            {
+                if (i == j)
+                    flag = true;
+                i = i->next;
+            }
+            // jab tak pivot element se greater hai jth pointer par value nodes ka tab tak
+            // aage badte rahenge and jese hi jth pointer ith pointer ke equal hoga toh
+            // flag ko true kardenge
+            while (j != NULL && j->data > pivot->data)
+            {
+                if (i == j)
+                    flag = true;
+                // kyunki doubly linked list hai isliye prev pointer ki help se last to first
+                // node traverse kar sakte hai
+                j = j->prev;
+            }
+            // agar flag true nahi hai toh iska matlab ith and jth pointer equal nahi huye hai
+            // toh ith and jth node ke values ko swap kardo
+            if (!flag)
+                swap(i->data, j->data);
+        }
+        // pivot element and jth element ke values ko swap kardo
+        if (flag)
+        {
+            swap(pivot->data, j->data);
+        }
+
+        return j;
+    }
+};
+
+void quickSort(struct Node *l, struct Node *h)
+{
+    if (h != NULL && l != h && l != h->next)
+    {
+        Solution obj;
+        struct Node *p = obj.partition(l, h);
+        quickSort(l, p->prev);
+        quickSort(p->next, h);
+    }
+}
+
 // Problem : Quick Sort on linked list GFG
 // Sorting Linked List using quicksort takes O(n^2) time in worst case and O(nLogn) in average and best cases, otherwise you may get TLE.
 // Hum yahan first ke around partition kar rahe hai
@@ -354,7 +420,7 @@ public:
     }
 };
 
-// Problem : Delete nodes having greater value on right
+// Problem : Delete nodes having greater value on right GFG
 // TC => O(N)   SC =>O(N)
 class Solution
 {
