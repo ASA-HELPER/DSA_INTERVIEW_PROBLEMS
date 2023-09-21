@@ -823,3 +823,131 @@ Node *kAltReverse(Node *head, int k, int flag)
     else
         return head;
 }
+
+// Problem : Subtraction in linked list GFG
+int findLen(Node *node)
+{
+    int len = 0;
+    while (node != NULL)
+    {
+        len++;
+        node = node->next;
+    }
+    return len;
+}
+
+Node *reverse(Node *head)
+{
+    Node *temp;
+    Node *prev = NULL;
+    Node *curr = head;
+    while (curr != NULL)
+    {
+        temp = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = temp;
+    }
+    return prev;
+}
+
+Node *subLinkedList(Node *l1, Node *l2)
+{
+    // agar dono mein se ek bhi linked list null huyi toh duri ko return kardenge
+    if (l2 == NULL)
+    {
+        return l1;
+    }
+    if (l1 == NULL)
+    {
+        return l2;
+    }
+    // agar linked list mein trailing zeroes hai toh unhe remove kar rahe hai
+    while (l1 && l1->data == 0)
+    {
+        l1 = l1->next;
+    }
+    // agar linked list mein trailing zeroes hai toh unhe remove kar rahe hai
+    while (l2 && l2->data == 0)
+    {
+        l2 = l2->next;
+    }
+    // dono linked list ki length nikal lenge taaki ye pata kar saken ki konsi greater hai
+    int n1 = findLen(l1);
+    int n2 = findLen(l2);
+    // agar second linked list greater hai toh dono linked list ko swap kardenge
+    if (n2 > n1)
+    {
+        swap(l1, l2);
+    }
+    // agar dono linked list ki length same hai toh ye find karna padega ki konsi greater hai
+    if (n1 == n2)
+    {
+        Node *temp1 = l1;
+        Node *temp2 = l2;
+        // jab tak linked list ke nodes ki values same hai aage badhte raho
+        while (temp1->data == temp2->data)
+        {
+            temp1 = temp1->next;
+            temp2 = temp2->next;
+            // agar linked list hi null hogayi toh iska matlab saara nodes dono linked list ke
+            // ek dusre ke equal the toh is case mein ek new linked list ko return kardenge jisme
+            // sirf ek hi node hoga jiski value zero hogi
+            if (temp1 == NULL && temp2 == NULL)
+            {
+                return new Node(0);
+            }
+        }
+        // agar linked list ke node ki values zyada hai toh swap kardo dono linked list ko
+        if (temp2->data > temp1->data)
+        {
+            swap(l1, l2);
+        }
+    }
+    // dono linked list ko reverse kardo
+    Node *temp = reverse(l1);
+    Node *ptr = reverse(l2);
+    // New node bana lenge
+    Node *head = NULL;
+    // ek variable le lenge jo ki ye show karega ki abhi difference negative tha ya positive
+    // linked list ke nodes ke beech
+    int borrow = 0;
+    while (temp != NULL)
+    {
+        // agar second linked list null hogayi hai toh 0 warna second linked list ke node ki
+        // value ko consider karenge difference ke liye
+        int diff = borrow + temp->data - (ptr == NULL ? 0 : ptr->data);
+        // agar difference negative hai iska matlab borrow karne ki zaroorat padegi toh
+        // borrow variable ko -1 kardenge and difference mein 10 add kardenge jo ki hume
+        // borrow lene ke baad ka difference de dega
+        if (diff < 0)
+        {
+            borrow = -1;
+            diff += 10;
+        }
+        // agar difference positive hai toh borrow zero hoga
+        else
+        {
+            borrow = 0;
+        }
+        // naya node banayenge jiski value difference hogi jo humne nikala hai
+        Node *newNode = new Node(diff);
+        // reverse naa karna pade last mein linked list ko isliye har baar new node ke next
+        // mein jo linked list hum create kar rahe hai usse hi daal denge and new node ko hi
+        // head bana denge
+        newNode->next = head;
+        head = newNode;
+        temp = temp->next;
+        // agar second linked list null nahi hai toh hi next node par jaao
+        if (ptr != NULL)
+        {
+            ptr = ptr->next;
+        }
+    }
+    // jab tak head ka next hai and trailing zeroes hai tab tak aaage badho
+    while (head->next && head->data == 0)
+    {
+        head = head->next;
+    }
+    return head;
+}
