@@ -79,3 +79,74 @@ struct MyQueue
         return popped;
     }
 };
+
+// Problem : Generate Binary Numbers GFG
+// TC => O(N)   SC => O(N)
+vector<string> generate(int N)
+{
+    vector<string> ans;
+    queue<string> q;
+    // simply queue ka istemaal karke hum usme har number ki binary string banakar push karenge
+    // uske pehle ke numbers ka use karke. For example, N = 5 ke liye dry run dekho :
+    // q = {"1"}                                          ans = {}
+    // q = {"10","11"}                                    ans = {"1"}
+    // q = {"11","100","101"}                             ans = {"1","10"}
+    // q = {"100","101","110","111"}                      ans = {"1","10","11"}
+    // q = {"101","110","111","1000","1001"}              ans = {"1","10","11","100"}
+    // q = {110","111","1000","1001","1010","1011"}       ans = {"1","10","11","100","101"}
+    q.push("1");
+    for (int i = 1; i <= N; i++)
+    {
+        string bin = q.front();
+        ans.push_back(bin);
+        q.pop();
+        q.push(bin + "0");
+        q.push(bin + "1");
+    }
+    return ans;
+}
+
+// Problem : First non-repeating character in a stream GFG
+class Solution
+{
+public:
+    // 	TC => O(26*N)
+    //  SC => O(N)
+    string FirstNonRepeating(string A)
+    {
+        int n = A.size();
+        //  ek queue le lenge taaki ye pata kar saken ki konsa character current index tak
+        // sirf ek hi baar aaya hai
+        queue<char> q;
+        //  ek frequency vector rakh lenge jo ki help karega ye pata karne mein ki current
+        // character kitni baar aa chuka hai abhi tak
+        vector<int> freq(26, 0);
+        for (int i = 0; i < A.size(); i++)
+        {
+            freq[A[i] - 'a']++;
+            //  agar character pehli baar aaya hai toh usse queue mein daaldo
+            if (freq[A[i] - 'a'] == 1)
+            {
+                q.push(A[i]);
+            }
+            //  agar queue empty nahi hai and queue mein jo elements hai unki frequency 1 se
+            // zyada hai toh queue se pop karte rahenge
+            while (!q.empty() && freq[q.front() - 'a'] > 1)
+            {
+                q.pop();
+            }
+            //  agar queue khali ho jaata hai toh iska matlab hai ki current character ke
+            // liye koyi bhi non repeating character nahi hai abhi tak warna queue ka front
+            // de denge
+            if (q.empty())
+            {
+                A[i] = '#';
+            }
+            else
+            {
+                A[i] = q.front();
+            }
+        }
+        return A;
+    }
+};
