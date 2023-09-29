@@ -1,3 +1,28 @@
+// Problem : Height of the heap GFG
+class Solution
+{
+public:
+    // TC => O(logN)   SC => O(1)
+    int heapHeight(int n, int arr[])
+    {
+        // Approach-1 : n ko repeatedly 2 se divide karte raho reason yeh hai ki observe
+        // karo dhyan se har baar har level par nodes previous level mein jitne nodes hai
+        // unka double hojaati hai. Toh jitne nodes honge unhe jab repeatedly divide karte
+        // jaayenge toh levels ka idea mil jaata hai.
+        int count = 0;
+        while (n > 0)
+        {
+            n /= 2;
+            count++;
+        }
+        return count - 1;
+
+        // Approach-2 : using log function
+        // TC => O(1)    SC => O(1)
+        return log2(n);
+    }
+};
+
 // Problem : Top k frequent elements LeetCode
 class Solution
 {
