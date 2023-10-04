@@ -182,3 +182,82 @@ public:
         return true;
     }
 };
+
+// Problem : Check Mirror in N-ary tree GFG
+class Solution
+{
+public:
+    //   TC => O(e)     SC => O(e)
+    int checkMirrorTree(int n, int e, int A[], int B[])
+    {
+        unordered_map<int, vector<int>> mp1, mp2;
+        // simply dono vectors ke through traverse karke dono ke liye adjancy list bana lo
+        for (int i = 0; i < 2 * e; i += 2)
+        {
+            mp1[A[i]].push_back(A[i + 1]);
+            mp2[B[i]].push_back(B[i + 1]);
+        }
+        // ab ek map ke through traverse karke current element se jitne connected hai unka reverse
+        // karke ye check karlo ki agar woh dusre adjancy list ke vector ke equal nahi hai toh
+        // mirror tree nahi hai
+        for (auto it : mp1)
+        {
+            reverse(it.second.begin(), it.second.end());
+            if (it.second != mp2[it.first])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+// Problem : Maximum edge removal interviewbit
+// TC => O(N)   SC => O(N)
+int dfs(vector<vector<int>> &tree, int node, vector<int> &child, int parent)
+{
+    for (int i = 0; i < tree[node].size(); i++)
+    {
+        if (tree[node][i] == parent)
+        {
+            continue;
+        }
+        // child ko count karte jaayenge
+        child[node] += dfs(tree, tree[node][i], child, node);
+    }
+    return child[node];
+}
+int helper(vector<vector<int>> &tree, int node, vector<int> &child, int parent)
+{
+    int count = 0;
+    for (int i = 0; i < tree[node].size(); i++)
+    {
+        if (tree[node][i] == parent)
+        {
+            continue;
+        }
+        // agar child ka count even hai toh cut kar sakte hai
+        if (child[tree[node][i]] % 2 == 0)
+        {
+            count++;
+        }
+        // subtree se bhi lekar aayenge answer
+        count += helper(tree, tree[node][i], child, node);
+    }
+    return count;
+}
+int Solution::solve(int A, vector<vector<int>> &B)
+{
+    // simply hum dfs lagakar saare nodes ke paas unke child ka counts rakh lenge
+    // phir hum ek ek node se puchenge ki kya woh cut kar sakte hai
+    vector<vector<int>> tree(A + 1);
+    for (int i = 0; i < B.size(); i++)
+    {
+        tree[B[i][0]].push_back(B[i][1]);
+        tree[B[i][1]].push_back(B[i][0]);
+    }
+    // ek child vector le lenge and sabhi nodes ki value 1 kardenge jo ki uss node ko show kar raha hai
+    vector<int> child(A + 1, 1);
+    dfs(tree, 1, child, -1);
+    return helper(tree, 1, child, -1);
+}
