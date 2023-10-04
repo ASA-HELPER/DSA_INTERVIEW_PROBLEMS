@@ -212,6 +212,63 @@ public:
     }
 };
 
+// Problem : Construct binary tree from parent array GFG
+class Solution
+{
+public:
+    // TC =>O(N)     SC => O(N)
+    Node *createTree(int parent[], int N)
+    {
+        // indexes child ko show kar rahe hai and unki values parent ko
+        Node *root = NULL;
+        unordered_map<int, Node *> mp;
+        // saare indexes ke through jao
+        for (int i = 0; i < N; i++)
+        {
+            // pehle child and parent dono ko null consider kar lenge
+            Node *child = NULL, *Parent = NULL;
+            int childkivalue = i;
+            int parentkivalue = parent[i];
+            // agar child exist karta hoga toh child ka parent le aayenge
+            if (mp.find(childkivalue) != mp.end())
+            {
+                child = mp[childkivalue];
+            }
+            // warna new child banakar usse child ki value de denge
+            else
+            {
+                child = new Node(childkivalue);
+                mp[childkivalue] = child;
+            }
+            // ab parent ko dekhenge agar root node hai toh parent value zero hogi
+            if (parentkivalue == -1)
+            {
+                root = child;
+            }
+            // warna 2 case hai ya toh parent exist karta hoga ya phir parent bhi new node
+            // banega and phir usko map mein daal denge
+            else
+            {
+                if (mp.find(parentkivalue) != mp.end())
+                {
+                    Parent = mp[parentkivalue];
+                }
+                else
+                {
+                    Parent = new Node(parentkivalue);
+                    mp[parentkivalue] = Parent;
+                }
+                // agar parent ka left null hai toh usme left ko daal denge warna right mein daal denge
+                if (Parent->left == NULL)
+                    Parent->left = child;
+                else if (Parent->right == NULL)
+                    Parent->right = child;
+            }
+        }
+        return root;
+    }
+};
+
 // Problem : Maximum edge removal interviewbit
 // TC => O(N)   SC => O(N)
 int dfs(vector<vector<int>> &tree, int node, vector<int> &child, int parent)
