@@ -269,6 +269,45 @@ public:
     }
 };
 
+// Problem : Make binary tree from linked list GFG
+// TC => O(N)   SC => O(N)
+void convert(Node *head, TreeNode *&root)
+{
+    // agar linked list mein koyi node nahi hai toh root ko NULL karke return kardo
+    if (!head)
+    {
+        root = NULL;
+        return;
+    }
+    // queue ki help leni padegi taaki har level ke nodes ko apne paas rakh saken tree banane
+    // ke piye
+    queue<TreeNode *> q;
+    // root ko queue mein push kardiya hai
+    root = new TreeNode(head->data);
+    q.push(root);
+    head = head->next;
+    // jab tak linked list khatam nahi hogi tab tak traverse karenge
+    while (head)
+    {
+        // queue se nikal kar front node ko apne paas rakhlenge taaki usse tree ka node
+        // bana saken and uska left and right node set kar saken
+        TreeNode *curr = q.front();
+        q.pop();
+        TreeNode *leftNode = new TreeNode(head->data);
+        curr->left = leftNode;
+        q.push(leftNode);
+        head = head->next;
+        // agar head hai toh right node banayenge current node ke liye
+        if (head)
+        {
+            TreeNode *rightNode = new TreeNode(head->data);
+            curr->right = rightNode;
+            q.push(rightNode);
+            head = head->next;
+        }
+    }
+}
+
 // Problem : Maximum edge removal interviewbit
 // TC => O(N)   SC => O(N)
 int dfs(vector<vector<int>> &tree, int node, vector<int> &child, int parent)
