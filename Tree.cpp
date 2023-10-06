@@ -1,3 +1,34 @@
+// Problem : Construct BST from postorder GFG
+// TC => O(N)   SC => O(N)
+Node *helper(int post[], int mini, int maxi, int &i)
+{
+    // agar saare nodes ko create kar chuke hai toh return NULL
+    if (i < 0)
+    {
+        return NULL;
+    }
+    // agar current node minimum se chota hai ya maximum se bada hai toh return NULL
+    if (post[i] <= mini || post[i] >= maxi)
+    {
+        return NULL;
+    }
+    // node create karenge
+    Node *root = new Node(post[i--]);
+    // pehle right mein daalo node ko and yahan minimum ab yehi node ban jaayega
+    root->right = helper(post, root->data, maxi, i);
+    // phir left mein daalenge and yahan maximum ab yehi node ban jaayega
+    root->left = helper(post, mini, root->data, i);
+    return root;
+}
+
+Node *constructTree(int post[], int size)
+{
+    int mini = INT_MIN;
+    int maxi = INT_MAX;
+    int i = size - 1;
+    return helper(post, mini, maxi, i);
+}
+
 // Problem : Print Nodes having K leaves GFG
 class Solution
 {
