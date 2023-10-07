@@ -339,6 +339,47 @@ void convert(Node *head, TreeNode *&root)
     }
 }
 
+// Problem : Function to convert binary tree to doubly linked list GFG
+class Solution
+{
+    // TC => O(N)     SC => O(H)
+public:
+    // Hum 2 nodes ki help lenge taaki previous pointer ko track kar saken and hume linked list ka head miljaaye
+    Node *prev = NULL;
+    Node *head = NULL;
+    // Simply hum inorder lagayenge
+    void inorder(Node *root)
+    {
+        if (root == NULL)
+        {
+            return;
+        }
+        // left mein jaate jaao
+        inorder(root->left);
+        // inorder work : toh agar previous node NULL hai toh iska matlab head current root banega
+        if (prev == NULL)
+        {
+            head = root;
+        }
+        // warna current node ke left mein previous node aayega and previous node ke right mein current node aayega
+        else
+        {
+            root->left = prev;
+            prev->right = root;
+        }
+        // ab current root ko previous node bana denge matlab agar visualize karoge toh iska matlab hum
+        // linked list ke next node par jaayenge
+        prev = root;
+        // right mein jaate jaao
+        inorder(root->right);
+    }
+    Node *bToDLL(Node *root)
+    {
+        inorder(root);
+        return head;
+    }
+};
+
 // Problem : Maximum edge removal interviewbit
 // TC => O(N)   SC => O(N)
 int dfs(vector<vector<int>> &tree, int node, vector<int> &child, int parent)
