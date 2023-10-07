@@ -424,6 +424,63 @@ public:
     }
 };
 
+// Problem : Check Tree Traversal GFG
+class Solution
+{
+    // TC => O(N^2)    SC => O(N)
+public:
+    bool checktree(int preorder[], int inorder[], int postorder[], int n)
+    {
+        // agar ek bhi node nahi bacha hai toh return true
+        if (n == 0)
+            return true;
+        // agar sirf ek hi node reh gaya hai toh ye dekho ki teeno traversals mein woh node same hai ya nahi
+        if (n == 1)
+        {
+            if (preorder[0] == inorder[0] && inorder[0] == postorder[0])
+                return true;
+            else
+                return false;
+        }
+
+        // preorder mein jo pehla element hoga usse inorder mein dhundo because wahi root hoga
+        int idx = -1, f = 0;
+        for (int i = 0; i < n; ++i)
+            if (inorder[i] == preorder[0])
+            {
+                idx = i;
+                break;
+            }
+        // agar inorder mein element milgaya hai toh preorder ke first element ko dhundo postorder
+        // traversal mein konse index par hai
+        if (idx != -1)
+        {
+            for (int i = 0; i < n; i++)
+                if (preorder[0] == postorder[i])
+                {
+                    f = 1;
+                    break;
+                }
+        }
+        // agar preorder ka first element inorder ya postorder mien se kisi mein bhi nahi mila hai
+        // toh iska matlab hai ki trees same nahi hai traversals mein
+        if (idx == -1 || f == 0)
+            return false;
+
+        // Ab left subtree mein check karenge and preorder ke index ko badha denge
+        bool ret1 = checktree(preorder + 1, inorder, postorder, idx);
+
+        // Ab right subtree mein check karenege jisme preorder ki value ko index + 1 kardenge because idx woh
+        // index hai jahan par hume preorder ka first element inorder mein mila tha and inorder ke liye
+        // bhi same yehi karenge and postorder mein sirf index ko hi add karenge and n ki value ab hogi
+        // n-index-1 jo ki right subtree ko represent kar raha hoga
+        int ret2 = checktree(preorder + idx + 1, inorder + idx + 1, postorder + idx, n - idx - 1);
+
+        // return 1 only if both of them are correct else 0
+        return (ret1 && ret2);
+    }
+};
+
 // Problem : Maximum edge removal interviewbit
 // TC => O(N)   SC => O(N)
 int dfs(vector<vector<int>> &tree, int node, vector<int> &child, int parent)
