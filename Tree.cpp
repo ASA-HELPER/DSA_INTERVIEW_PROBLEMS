@@ -380,6 +380,50 @@ public:
     }
 };
 
+// Problem : Maximum Path Sum between 2 Special Nodes GFG
+// Here special node is a node which is connected to exactly one different node.
+class Solution
+{
+    // TC => O(N)    SC => O(H)
+public:
+    int helper(Node *root, int &maxSum)
+    {
+        // agar leaf node hai toh uski value ko return kardo
+        if (root->left == NULL && root->right == NULL)
+        {
+            return root->data;
+        }
+        // agar sirf left node hai toh left mein jao and root ke data ko add karte raho
+        if (root->right == NULL)
+        {
+            return (helper(root->left, maxSum)) + (root->data);
+        }
+        // agar sirf right node hai toh right mein jao and root ke data ko add karte raho
+        if (root->left == NULL)
+        {
+            return (helper(root->right, maxSum)) + (root->data);
+        }
+        // left mein jaate jao and phir right mein jaate jao
+        int l = helper(root->left, maxSum);
+        int r = helper(root->right, maxSum);
+        // childs ke through root mein add karke maximum sum milega
+        maxSum = max(maxSum, l + r + root->data);
+        // ya phir left side and right side se maximum answer milega
+        return (max(l, r) + (root->data));
+    }
+    int maxPathSum(Node *root)
+    {
+        int maxSum = INT_MIN;
+        int ans = helper(root, maxSum);
+        // agar left and right dono hi NULL hai toh maximum le lo maxSum and ans ka
+        if (root->left == NULL || root->right == NULL)
+        {
+            maxSum = max(maxSum, ans);
+        }
+        return maxSum;
+    }
+};
+
 // Problem : Maximum edge removal interviewbit
 // TC => O(N)   SC => O(N)
 int dfs(vector<vector<int>> &tree, int node, vector<int> &child, int parent)
