@@ -97,6 +97,81 @@ public:
     }
 };
 
+// Problem : Maximum Meetings in one room GFG
+class Solution
+{
+public:
+    // TC => O(NlogN)    SC => O(N)
+    vector<int> maxMeetings(int n, vector<int> &start, vector<int> &end)
+    {
+        // hum vector of pairs banayenge and usme hum {end time,start time,index+1} store karenge
+        vector<pair<int, pair<int, int>>> meetings;
+        for (int i = 0; i < n; i++)
+        {
+            meetings.push_back({end[i], {start[i], i + 1}});
+        }
+        // sort kardo meetings ko end time ke base par
+        sort(meetings.begin(), meetings.end());
+        // first meeting ke liye previously end time -1 rahega
+        int End = -1;
+        // maximum 1 meeting toh hogi hi
+        int maxMeet = 1;
+        vector<int> res;
+        for (int i = 0; i < n; i++)
+        {
+            // agar current meeting ka start time current end time se zyada hai toh new meeting banegi
+            if (End < meetings[i].second.first)
+            {
+                res.push_back(meetings[i].second.second);
+                maxMeet++;
+                End = meetings[i].first;
+            }
+        }
+        // indexes ko sort karke send karna hoga
+        sort(res.begin(), res.end());
+        return res;
+    }
+};
+
+// Problem : Non-Overlapping Intervals or Disjoint Intervals GFG
+class Solution
+{
+    // TC => O(NlogN)     SC => O(1)
+public:
+    static bool comp(vector<int> &a, vector<int> &b)
+    {
+        if (a[1] == b[1])
+        {
+            return a[0] < b[0];
+        }
+        return a[1] < b[1];
+    }
+    int minRemoval(int N, vector<vector<int>> &intervals)
+    {
+        // end time ke base par sort karlo
+        sort(intervals.begin(), intervals.end());
+        int count = 0;
+        // end time ko track karenge saath ke saath
+        int end = intervals[0][1];
+        for (int i = 1; i < N; i++)
+        {
+            // agar current interval ka start time previous waale interval ke end time se
+            // zyada hai toh current interval waale ke end time ko new end time bana do
+            if (end <= intervals[i][0])
+            {
+                end = intervals[i][1];
+            }
+            // warna overlapping hogi toh yahan hume end time ko check karna hoga kiska zyada hai
+            else
+            {
+                count++;
+                end = min(end, intervals[i][1]);
+            }
+        }
+        return count;
+    }
+};
+
 // Problem : Find Maximum Equal sum of Three Stacks GFG
 class Solution
 {
