@@ -141,6 +141,51 @@ public:
     }
 };
 
+// Problem : Predecessor and Successor of key in BST GFG
+class Solution
+{
+    // TC => O(Height of the BST)   SC => O(Height of the BST)
+public:
+    void findPreSuc(Node *root, Node *&pre, Node *&suc, int key)
+    {
+        // Ceil in a BST find karne ka code hai ye
+        Node *temp = root;
+        while (temp)
+        {
+            // agar current node less than equal to hai key se toh right mein jaate jao
+            if (temp->key <= key)
+            {
+                temp = temp->right;
+            }
+            // warna successor ko apne paas rakhlo and left mein move karna start kardo taaki
+            // NULL par paunch jaao
+            else
+            {
+                suc = temp;
+                temp = temp->left;
+            }
+        }
+        // floor in a BST find karne ka code hai ye
+        temp = root;
+        while (temp)
+        {
+            // agar current node greater than equal to hai key se toh left mein jaate jao
+            if (temp->key >= key)
+            {
+                temp = temp->left;
+            }
+            // warna predecessor ko apne paas rakhlo and right mein move karna start kardo taaki
+            // NULL par paunch jaao because right mein chalejaayenge toh greater nodes hi aayenge
+            // key se
+            else
+            {
+                pre = temp;
+                temp = temp->right;
+            }
+        }
+    }
+};
+
 // Problem : Binary Search Tree Iterator Leetcode
 class BSTIterator
 {
