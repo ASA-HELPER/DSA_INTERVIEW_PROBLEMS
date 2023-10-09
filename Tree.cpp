@@ -141,6 +141,60 @@ public:
     }
 };
 
+// Problem : Function to return the ceil of given number in BST GFG
+int findCeil(Node *root, int input)
+{
+    // TC => O(Height of the BST)   SC => O(Height of the BST)
+    if (root == NULL)
+        return -1;
+    int ceilVal = -1;
+    while (root)
+    {
+        // agar current node less than hai key se toh right mein jaate jao
+        if (root->data < input)
+        {
+            root = root->right;
+        }
+        // warna successor ko apne paas rakhlo and left mein move karna start kardo taaki
+        // NULL par paunch jaao
+        else
+        {
+            ceilVal = root->data;
+            root = root->left;
+        }
+    }
+    return ceilVal;
+}
+
+// Problem : Function to return the floor of given number in BST GFG
+class Solution
+{
+public:
+    int floor(Node *root, int input)
+    {
+        // TC => O(Height of the BST)   SC => O(Height of the BST)
+        if (root == NULL)
+            return -1;
+        int floorVal = -1;
+        while (root)
+        {
+            // agar current node greater than hai key se toh left mein jaate jao
+            if (root->data > input)
+            {
+                root = root->left;
+            }
+            // warna successor ko apne paas rakhlo and right mein move karna start kardo taaki
+            // NULL par paunch jaao
+            else
+            {
+                floorVal = root->data;
+                root = root->right;
+            }
+        }
+        return floorVal;
+    }
+};
+
 // Problem : Predecessor and Successor of key in BST GFG
 class Solution
 {
