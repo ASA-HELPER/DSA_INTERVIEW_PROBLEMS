@@ -29,6 +29,47 @@ Node *constructTree(int post[], int size)
     return helper(post, mini, maxi, i);
 }
 
+// Problem : Preorder to Postorder GFG
+class Solution
+{
+public:
+    // TC => O(N)       SC => O(N)
+    Node *preToPost(int arr[], int start, int end)
+    {
+        // agar start zyada hojaata hai end se toh hum NULL return kardenge
+        if (start > end)
+        {
+            return NULL;
+        }
+        // current element ka root bana lenge hum because preorder mein yehi root hoga main tree
+        // ka and even subtree ke roots bhi aese hi recursively banege
+        Node *root = newNode(arr[start]);
+        // ab hum root waale node ke next se start karenge and usse chote elements jab tak milenge
+        // tab tak mid ko aage badhate jaayenge
+        int mid = start + 1;
+        while (mid <= end && arr[mid] < arr[start])
+        {
+            mid++;
+        }
+        // jab condition fail huyi hogi toh mid aese element ko point kar raha hoga jo ki usse
+        // greater hai toh mid ko decrement karna hoga taaki woh us index par aajaaye jahan usse
+        // smaller last element present hai
+        mid--;
+        // post order traversal technique follow kar rahe hai because yahan hum root se smaller
+        // elements yaani left part ko pehle banayenge jo ki index start+1 se mid tak mein hai
+        // and phir right part ko banayenge jo ki index mid+1 se end tak hai and phir root ko return
+        // karenge
+        root->left = preToPost(arr, start + 1, mid);
+        root->right = preToPost(arr, mid + 1, end);
+        return root;
+    }
+    Node *post_order(int pre[], int size)
+    {
+        Node *root = preToPost(pre, 0, size - 1);
+        return root;
+    }
+};
+
 // Problem : Print Nodes having K leaves GFG
 class Solution
 {
