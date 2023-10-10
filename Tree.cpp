@@ -70,6 +70,48 @@ public:
     }
 };
 
+// Problem : Preorder traversal and BST GFG
+class Solution
+{
+    // TC => O(N)    SC => O(N)
+public:
+    int canRepresentBST(int arr[], int n)
+    {
+        // Hum ek stack le lenge and usme store karte rahenge elements ko
+        stack<int> st;
+        int k = 0;
+        for (int i = 0; i < n; i++)
+        {
+            // agar stack khali hai ya phir stack ke top par jo element hai woh bada hai current
+            // element se toh hume ye dekhna hoga ki kya K waala element bada toh nahi hai current
+            // element se toh isse aese samajh sakte hai ki K parent node hai st stack ke top node
+            // ka toh agar parent node greater hoga apne child ke child node se toh preorder nahi
+            // banega because preorder mein pehle root ko lete hai phir left node ko and phir right
+            // node ko
+            if (st.empty() || arr[i] < st.top())
+            {
+                if (k > arr[i])
+                {
+                    return 0;
+                }
+                st.push(arr[i]);
+            }
+            else
+            {
+                // agar current element greater hai stack ke element se toh current element ko apne
+                // paas rakhlo and stack se remove karte raho
+                while (!st.empty() && st.top() < arr[i])
+                {
+                    k = st.top();
+                    st.pop();
+                }
+                st.push(arr[i]);
+            }
+        }
+        return 1;
+    }
+};
+
 // Problem : Print Nodes having K leaves GFG
 class Solution
 {
@@ -669,4 +711,82 @@ int Solution::solve(int A, vector<vector<int>> &B)
     vector<int> child(A + 1, 1);
     dfs(tree, 1, child, -1);
     return helper(tree, 1, child, -1);
+}
+
+// Problem : Pairs violating BST property GFG : Question GFG ke count inversions question ke exact same hi hai
+// TC => O(NlogN)    SC => O(N)
+int countMerge(vector<int> &arr, int low, int mid, int high)
+{
+    int n1 = mid - low + 1;
+    int n2 = high - mid;
+
+    vector<int> left(n1), right(n2);
+    for (int i = 0; i < n1; i++)
+    {
+        left[i] = arr[low + i];
+    }
+    for (int j = 0; j < n2; j++)
+    {
+        right[j] = arr[mid + 1 + j];
+    }
+
+    int i = 0, j = 0, k = low, res = 0;
+    while (i < n1 && j < n2)
+    {
+        if (left[i] <= right[j])
+        {
+            arr[k++] = left[i++];
+        }
+        else
+        {
+            arr[k++] = right[j++];
+
+            res += (n1 - i);
+        }
+    }
+
+    while (i < n1)
+    {
+        arr[k++] = left[i++];
+    }
+
+    while (j < n2)
+    {
+        arr[k++] = right[j++];
+    }
+
+    return res;
+}
+
+int countInversion(vector<int> &arr, int low, int high)
+{
+    int res = 0;
+
+    if (low < high)
+    {
+        int mid = low + (high - low) / 2;
+        res += countInversion(arr, low, mid);
+        res += countInversion(arr, mid + 1, high);
+        res += countMerge(arr, low, mid, high);
+    }
+
+    return res;
+}
+
+void createArray(Node *root, vector<int> &arr)
+{
+    if (root)
+    {
+        createArray(root->left, arr);
+        arr.push_back(root->data);
+        createArray(root->right, arr);
+    }
+}
+
+int pairsViolatingBST(Node *root, int n)
+{
+    vector<int> arr;
+    createArray(root, arr);
+    int res = countInversion(arr, 0, arr.size() - 1);
+    return res;
 }
