@@ -70,6 +70,41 @@ public:
     }
 };
 
+// Problem : Print leaf nodes from preorder traversal of BST GFG
+class Solution
+{
+    // TC => O(N)   SC => O(N)
+    // iski explanation bilkul similar hai Preorder to Postorder GFG question ke
+public:
+    vector<int> ans;
+    void preOrder(int arr[], int start, int end)
+    {
+        if (start > end)
+        {
+            return;
+        }
+        if (start == end)
+        {
+            ans.push_back(arr[start]);
+            return;
+        }
+        int root = arr[start];
+        int mid = start + 1;
+        while (mid <= end && arr[mid] < arr[start])
+        {
+            mid++;
+        }
+        mid--;
+        preOrder(arr, start + 1, mid);
+        preOrder(arr, mid + 1, end);
+    }
+    vector<int> leafNodes(int arr[], int N)
+    {
+        preOrder(arr, 0, N - 1);
+        return ans;
+    }
+};
+
 // Problem : Preorder traversal and BST GFG
 class Solution
 {
@@ -279,6 +314,54 @@ public:
                 temp = temp->right;
             }
         }
+    }
+};
+
+// Problem : Remove BST keys outside given range GFG
+class Solution
+{
+    // TC => O(N)   SC => O(height of tree)
+public:
+    Node *removekeys(Node *root, int l, int r)
+    {
+        if (!root)
+            return NULL;
+        // range se bahar ke nodes ko recursively eliminate karenge
+        // agar root ka data l se less hai toh root ke right mein chalejaayenge
+        if (root->data < l)
+        {
+            return removekeys(root->right, l, r);
+        }
+        // agar root ka data r se zyada hai toh root ke left mein chalejaayenge
+        if (root->data > r)
+        {
+            return removekeys(root->left, l, r);
+        }
+        // postorder traversal ka use kar rahe hai
+        root->left = removekeys(root->left, l, r);
+        root->right = removekeys(root->right, l, r);
+        return root;
+    }
+};
+
+// Problem : Delete nodes greater than k GFG
+class Solution
+{
+    // TC => O(N)   SC => O(height of tree)
+public:
+    // Iski explanation exactly similar hai Remove BST keys outside given range GFG waale question ke
+    Node *deleteNode(Node *root, int k)
+    {
+        if (!root)
+            return NULL;
+        if (root->data >= k)
+        {
+            root->right = NULL;
+            return deleteNode(root->left, k);
+        }
+        root->left = deleteNode(root->left, k);
+        root->right = deleteNode(root->right, k);
+        return root;
     }
 };
 
@@ -660,6 +743,63 @@ public:
 
         // return 1 only if both of them are correct else 0
         return (ret1 && ret2);
+    }
+};
+
+// Problem : Merge two BST's GFG
+class Solution
+{
+    // TC => O(M+N)
+    // SC => O(Height of BST1 + Height of BST2 + M + N(for storing the answer))
+public:
+    // inorder traversal code
+    void inorder(Node *root, vector<int> &bst)
+    {
+        if (root == NULL)
+        {
+            return;
+        }
+        inorder(root->left, bst);
+        bst.push_back(root->data);
+        inorder(root->right, bst);
+    }
+    vector<int> merge(Node *root1, Node *root2)
+    {
+        // inorder traversal ko store kar lenge dono trees ke and phir two pointers ki help
+        // se hum ek sorted vector ko create kar lenge
+        vector<int> BST1;
+        vector<int> BST2;
+        vector<int> merged;
+        inorder(root1, BST1);
+        inorder(root2, BST2);
+        int n = BST1.size();
+        int m = BST2.size();
+        int i = 0;
+        int j = 0;
+        while (i < n && j < m)
+        {
+            if (BST1[i] <= BST2[j])
+            {
+                merged.push_back(BST1[i]);
+                i++;
+            }
+            else
+            {
+                merged.push_back(BST2[j]);
+                j++;
+            }
+        }
+        while (i < n)
+        {
+            merged.push_back(BST1[i]);
+            i++;
+        }
+        while (j < m)
+        {
+            merged.push_back(BST2[j]);
+            j++;
+        }
+        return merged;
     }
 };
 
