@@ -803,6 +803,115 @@ public:
     }
 };
 
+// Problem : Largest BST GFG
+class Solution
+{
+    // Brute Force Approach : Har node par jaake puch lo ki valid BST hai ya nahi
+    // TC => O(N*N)
+public:
+    // Approach : Hum simply har node par uske left mein max kya hai and uske right mein minimum
+    // kya hai ye track kar rahe hai and saath hi saath size ko bhi calculate karte rahenge
+    // TC => O(N)   SC => O(Height of tree)
+    vector<int> helper(Node *root)
+    {
+        // agar root NULL hojaayega toh left max hoga INT_MIN and right min hoga INT_MAX and size 0 hoga
+        if (root == NULL)
+        {
+            return {INT_MIN, INT_MAX, 0};
+        }
+        // postorder traversal laga rahe hai
+        vector<int> l = helper(root->left);
+        vector<int> r = helper(root->right);
+        // returned vectors mein left Max and right Min ko nikal rahe hai
+        int leftMax = l[0];
+        int rightMin = r[1];
+        // agar left subtree ka max value chota hai root se and root chota hai right subtree ke minimum value se
+        // toh hum return karenge {max(left,right,root),min(left,right,root),total size}
+        if (leftMax < root->data && root->data < rightMin)
+        {
+            return {max({l[0], r[0], root->data}), min({l[1], r[1], root->data}), l[2] + r[2] + 1};
+        }
+        // agar BST hi nahi bana toh left se max INT_MAX hoga and right se min INT_MIN hoga and size left and right ka max hoga
+        return {INT_MAX, INT_MIN, max(l[2], r[2])};
+    }
+    int largestBst(Node *root)
+    {
+        vector<int> ans = helper(root);
+        return ans[2];
+    }
+};
+
+// Problem : Shortest Range In BST GFG
+class Solution
+{
+public:
+    // TC => O(N)   SC => O(N)
+    // approach bilkul similar hai Merge K sorted arrays/linked lists waale problems ki
+    pair<int, int> shortestRange(Node *root)
+    {
+        // BFS lagakar tree ke saare levels ke nodes ko apne paas store kar lenge jinhe hum
+        // arrays ki tarah treat karenge
+        vector<vector<int>> v;
+        queue<Node *> q;
+        q.push(root);
+        while (!q.empty())
+        {
+            int size = q.size();
+            vector<int> t;
+            while (size--)
+            {
+                root = q.front();
+                q.pop();
+                t.push_back(root->data);
+                if (root->left)
+                    q.push(root->left);
+                if (root->right)
+                    q.push(root->right);
+            }
+            v.push_back(t);
+        }
+        int m = v.size();
+        int mx = 0;
+        // hume minimum range nikalni hai toh hume difference between start and end ko minimize karna hoga
+        int s, e, diff = INT_MAX;
+        // minimum priority queue le lenge jisme har level ke first node ko uske index and level number ke saath
+        // priority queue mein daaldenge and saath hi saath har level ke initial nodes mein se maximum waale ko
+        // apne paas rakh lenge
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+        for (int i = 0; i < m; i++)
+        {
+            pq.push({v[i][0], i, 0});
+            mx = max(mx, v[i][0]);
+        }
+        // ab merge sorted lists waala approach use karenge
+        while (!pq.empty())
+        {
+            // {value,level,node index}
+            int mn = pq.top()[0];
+            int i = pq.top()[1];
+            int j = pq.top()[2];
+            pq.pop();
+            // agar maximum and minimum ke beech ka difference less hai toh update karo difference, start and end ko
+            if (mx - mn < diff)
+            {
+                diff = mx - mn;
+                s = mn;
+                e = mx;
+            }
+            // current level ke next node par jao
+            j++;
+            // agar current level ke nodes hi finish hogaye hai toh break
+            if (j == v[i].size())
+                break;
+            // har baar maximum range ko update karte rahenge
+            mx = max(mx, v[i][j]);
+            // current node ko uske index and level ke saath priority queue mein push kardo
+            pq.push({v[i][j], i, j});
+        }
+        return {s, e};
+    }
+};
+
 // Problem : Maximum edge removal interviewbit
 // TC => O(N)   SC => O(N)
 int dfs(vector<vector<int>> &tree, int node, vector<int> &child, int parent)
