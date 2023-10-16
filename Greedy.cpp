@@ -225,3 +225,143 @@ public:
         return 0;
     }
 };
+
+// Problem : Huffman Decoding GFG
+// TC => O(NlogN)   SC => O(1)
+string decodeHuffmanData(struct MinHeapNode *root, string binaryString)
+{
+    string res;
+    MinHeapNode *tmp = root;
+    // Hume bas itna pata hai ki huffman coding mein first node se leaf node tak hume ek value deta hai
+    // toh hum saare root to leaf ke paths ko explore karlenge using giving string
+    for (int i = 0; i < binaryString.length(); ++i)
+    {
+        if (binaryString[i] == '0')
+            tmp = tmp->left;
+        else
+            tmp = tmp->right;
+        if (tmp->left == NULL && tmp->right == NULL)
+        {
+            res += tmp->data;
+            tmp = root;
+        }
+    }
+    return res;
+}
+
+// Problem : Largest number with given sum GFG
+class Solution
+{
+public:
+    // TC => O(N)   SC => O(1)
+    string largestNumber(int n, int sum)
+    {
+        string ans = "";
+        // jab tak sum greater hai 9 se tab tak 9 se subtract karte rahenge
+        while (sum > 0 && n > 0)
+        {
+            if (sum >= 9)
+                ans += '9';
+            else
+                ans += to_string(sum);
+            sum -= 9;
+            n--;
+        }
+        if (sum > 0)
+            return "-1";
+        // agar sum khatam hogaya hai and digits baaki hai abhi bhi toh zeroes append kardo
+        while (n--)
+            ans += '0';
+        return ans;
+    }
+};
+
+// Problem : Water the plants GFG
+class Solution
+{
+    // TC => O(NlogN)   SC => O(N)
+public:
+    int min_sprinklers(int gallery[], int n)
+    {
+        int count = 0, target = 0;
+        vector<pair<int, int>> span;
+        // har index ke liye uske range ko bana kar rakh lenge apne paas ki agar us position par agar sprinkler rakhte hai toh woh
+        // kahan tak plants ko water de paayega
+        for (int i = 0; i < n; i++)
+        {
+            if (gallery[i] != -1)
+            {
+                span.push_back({i - gallery[i], i + gallery[i]});
+            }
+        }
+        // sort kardo ranges ko
+        sort(span.begin(), span.end());
+
+        int m = span.size(), idx = 0;
+        // traverse karenge range vector ke through and jahan tak ke plants ko water kar paa rahe honge
+        // jis bhi index par sprinkler laga rahe hai usse apne count mein rakh lenge
+        while (target < n && idx < m)
+        {
+            int next_target = -1;
+
+            if (span[idx].first > target)
+                return -1;
+
+            while (idx < m && span[idx].first <= target)
+            {
+                next_target = max(next_target, span[idx].second);
+                idx += 1;
+            }
+            target = next_target + 1;
+            count += 1;
+        }
+
+        return target >= n ? count : -1;
+    }
+};
+
+// Problem : Police and Thieves GFG
+class Solution
+{
+public:
+    // TC => O(N)    SC => O(N)
+    int catchThieves(char arr[], int n, int k)
+    {
+        int i = 0, j = 0, count = 0;
+        vector<int> vis(n, 0);
+        // two pointers ka use karenge and ith pointer ko first police ke paas lekar jaayenge
+        while (i < n && arr[i] != 'P')
+            i++;
+        // two pointers ka use karenge and jth pointer ko first thief ke paas lekar jaayenge
+        while (j < n && arr[j] != 'T')
+            j++;
+
+        while (i < n and j < n)
+        {
+            // agar abhi tak thief visited mark nahi hai and thief and police ke beech ka distance less than k hai toh
+            // mark karlo is thief ko and count ko increase kardo
+            if (arr[i] == 'P' and arr[j] == 'T' and abs(j - i) <= k and !vis[j])
+            {
+                count++;
+                vis[j] = 1;
+                i++;
+                j++;
+            }
+            // agar distance zyada hai toh distance ko kum karna hoga
+            else if (abs(j - i) > k)
+            {
+                if (j > i)
+                    i++;
+                else
+                    j++;
+            }
+            // agar current position par thief hai jahan hum police ko dhund rahe hai toh ith pointer ko aage badhao
+            else if (arr[i] == 'T')
+                i++;
+            // agar current position par police hai jahan hum theif ko dhund rahe hai toh jth pointer ko aage badhao
+            else if (arr[j] == 'P')
+                j++;
+        }
+        return count;
+    }
+};
