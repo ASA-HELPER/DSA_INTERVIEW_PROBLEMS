@@ -276,6 +276,40 @@ public:
     }
 };
 
+// Problem : Fractional Knapsack GFG
+class Solution
+{
+    // TC => O(NlogN)   SC => O(1)
+public:
+    // Sort karo items ko value by weight ke ratio ke according
+    static bool comp(Item a, Item b)
+    {
+        return ((float)a.value / a.weight) > ((float)b.value / b.weight);
+    }
+    double fractionalKnapsack(int W, Item arr[], int n)
+    {
+        sort(arr, arr + n, comp);
+        double ans = 0;
+        for (int i = 0; i < n; i++)
+        {
+            // agar W ki value hai greater than equal to 0 toh current item ko pura le lo
+            if (W >= arr[i].weight)
+            {
+                W = W - arr[i].weight;
+                ans = ans + arr[i].value;
+            }
+            // warna current item ka fractional part le lo jitna W bach gaya hai
+            else
+            {
+                double val = ((double)W / arr[i].weight) * arr[i].value;
+                ans = ans + val;
+                break;
+            }
+        }
+        return ans;
+    }
+};
+
 // Problem : Water the plants GFG
 class Solution
 {
@@ -317,6 +351,120 @@ public:
         }
 
         return target >= n ? count : -1;
+    }
+};
+
+// Problem : Minimize the Heights I and II GFG
+class Solution
+{
+public:
+    // TC => O(NlogN)    SC => O(1)
+    int getMinDiff(int arr[], int n, int k)
+    {
+        sort(arr, arr + n);
+        // given elements ke minimum and maximum elements ke beech ka difference
+        int min_diff = arr[n - 1] - arr[0];
+        int maxx, minn;
+        for (int i = 1; i < n; i++)
+        {
+            // Minimize heights I and II ke code mein bas ye condition ka hi pharak hai because
+            // II waale mein negative allowed nahi the toh I waale mein ye if condition use mat karna
+            if ((arr[i] - k) < 0)
+                continue;
+            // minimum mein increase karke and current mein decrease karke minimum ko nikal rahe hai
+            minn = min(arr[0] + k, arr[i] - k);
+            // maximum mein decrease karke and current mein increase karke maximum ko nikal rahe hai
+            maxx = max(arr[n - 1] - k, arr[i - 1] + k);
+            // ab minimum and maximum ke beech ka difference nikal rahe hai
+            min_diff = min(min_diff, maxx - minn);
+        }
+        return min_diff;
+    }
+};
+
+// Problem : Page Faults in LRU GFG
+class Solution
+{
+public:
+    // TC => O(N*C)   SC => O(C)
+    int pageFaults(int N, int C, int pages[])
+    {
+        list<int> ls;
+        int ans = 0;
+        unordered_map<int, list<int>::iterator> mp;
+        for (int i = 0; i < N; i++)
+        {
+            // agar page map mein nahi hai
+            if (mp.find(pages[i]) == mp.end())
+            {
+                // toh pehle page faults ko increase karenge and phir check karenge ki kya
+                // doubly linked list ka size given capactity se zyada hai ya nahi
+                // agar haan toh map mein se list ke last ke element ko erase kardenge and list se bhi
+                ans++;
+                if (ls.size() >= C)
+                {
+                    mp.erase(ls.back());
+                    ls.pop_back();
+                }
+                // ab new page ko list mein front par daal do
+                ls.push_front(pages[i]);
+                // ls.begin hume linked list ke first element ka address de deta hai
+                mp[pages[i]] = ls.begin();
+            }
+            // agar page map mein hi hai toh usse list se erase karke list ke front par daal denge
+            // and map mein isse new address de denge
+            else
+            {
+                ls.erase(mp[pages[i]]);
+                ls.push_front(pages[i]);
+                mp[pages[i]] = ls.begin();
+            }
+        }
+        return ans;
+    }
+};
+
+// Problem : Valid Compressed String GFG
+class Solution
+{
+public:
+    // TC => O(len(T))   SC =>O(1)
+    int checkCompressed(string S, string T)
+    {
+        int i = 0;
+        int j = 0;
+        // Dono string mein traverse karenge
+        while (i < S.size() && j < T.size())
+        {
+            // agar dono ke current characters equal hai toh dono stirng mein aage badho
+            if (S[i] == T[j])
+            {
+                i++;
+                j++;
+            }
+            // agar digit hai toh number banakar aage badh jaao string T mein and jitna number banega utna
+            // hi aage badh jaao string S mein
+            else if (isdigit(T[j]))
+            {
+                int num = 0;
+                while (j < T.size() && isdigit(T[j]))
+                {
+                    num = num * 10 + int(T[j]) - 48;
+                    j++;
+                }
+                i += num;
+            }
+            // agar equal bhi nahi hai and digit bhi nahi hai toh return zero
+            else
+            {
+                return 0;
+            }
+        }
+        // agar ith and jth pointer last mein paunch gaye hai toh iska matlab string S ka correct compression tha string T
+        if (i == S.size() && j == T.size())
+            return 1;
+
+        return 0;
     }
 };
 
