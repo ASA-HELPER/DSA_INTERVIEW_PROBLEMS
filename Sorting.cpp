@@ -392,6 +392,34 @@ public:
     }
 };
 
+// Problem : Make array elements unique GFG
+class Solution
+{
+public:
+    //   TC => O(NlogN)     SC => O(1)
+    long long int minIncrements(vector<int> arr, int n)
+    {
+        // Simply sort kardenge taaki saare elements ko increasing order mein unique kar paayen
+        sort(arr.begin(), arr.end());
+        long long int count = 0;
+        for (int i = 1; i < n; i++)
+        {
+            // agar previous element greater ho jaata hai current se toh hum
+            // number of operations ko count karlenge ki previous se greater banane mein
+            // current number ko kitne operation lagenge. For example [4,5,3] hai toh 3 ko
+            // 5 se greater banane ke liye (5-3)+1 = 3 operations lagenge tabhi 3 ko 6 banayenge
+            if (arr[i - 1] >= arr[i])
+            {
+                // Number of operations ko count kar rahe hai
+                count += arr[i - 1] - arr[i] + 1;
+                // bas current number ko previous ka greater bana do
+                arr[i] = arr[i - 1] + 1;
+            }
+        }
+        return count;
+    }
+};
+
 // Problem : Maximum Intersecting Lines GFG
 class Solution
 {
