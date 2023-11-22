@@ -402,3 +402,56 @@ public:
         return mostWater;
     }
 };
+
+// Problem : Median of the subarrays GFG
+class Solution
+{
+public:
+    //   TC => O(N)     SC => O(N)
+    long solve(vector<int> &A, int N, int M)
+    {
+        // create a map to store the difference between x and y.
+        // cur=0(store the current difference)
+        // total=0(stores to number of subarrays for the current index)
+        // ans=0{sum of "total" for each index}.
+        unordered_map<int, int> mp;
+        int cur = 0;
+        long long int tot = 0, ans = 0;
+        mp[cur] = 1;
+        for (int i = 0; i < N; i++)
+        {
+            int x;
+            if (A[i] >= M)
+            {
+                x = 1;
+            }
+            else
+            {
+                x = -1;
+            }
+            if (x == -1)
+            {
+                tot -= mp[cur - 1];
+            }
+            else
+            {
+                tot += mp[cur];
+            }
+            cur += x;
+            ans += tot;
+            mp[cur] = mp[cur] + 1;
+        }
+        return ans;
+    }
+    long long countSubarray(int N, vector<int> A, int M)
+    {
+        // Hum kya karenge ki jo bhi median diya hoga usse less waale numbers ko -1 mark kardenge
+        // aur jo median se greater hai unhe 1 se mark kardenge and phir un subarrays ko nikal
+        // lunga jinka sum greater hai 0 se
+        // ans = number of subarrays with median M - number of subarrays having median (M+1)
+
+        long long int lessthanM = solve(A, N, M);
+        long long int greaterthanM = solve(A, N, M + 1);
+        return (lessthanM - greaterthanM);
+    }
+};
