@@ -62,6 +62,45 @@ int main()
     return 0;
 }
 
+// Problem : Largest subarray with 0 sum
+class Solution
+{
+public:
+    // TC => O(N)  SC => O(N)
+    int maxLen(vector<int> &A, int n)
+    {
+        // Simply ek map le lenge jiski help se sum ko track karenge
+        unordered_map<int, int> mp;
+        int sum = 0;
+        int maxi = 0;
+        for (int i = 0; i < n; i++)
+        {
+            sum += A[i];
+            // agar sum 0 hogaya toh maxi ko us index se update kardenge
+            if (sum == 0)
+            {
+                maxi = i + 1;
+            }
+            // warna hum map mein us sum ko dhundenge ki kya current pehle bhi aa chuka hai
+            // agar haan toh uska track rakh current index se us sum ke index ko subtract karke
+            // length nikal lenge and max le lenge warna current sum ke index ko map mein mark
+            // kardenge
+            else
+            {
+                if (mp.find(sum) != mp.end())
+                {
+                    maxi = max(maxi, i - mp[sum]);
+                }
+                else
+                {
+                    mp[sum] = i;
+                }
+            }
+        }
+        return maxi;
+    }
+};
+
 // Problem : Count number of Subarrays with XOR K
 int subarraysWithXorK(vector<int> a, int k)
 {

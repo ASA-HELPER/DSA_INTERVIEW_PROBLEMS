@@ -461,6 +461,66 @@ public:
     }
 };
 
+// Problem : Flattening a Linked List
+// Approach : Hum last se linked list ko sort karenge jiske liye pehle hum recursively linked list ke last node tak jaayenge
+// last node par paunch kar hum linked list ke pairs ko sort karenge pairs ke bottom parts ko
+// sort karke. Hum har linked list ke bottoms ko sort karke ek new linked list banayenge jo ki bottom wise hogi
+// matlab hum new linked list ke bottom mein hi sorted linked list ko prepare karte rahenge
+
+// If we consider each vertical linked list of size O(M) in the worst case, then in this method we are merging two vertical sub-linked lists at a time.
+// Time is taken to merge two linked lists of size M = O(M+M) =O(2M)
+// Similarly, the time is taken to merge another linked list of size M with a linked list of size 2M = O(M+2M)=O(3M)
+// Similarly, the time is taken to merge another linked list of size M with a linked list of size 3M = O(M+3M) =O(4M).
+// This process will take place N times where N is the no of nodes in the horizontal linked list. So, the total time taken till all the nodes are merged = O(2M+3M+4M+5M+...N * M )
+// = O(2+3+4+5+6...+N)* M
+// = O(N* ( N + 1 ) / 2)* M
+// TC => O(N * N * M)
+// SC => O(N)
+Node *merge(Node *l1, Node *l2)
+{
+    // new linked list starting node
+    Node *dummy = new Node(0);
+    // pointer to store the head of the new linked list
+    Node *prev = dummy;
+    while (l1 != NULL && l2 != NULL)
+    {
+        if (l1->data < l2->data)
+        {
+            dummy->bottom = l1;
+            dummy = dummy->bottom;
+            l1 = l1->bottom;
+        }
+        else
+        {
+            dummy->bottom = l2;
+            dummy = dummy->bottom;
+            l2 = l2->bottom;
+        }
+    }
+    if (l1 != NULL)
+    {
+        dummy->bottom = l1;
+    }
+    if (l2 != NULL)
+    {
+        dummy->bottom = l2;
+    }
+    return prev->bottom;
+}
+
+Node *flatten(Node *root)
+{
+    if (root->next == NULL)
+    {
+        return root;
+    }
+    // recursively linked list ke last tak jaa rahe hai
+    root->next = flatten(root->next);
+    // linked list last pairs ko merge kar rahe hai and phir wapis send kardenge
+    root = merge(root->next, root);
+    return root;
+}
+
 // Problem : Prime List GFG
 class Solution
 {

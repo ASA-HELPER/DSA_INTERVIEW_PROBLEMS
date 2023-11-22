@@ -172,6 +172,37 @@ public:
     }
 };
 
+// Problem : Minimum number of platforms required for a railway GFG
+// TC => O(nlogn)  SC => O(1)
+class Solution
+{
+public:
+    int findPlatform(int arr[], int dep[], int n)
+    {
+        sort(arr, arr + n);
+        sort(dep, dep + n);
+
+        int ans = 1;
+        int count = 1;
+        int i = 1, j = 0;
+        while (i < n && j < n)
+        {
+            if (arr[i] <= dep[j])
+            {
+                count++;
+                i++;
+            }
+            else
+            {
+                count--;
+                j++;
+            }
+            ans = max(ans, count);
+        }
+        return ans;
+    }
+};
+
 // Problem : Find Maximum Equal sum of Three Stacks GFG
 class Solution
 {
@@ -511,5 +542,56 @@ public:
                 j++;
         }
         return count;
+    }
+};
+
+// Problem : Job Sequencing
+// TC => O(NlogN) + O(N*maxi)
+// SC => O(maxi)
+struct Job
+{
+    int id;     // Job Id
+    int dead;   // Deadline of job
+    int profit; // Profit if job is over before or on deadline
+};
+
+class Solution
+{
+public:
+    bool static comp(Job a, Job b)
+    {
+        return (a.profit > b.profit);
+    }
+
+    vector<int> JobScheduling(Job arr[], int n)
+    {
+        // jobs ko sort kardenge according to profit ascending order mein
+        sort(arr, arr + n, comp);
+        int maxi = arr[0].dead;
+        for (int i = 1; i < n; i++)
+        {
+            maxi = max(maxi, arr[i].dead);
+        }
+        // slots ke liye array banao jiski length maxi+1 hogi
+        vector<int> slot(maxi + 1, -1);
+
+        int countJobs = 0, jobProfit = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            // har job ke liye check karo ki usse last day par perform kar sakte hai ya nahi
+            for (int j = arr[i].dead; j > 0; j--)
+            {
+                if (slot[j] == -1)
+                {
+                    slot[j] = i;
+                    countJobs++;
+                    jobProfit += arr[i].profit;
+                    break;
+                }
+            }
+        }
+
+        return {countJobs, jobProfit};
     }
 };
