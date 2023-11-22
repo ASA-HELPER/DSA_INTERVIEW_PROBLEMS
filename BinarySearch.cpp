@@ -55,6 +55,87 @@ public:
     }
 };
 
+// Problem : Nth root of a number GFG
+class Solution
+{
+public:
+    // 	Approach-1 : Brute force
+    // TC => O(m*n)     SC => O(1)
+    int NthRoot(int n, int m)
+    {
+        // agar 1 ka Nth root nikalna hai toh woh hamesha 1 hi rahega
+        if (m == 1)
+        {
+            return 1;
+        }
+        // agar kisi number ka 1st rool nikalna hai toh woh wahi number rahega
+        if (n == 1)
+        {
+            return m;
+        }
+        for (int i = 1; i < m; i++)
+        {
+            int prod = 1;
+            for (int j = 0; j < n; j++)
+            {
+                prod *= i;
+            }
+            if (prod == m)
+            {
+                return i;
+            }
+            if (prod > m)
+            {
+                break;
+            }
+        }
+        return -1;
+    }
+
+    // Approach-2 : Using Binary search
+    // TC => O(nlogm)   SC => O(1)
+    int helper(int mid, int n, int m)
+    {
+        long long ans = 1;
+        for (int i = 1; i <= n; i++)
+        {
+            ans = ans * mid;
+            if (ans > m)
+            {
+                return 2;
+            }
+        }
+        if (ans == m)
+        {
+            return 1;
+        }
+        return 0;
+    }
+    int NthRoot(int n, int m)
+    {
+        int low = 1;
+        int high = m;
+        while (low <= high)
+        {
+            int mid = (low + high) / 2;
+            int ans = helper(mid, n, m);
+            if (ans == 1)
+            {
+                return mid;
+            }
+            else if (ans == 0)
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+        return -1;
+    }
+};
+
 // Problem : Number and the Digit Sum GFG
 class Solution
 {
@@ -500,5 +581,144 @@ public:
             }
         }
         return ans;
+    }
+};
+
+// Problem : WoodCutting Made Easy interviewbit (Flipkart ka problem hai ye)
+class Solution
+{
+    // TC => O(Nlog(max))       SC => O(1)
+    // Simply binary search on answers ka question hai ye
+    long long int helper(vector<int> &trees, int wood, int TreeHeight)
+    {
+        int n = trees.size();
+        int woodGot = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (trees[i] > TreeHeight)
+            {
+                woodGot += (trees[i] - Treeheight);
+            }
+        }
+        return woodGot;
+    }
+    int woodCutter(vector<int> &trees, long long int wood)
+    {
+        int n = trees.size();
+        int low = 0;
+        int high = *max_element(trees.begin(), trees.end());
+        long long int woodNeeded = 0;
+        while (low <= high)
+        {
+            int mid = low + (high - low) / 2;
+            long long int woodGot = helper(trees, wood, mid);
+            if (woodGot >= wood)
+            {
+                woodNeeded = max(woodGot, woodNeeded);
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+        return woodNeeded;
+    }
+};
+
+// Problem : Kth element of two sorted arrays
+class Solution
+{
+public:
+    // Approach-1 : Using two pointers
+    // TC => O(N+M)   SC => O(1)
+    int kthElement(int arr1[], int arr2[], int n, int m, int k)
+    {
+        int idx = 0;
+        int i = 0;
+        int j = 0;
+        while (i < n && j < m)
+        {
+            if (arr1[i] <= arr2[j])
+            {
+                // pehle check karenge ki kitne elements track karliiye phir index ko badhayenge
+                if (idx == k - 1)
+                {
+                    return arr1[i];
+                }
+                i++;
+                idx++;
+            }
+            else
+            {
+                if (idx == k - 1)
+                {
+                    return arr2[j];
+                }
+                j++;
+                idx++;
+            }
+        }
+        if (idx < k)
+        {
+            while (i < n)
+            {
+                if (idx == k - 1)
+                {
+                    return arr1[i];
+                }
+                i++;
+                idx++;
+            }
+            while (j < m)
+            {
+                if (idx == k - 1)
+                {
+                    return arr2[j];
+                }
+                j++;
+                idx++;
+            }
+        }
+        // agar dono array ke sizes ka sum less than k hai toh kth element nahi milega
+        return -1;
+    }
+
+    // Approach-2 : Median of two sorted arrays ka hi concept use kar rahen hai bas hum dono arrays se
+    // elements ko lekar uske last elements ka max return kar rahe hai
+    // TC => O(log(min(n,m)))    SC => O(1)
+    int kthElement(int arr1[], int arr2[], int n, int m, int k)
+    {
+        if (m > n)
+        {
+            return kthelement(arr2, arr1, n, m, k);
+        }
+        // first array se 0 to (k-m)th tak ke elements lenge
+        int low = max(0, k - m);
+        // second array se total and k mein se jo minimum hoga utne elements hi lenge
+        int high = min(k, n);
+        while (low <= high)
+        {
+            int cut1 = (low + high) >> 1;
+            int cut2 = k - cut1;
+            int l1 = cut1 == 0 ? INT_MIN : arr1[cut1 - 1];
+            int l2 = cut2 == 0 ? INT_MIN : arr2[cut2 - 1];
+            int r1 = cut1 == n ? INT_MAX : arr1[cut1];
+            int r2 = cut2 == m ? INT_MAX : arr2[cut2];
+
+            if (l1 <= r2 && l2 <= r1)
+            {
+                return max(l1, l2);
+            }
+            else if (l1 > r2)
+            {
+                high = cut1 - 1;
+            }
+            else
+            {
+                low = cut1 + 1;
+            }
+        }
+        return 1;
     }
 };
