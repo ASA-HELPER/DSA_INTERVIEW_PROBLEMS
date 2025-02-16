@@ -1,3 +1,48 @@
+// Problem : Find ceil and floor GFG
+int helper(vector<int> &arr, int n, int x, int op)
+{
+    int low = 0;
+    int high = n - 1;
+    int ceil = -1;
+    int floor = -1;
+    while (low <= high)
+    {
+        int mid = low + (high - low) / 2;
+        if (op == 0)
+        {
+            if (arr[mid] <= x)
+            {
+                floor = arr[mid];
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid - 1;
+            }
+        }
+        else
+        {
+            if (arr[mid] >= x)
+            {
+                ceil = arr[mid];
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid + 1;
+            }
+        }
+    }
+    return op == 0 ? floor : ceil;
+}
+
+pair<int, int> getFloorAndCeil(vector<int> &a, int n, int x)
+{
+    int ceil = helper(a, n, x, 1);
+    int floor = helper(a, n, x, 0);
+    return {floor, ceil};
+}
+
 // Problem : Square root of a number GFG
 class Solution
 {
@@ -625,6 +670,63 @@ class Solution
         return woodNeeded;
     }
 };
+
+// Problem : Minimize max distance to gas stations GFG
+// Approach :
+// 1) Binary search ka use karke distance calculate karenge jo ki ye batayega ki kitne distance par stations ko rakhna hai ek segment ke beech mein.
+// 2) Har segment ke beech count karo ki kitne gas stations place ho sakte hain
+// 3) Agar count > k, toh mid distance bada karo (low = mid)
+//    Agar count ≤ k, toh mid distance chhota karo (high = mid, answer = mid)
+// 4) Binary search ka last updated mid hi minimum maximum distance hoga
+// (high-low)>1e-6 ki condition ka reason :
+// A) Binary search ek double value (floating point number) ke upar chal raha hai, toh hume ek precision limit set karni padti hai.
+// B) Agar hum bina kisi precision ke low aur high ko compare karein, toh wo kabhi exactly equal nahi honge (floating point precision issues ki wajah se).
+// C) Agar high - low ko exact 0 hone tak chalaye, toh kabhi-kabhi loop infinite bhi ho sakta hai (floating point precision errors).
+// D) Agar high - low = 1e-6 ka condition rakhein, toh answer ek precision level tak accurate hoga, aur unnecessary iterations nahi lagenge.
+bool isPossible(vector<int> &arr, int k, double mid)
+{
+    // TC =>Binary Search runs in O(log(High / 1e-6)) ≈ O(60) iterations and Each iteration calls isPossible(), which is O(N)
+    // Total Time Complexity: O(N log(High / 1e-6)) ≈ O(N log M) (where M = arr[n-1] - arr[0])
+    // SC => O(1) because koyi extra variable use nahi kar rahe hai hum
+    int count = 0;
+    for (int i = 1; i < arr.size(); i++)
+    {
+        // har 2 gas stations ke beech mein jo distance hai usme
+        // count kar rahe hai ki kitne gas stations ho sakte hai agar
+        // gas stations ke beech mein mid distance hai
+        count += (int)((arr[i] - arr[i - 1]) / mid);
+        // agar hum k stations se zyada kar paa rahe hai toh hume apne distance increase karna hoga
+        if (count > k)
+            return false;
+    }
+    return count <= k;
+}
+
+double minimiseMaxDistance(vector<int> &arr, int k)
+{
+    double low = 0, high = arr.back() - arr[0], ans = high;
+
+    while (high - low > 1e-6)
+    {
+        // hum distance calculate karenge and then har segment ke beech mein jaake
+        // check karenge ki current segment mein mid distance par kitne stations ho sakte hai
+        double mid = (low + high) / 2.0;
+        // agar hum mid distance par exact k stations place kar paa rahe hai given stations ke
+        // beech mein toh hum distance ko decrease karne kar try karenge
+        if (isPossible(arr, k, mid))
+        {
+            ans = mid;
+            high = mid;
+        }
+        // agar hum k se zyada stations ko add kar paa rahe hai toh hume distance ko increase
+        // karna padega taaki stations jo hum add kar paa rahe hai woh decrease ho jaayen
+        else
+        {
+            low = mid;
+        }
+    }
+    return ans;
+}
 
 // Problem : Kth element of two sorted arrays
 class Solution
